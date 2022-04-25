@@ -1,0 +1,26 @@
+{% load static %}
+{% load Ads %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Skillhunt - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    {% include 'BASE_HTMLs/styles_links.html' %}
+
+  </head>
+  <body>
+    
+	{% include 'BASE_HTMLs/Nav.html' %}
+    
+  {% block common_content %}{% endblock %}
+
+	{% include 'BASE_HTMLs/Footer.html' %}
+    
+  {% include 'BASE_HTMLs/Scripts.html' %}
+
+
+    
+  </body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+
+{% block common_content %}<div class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+          <div class="col-md-12 ftco-animate text-center mb-5">
+          	<p class="breadcrumbs mb-0"><span class="mr-3"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Login</span></p>
+            <h1 class="mb-3 bread">Login Manager</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<section class="ftco-section bg-light">
+	<div class="container">
+		<div class="col align-self-center">
+
+			<form class="p-5 bg-white col-md-6 offset-md-3 text-right" method="post" dir="rtl">
+				<h2 class="text-center mb-5">ورود به حساب کاربری</h2>
+				{% csrf_token %}
+				
+					<div class="col-md-12 mt-3 mb-md-0">
+			      <label for="name">{{login_form.username.label_tag}}</label>
+			        {{login_form.username}}
+			        {% for error in login_form.username.errors %}
+			    			<p class="alert alert-danger"><strong>{{error}}</strong></p>
+			    		{% endfor %}
+			      <label for="name">{{login_form.password.label_tag}}</label>
+			        {{login_form.password}}
+			    </div>
+			    {% for error in login_form.password.errors %}
+			    	<p class="alert alert-danger"><strong>{{error}}</strong></p>
+			    {% endfor %}
+		   
+				<hr>
+				<button type="submit" class="btn btn-success">ورود به حساب کاربری</button>
+			</form>
+		</div>
+	</div>
+</section>
+
+{% endblock %}
