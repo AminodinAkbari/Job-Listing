@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from Employer.models import Manager , Company
 from django.contrib.auth.models import User
 from django import forms
+from Accounts.models import Newsletter
 
 class RegisterForm(ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput,label='رمز عبور')
@@ -77,3 +78,18 @@ class EmployeeRegister(ModelForm):
 			raise forms.ValidationError('کلمه های عبور با یکدیگر مغایرت دارند !')
 		return password
 
+class NewsletterEmailsForm(forms.ModelForm):
+	class Meta:
+		model = Newsletter
+		fields = ['email']
+
+	def __init__(self,*args , **kwargs):
+		super(NewsletterEmailsForm , self).__init__(*args , **kwargs)
+		self.fields['email'].widget.attrs.update({'class':'form-control'})
+
+	def clean_email(self):
+		email = self.cleaned_data.get('email')
+		All_emails = Newsletter.objects.filter(email = email).first()
+		if All_emails is not None:
+			raise forms.ValidationError('این ایمیل قبلا در خبرنامه ثبت نام کرده است')
+		return email
