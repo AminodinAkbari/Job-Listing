@@ -10,12 +10,10 @@ def Navbar(context , request):
 	except:
 		is_a_manager = None
 
-
 	try:
 		is_a_employee = EmployeeModel.objects.get(employee = request.user)
 	except:
 		is_a_employee = None
-
 
 	context = {}
 	if request.user.is_authenticated:
