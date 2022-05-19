@@ -68,6 +68,9 @@ def passGenerator(passlen):
       finalPass="".join(passwordlist)
       return finalPass
 
+class Tags(models.Model):
+    name = models.CharField(max_length = 35 , verbose_name = 'نام تگ')
+
 
 def debugger(func):
     def wrapper(*args,**kwargs):
