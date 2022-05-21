@@ -13,31 +13,6 @@ from django.core.exceptions import ValidationError
 
 from Controllers.models import *
 
-# class CreateResumeForm(ModelForm):
-# 	class Meta:
-# 		model = EmployeeModel
-# 		fields = '__all__'
-# 	def __init__(self ,*args, **kwargs):
-# 		user = kwargs.pop('user',None)
-# 		employee = forms.ModelChoiceField(queryset = User.objects.all())
-# 		employee.disabled = True
-# 		super(CreateResumeForm, self).__init__(*args, **kwargs)
-# 		for field in self.fields.values():
-# 			field.widget.attrs.update({'class': 'form-control rtl'})
-# 		self.fields['birth'] = JalaliDateField(label=('تاریخ تولد'),widget=AdminJalaliDateWidget)
-# 		self.initial['employee'] = user
-# 		self.fields['employee'].disabled = True
-
-# class ResumeUpdateForm(ModelForm):
-# 	class Meta:
-# 		model = EmployeeModel
-# 		exclude= ('employee',)
-
-# 	def __init__(self, *args, **kwargs):
-# 		super(ResumeUpdateForm, self).__init__(*args, **kwargs)
-# 		for field in self.fields.values():
-# 			field.widget.attrs.update({'class': 'form-control rtl'})
-
 class PersonalInfo_ResumeForm(ModelForm):
 	class Meta:
 		model = EmployeeModel
@@ -50,6 +25,8 @@ class PersonalInfo_ResumeForm(ModelForm):
 	def __init__(self , *args , **kwargs):
 		super(PersonalInfo_ResumeForm, self).__init__(*args, **kwargs)
 
+		self.fields['skills'].widget.attrs = {'placeholder':'تسلط به نرم افزار هلو / تسلط به زبان انگلیسی / ...' , 'rows':'9'}
+		
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
 
@@ -59,6 +36,7 @@ class PersonalInfo_ResumeForm(ModelForm):
 		self.fields['marital_status'].widget.attrs = {'class':'rtl bb-1'}
 		self.fields['languages'].widget.attrs = {'class':'rtl bb-1'}
 		self.fields['languages'].label='به کدام زبان گفتاری مسلط هستید ؟'
+		self.fields['skills'].label='مهارت های خود را بنویسید (آنها را با علامت "/" جدا کنید)'
 		self.fields['birth'] = JalaliDateField(label=('تاریخ تولد'),widget=AdminJalaliDateWidget)
 
 
