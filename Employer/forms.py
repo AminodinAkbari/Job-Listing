@@ -4,10 +4,49 @@ from .models import Advertisement , Company , Manager
 
 from urllib import request
 
+from Controllers.views import file_size
+
 from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
 from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 # OUR New Ad Form is Down Here ↓
 
+
+class EditManagerInfoForm(ModelForm):
+	class Meta:
+		model = Manager
+		exclude= ('email',)
+
+	def __init__(self, *args, **kwargs):
+		super(EditManagerInfoForm, self).__init__(*args, **kwargs)
+		self.fields['profile_pic'].widget.attrs.update({'id':'imageUpload','class':'form-control','accept':'.png, .jpg, .jpeg','type':'file'})
+		self.fields['profile_pic'].validators = [file_size]
+		self.fields['name'].widget.attrs.update({'id':'name' , 'class':'form-control'})
+		self.fields['family'].widget.attrs.update({'id':'family' , 'class':'form-control'})
+		self.fields['phone'].widget.attrs.update({'id':'phone' , 'class':'form-control'})
+		self.fields['About'].widget.attrs.update({'id':'About' , 'class':'form-control'})
+class UpdatePasswordManagersForm(forms.Form):
+
+	def __init__(self , *args , **kwargs):
+		super(UpdatePasswordManagersForm, self).__init__(*args, **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs.update({'class': 'form-control rtl'})
+			
+	old_password = forms.CharField(widget=forms.PasswordInput,label='رمز عبور حال حاضر')
+	new_password = forms.CharField(widget=forms.PasswordInput,label='رمز جدید')
+	re_new_password = forms.CharField(widget=forms.PasswordInput,label='تکرار رمز جدید')
+
+	def clean_new_password(self):
+		new_password = self.cleaned_data.get('new_password')
+		if len(new_password)<8:
+			raise forms.ValidationError('کلمه عبور باید حداقل 8 کاراکتر باشد')
+		return new_password
+
+	def clean_re_new_password(self):
+		new_password = self.cleaned_data.get('new_password')
+		re_new_password = self.cleaned_data.get('re_new_password')
+		if new_password != re_new_password :
+			raise forms.ValidationError('کلمه های عبور با یکدیگر مغایرت دارند !')
+		return re_new_password
 
 class NewAdvertisementForm(ModelForm):
 	class Meta:
@@ -27,7 +66,7 @@ class NewAdvertisementForm(ModelForm):
 		self.fields['category'].label='دسته بندی'
 
 		self.fields['company'].widget.attrs.update({'id':'company' , 'class':'form-control'})
-		self.fields['company'].label='شرکت '
+		self.fields['company'].label='شرکت های معتبر شما '
 		self.fields['company'].queryset = Company.objects.filter(manager__email=user , valid = True)
 		
 
@@ -65,10 +104,42 @@ class NewAdvertisementForm(ModelForm):
 
 	def clean_title(self):
 		title = self.cleaned_data.get('title')
-		if len(title)>5:
+		if len(title)<5:
 			raise forms.ValidationError('لطفا عنوان بهتری برای آگهی ایجادکنید (عنوان بسیار کوتاه است)')
 		return title
 
+class EditAdInfoForm(ModelForm):
+	class Meta:
+		model = Advertisement
+		exclude = ["generate_in" , "expired" , "company"]
+	def __init__(self,*args , **kwargs):
+		super(EditAdInfoForm, self).__init__(*args, **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs.update({'class': 'form-control rtl'})
+
+
+	def clean_skills(self):
+		skills = self.cleaned_data.get('skills')
+		skills_count = skills.split('/')
+		if len(skills_count)<2:
+			raise forms.ValidationError('برای شفافیت آگهی ، باید حداقل 2 مهارت اضافه کنید.')
+		return skills
+
+	def clean_text(self):
+		text = self.cleaned_data.get('text')
+		if len(text)>1250:
+			raise forms.ValidationError('لطفا متن آگهی را کوتاه تر کنید')
+		if len(text)<30:
+			raise forms.ValidationError('توضیحات این آگهی نمیتواند بسیار کوتاه باشد')
+		return text
+
+	def clean_title(self):
+		title = self.cleaned_data.get('title')
+		if len(title)<5:
+			raise forms.ValidationError('لطفا عنوان بهتری برای آگهی ایجادکنید (عنوان بسیار کوتاه است)')
+		return title
+
+		
 class NewCompanyForm(forms.Form):
 	def __init__(self ,*args, **kwargs):
 		super(NewCompanyForm, self).__init__(*args, **kwargs)
@@ -88,4 +159,12 @@ class NewCompanyForm(forms.Form):
         label = 'درباره شرکت توضیح دهید (این متن در آگهی های شما نمایش داده خواهد شد)'
     )
 
-		
+
+class EditCompanyForm(ModelForm):
+	class Meta:
+		model = Company
+		exclude = ('valid','manager')
+	def __init__(self,*args,**kwargs):
+		super(EditCompanyForm , self).__init__(*args , **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs.update({'class': 'form-control rtl'})
