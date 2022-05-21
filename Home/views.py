@@ -21,10 +21,12 @@ def Index(request , user_type):
 	context = {}
 	Categories = categories.objects.all()
 	All_emails = Newsletter.objects.all()
+	companies  = Company.objects.all()
 	top_companies = Company.objects.annotate(num_ad=Count('company')).order_by('-num_ad')[:5]
 	context['categories'] = Categories
+	context['companies'] = companies
 	context['top_companies'] = top_companies
-	context['employees'] = EmployeeModel.objects.all()[:6]
+	context['employees'] = EmployeeModel.objects.all()
 	context['is_a_manager'] = user_type
 	if request.method == 'POST':
 		form = NewsletterEmailsForm(request.POST)
