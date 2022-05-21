@@ -1,28 +1,66 @@
-{% for item in Ads %}							
+{% if Ads %}
+{% for item in Ads %}						
 <div dir="rtl" class="col-md-12 ftco-animate">
 	<div class="job-post-item p-4 d-block d-lg-flex align-items-center">
 		<div class="one-third mb-4 mb-md-0">
 		    <div class="job-post-item-header text-right">
 		        <span class="subadge">{{item.get_job_nature_display}}</span>
-		        <h5 class="mr-3 text-black"><a href="#">{{item.title}}</a></h5>
+		        <h5 class="mr-3 text-black"><a href="{% url 'AdDetail' pk=item.id %}">{{item.title}}</a></h5>
 		    </div>
 		<div class="job-post-item-body d-block d-md-flex">
-			<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.company}}</a></div>
+			<div class="ml-3"><span class="icon-layers"></span><a href=""> {{item.company}}</a></div>
 			<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.location}}</span></div>
 			<div><span class="icon-my_location">{{item.salary}}</span></div>
 		</div>
 		</div>
-
 		    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
 		        <div>
-			        <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
+		        	{% for item in marked %}
+		        	<a href="{% url 'AdUnsaved' pk=item.id %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
+			             <span class="icon-trash"></span>
+			        </a>
+		        	{% empty %}
+			        <a href="{% url 'Favorite' ad=item.id %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
 			             <span class="icon-heart"></span>
 			        </a>
+			        {% endfor %}
 		        </div>
-		        <a href="job-single.html" class="btn btn-primary py-2">ارسال رزومه</a>
+
+		        {% if item in applied_jobs %}
+		        <a href="" class="btn btn-light py-2">قبلا رزومه ارسال کردید</a>
+		        {% else %}
+		        <a href="{% url 'ApplicantView' ad=item.id %}" class="btn btn-primary py-2">ارسال رزومه</a>
+		        {% endif %}
+
+
+		    </div>
+	</div>
+</div>
+
+{% endfor %}
+{% endif %}
+<!-- end -->
+
+{% if Applicants %}
+{% for item in Applicants %}
+<div dir="rtl" class="col-md-6 ftco-animate">
+	<div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+		<div class="one-third mb-4 mb-md-0">
+		    <div class="job-post-item-header text-right">
+		        <span class="subadge">{{item.ad.get_job_nature_display}}</span>
+		        <h5 class="mr-3 text-black"><a href="ad-details">{{item.ad.title}}</a></h5>
+		    </div>
+		<div class="job-post-item-body d-block d-md-flex">
+			<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.ad.company}}</a></div>
+			<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.ad.location}}</span></div>
+			<div><span class="icon-my_location">{{item.ad.salary}}</span></div>
+		</div>
+		</div>
+
+		    <div class=" ml-auto d-flex align-items-center mt-4 md-md-0">
+		        <a class="btn btn-primary font-size-10">{{item.get_status_display}}</a>
 		    </div>
 	</div>
 </div>
 {% endfor %}
-<!-- end -->
-
+{% endif %}

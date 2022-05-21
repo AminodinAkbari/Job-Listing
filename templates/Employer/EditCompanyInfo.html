@@ -1,0 +1,43 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+
+{% block common_content %}
+
+    <section class="ftco-section bg-light" dir="rtl">
+		<div class="container ftco-animate">
+			<div class="row">
+				<form class="p-5 bg-white manager-register" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="row form-group text-right">
+
+							<div class="col-md-12 mt-3 mb-md-0">
+			            <label for="name">{{form.logo.label_tag}}</label>
+			            {{form.logo}}
+			          </div>
+
+			          <div class="col-md-12 mt-3 mb-md-0">
+			            <label for="name">{{form.name.label_tag}}</label>
+			            {{form.name}}
+			          </div>
+
+			          <div class="col-md-12 mt-3 mb-md-0">
+			            <label for="address">{{form.address.label_tag}}</label>
+			            {{form.address}}
+			          </div>
+
+			          <div class="col-md-12 mt-3 mb-md-0">
+			            <label for="underlie">{{form.underlie.label_tag}}</label>
+			            {{form.underlie}}
+			            {% for error in form.phone.errors %}
+										<span class="text-danger">{{error}}</span>
+									{% endfor %}
+			          </div>
+
+			        </div>
+			        <button type="submit" name="btn-edit" class="btn btn-success">اعمال تغییرات</button>
+			    </form>
+			</div>
+		</div>
+	</section>
+
+
+{% endblock %}

@@ -1,5 +1,5 @@
 {% load static %}
-{% load Ads %}
+{% load template-parts %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,9 +12,18 @@
   </head>
   <body>
     
-	{% include 'BASE_HTMLs/Nav.html' %}
-    
-  {% block common_content %}{% endblock %}
+	{% Navbar request %}
+
+  {% if request.path != '/' %}
+    {% include 'BASE_HTMLs/Header.html' %}
+  {% endif %}
+
+  {% block common_content %}
+
+  {% endblock %}
+
+  {% block index_content %}{% endblock %}
+
 
 	{% include 'BASE_HTMLs/Footer.html' %}
     

@@ -1,0 +1,116 @@
+{% extends 'BASE_HTMLs/BASE.html' %}
+{% load Ads %}
+{% block common_content %}
+<section class="ftco-section bg-light">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3 sidebar">
+		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
+		        	<h3 class="heading-sidebar">دسته بندی ها</h3>
+		        <form action="" class="search-form mb-3" method="GET">
+	                <div class="form-group">
+	                  <span class="icon icon-search"></span>
+	                  <input type="text" class="form-control font-size-10" placeholder="جست و جو دسته بندی">
+	                </div>
+              	</form>
+		        	<form action="" class="browse-form" method="GET">
+		        		{% for item in categories %}
+							<label class="font-size-10" for="{{item.name}}"><input type="radio" id="{{item.name}}" name="category" value="{{item.name}}"> {{item.name}}</label><br>
+						{% endfor %}
+							  <hr>
+							  <button type="submit" class="btn btn-primary btn-sm">اعمال تغییرات</button>
+					</form>
+		        </div>
+
+		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
+		        	<h3 class="heading-sidebar">انتخاب استان</h3>
+		        	<form action="" class="search-form mb-3">
+                <div class="form-group">
+                  <input name="location" type="text" class="form-control font-size-10" dir="rtl" placeholder="جست و جو شهر یا استان"><br>
+                  <button type="submit" class="btn btn-primary btn-sm">جست و جو</button>
+                </div>
+              </form>
+
+		        </div>
+
+		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
+		        	<h3 class="heading-sidebar">نوع قرار داد</h3>
+		        	<form action="" class="browse-form font-size-10">
+
+							  <label for="option-job-type-1"><input type="radio" id="option-job-type-1" name="job_nature" value="Remote">دورکاری</label><br>
+							  <label for="option-job-type-2"><input type="radio" id="option-job-type-2" name="job_nature" value="PartTime">پاره وقت</label><br>
+							  <label for="option-job-type-3"><input type="radio" id="option-job-type-3" name="job_nature" value="FullTime">تمام وقت</label><br>
+
+							  <hr>
+							  <button type="submit" class="btn btn-primary btn-sm">اعمال تغییرات</button>
+							</form>
+		        </div>
+		      </div>
+		      <div class="col-lg-9 pr-lg-4">
+					{% for item in page_obj %}							
+						<div dir="rtl" class="col-md-12 ftco-animate">
+							<div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+								<div class="one-third mb-4 mb-md-0">
+								    <div class="job-post-item-header text-right">
+								        <span class="subadge">{{item.get_job_nature_display}}</span>
+								        <h5 class="mr-3 text-black"><a href="{% url 'AdDetail' pk=item.id %}">{{item.title}}</a></h5>
+								    </div>
+								<div class="job-post-item-body d-block d-md-flex">
+									<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.company}}</a></div>
+									<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.location}}</span></div>
+									<div><span class="icon-my_location">{{item.salary}}</span></div>
+								</div>
+								</div>
+
+								    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+								        <div>
+								        	{% for item in marked %}
+								        	<a href="{% url 'AdUnsaved' pk=item.id %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
+									             <span class="icon-trash"></span>
+									        </a>
+								        	{% empty %}
+									        <a href="{% url 'Favorite' ad=item.id %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
+									             <span class="icon-heart"></span>
+									        </a>
+									        {% endfor %}
+								        </div>
+
+								        {% for item in applied_jobs %}
+								        <a href="" class="btn btn-light py-2">قبلا رزومه ارسال کردید</a>
+								        {% empty %}
+								        <a href="{% url 'ApplicantView' ad=item.id %}" class="btn btn-primary py-2">ارسال رزومه</a>
+								        {% endfor %}
+								    </div>
+							</div>
+						</div>
+					{% endfor %}
+		      </div>
+		</div>
+		<!--Paginate-->
+		<div class="row mt-5">
+		    <div class="col text-center">
+		        <div class="block-27">
+		            <ul>
+		              	{% if page_obj.has_previous %}
+		                <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+		                {% endif %}
+		                {% for page in paginator.page_range %}
+		                	{% if page == page_obj.number%}
+		                		<li class="active"><a href="?page={{page}}">{{page}}</a></li>
+		                	{% else %}
+		                		<li><a href="?page={{page}}">{{page}}</a></li>
+		                	{% endif %}
+		                {% endfor %}
+		                {% if page_obj.has_next %}
+		                <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+		                {% endif %}
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+		<!--End Paginate-->
+	</div>
+</section>
+
+
+{% endblock %}

@@ -7,7 +7,7 @@
         <div class="row no-gutters slider-text align-items-end justify-content-start">
           <div class="col-md-12 ftco-animate text-center mb-5">
           	<p class="breadcrumbs mb-0"><span class="mr-3"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Job Post</span></p>
-            <h1 class="mb-3 bread">Post A Job</h1>
+            <h1 class="mb-3 bread">Edit AD</h1>
           </div>
         </div>
       </div>
@@ -39,36 +39,84 @@
           </div>
 
           <div class="col-md-12 col-lg-8 mb-5">
-          
-			     <form class="p-5 bg-white" method="POST" dir="rtl">
-
-            {% if user %}
-            <p class="alert alert-primary text-center" dir="rtl"><strong>{{user.get_full_name}}</strong> به عنوان نماینده این شرکت در این وب سایت شناخته خواهد شد</p>
-            {% endif %}
-
+          {% if form.errors %}
+            <h5 class="alert alert-warning text-right"><strong>لطفا خطاهای فرم را برطرف کنید ↓</strong></h5>
+          {% endif %}
+			     <form action="" class="p-5 bg-white" method="post" dir="rtl">
+            {% for form in form_ad %}
+            {% for error in form %}
+              <strong>{{ error.errors }}</strong>
+            {% endfor %}
+            {% endfor %}
             <div class="row form-group text-right">
                 <div class="col-md-12 mb-3 mb-md-0">
-                  <label for="title">{{form.name.label_tag}}</label>
-                    {{form.name}}
+                  <label for="title">{{form.title.label_tag}}</label>
+                    {{form.title}}
+                    {% for error in form.title.errors %}
+                      <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                    {% endfor %}
                 </div>
             </div>
 
             <div class="row form-group text-right">
                 <div class="col-md-12 mb-3 mb-md-0">
-                  <label for="title">{{form.address.label_tag}}</label>
-                    {{form.address}}
+                  <label for="location">{{form.location.label_tag}}</label>
+                    {{form.location}}
+                </div>
+            </div>
+
+
+            <div class="row form-group text-right">
+                <div class="col-md-4 mb-3 mb-md-0">
+                  <label for="category">{{form.category.label_tag}}</label>
+                    {{form.category}}
+                </div>
+            </div>
+
+            <div class="row form-group text-right">
+                <div class="col-md-12 mb-3">
+                  <label for="text">{{form.text.label_tag}}</label>
+                    {{form.text}}
+                      {% for error in form.text.errors %}
+                        <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                      {% endfor %}
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="soldier_ship">{{form.soldier_ship.label_tag}}</label>
+                    {{form.soldier_ship}}
+                </div>
+            </div>
+
+            <div class="row form-group text-right">
+                <div class="col-md-12 mb-3">
+                  <label for="skills">{{form.skills.label_tag}}</label>
+                    {{form.skills}}
+                      {% for error in form.skills.errors %}
+                        <strong class="alert alert-warning mb-2">{{error}}</strong>
+                      {% endfor %}
                 </div>
             </div>
 
             <div class="row form-group text-right">
                 <div class="col-md-12 mb-3 mb-md-0">
-                  <label for="location">{{form.underlie.label_tag}}</label>
-                    {{form.underlie}}
+                  <label for="job_nature">{{form.job_nature.label_tag}}</label>
+                    {{form.job_nature}}
                 </div>
-            </div>
 
+                <div class="col-md-6 mt-3 mb-md-0">
+                  <label for="expired_in">{{form.expired_in.label_tag}}</label>
+                    {{form.expired_in}}
+                </div>
+
+                <div class="col-md-6 mt-3 mb-md-0">
+                  <label for="salary">{{form.salary.label_tag}}</label>
+                    {{form.salary}}
+                </div>
+
+            </div>
             <hr>
-            <button type="submit" class="btn btn-primary btn-lg">ثبت</button>
+            <button type="submit" class="btn btn-success">اعمال تغییرات</button>
+            
             {% csrf_token %}
             </form>
           </div>

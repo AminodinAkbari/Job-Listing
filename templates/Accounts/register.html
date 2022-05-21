@@ -14,7 +14,7 @@
 
 <section class="ftco-section bg-light">
 	<div class="container">
-		<form class="p-5 bg-white manager-register" method="post" dir="rtl" enctype="multipart/form-data">
+		<form class="p-5 bg-white manager-register" method="POST" dir="rtl" enctype="multipart/form-data">
 			{% csrf_token %}
 
 		    <h1>فرم ثبت نام مدیر کمپانی 
@@ -31,7 +31,7 @@
 									</svg></label>
 		        </div>
 		        <div class="avatar-preview">
-		            <div id="imagePreview" style="background-image: url(static/png/Manager.png);">
+		            <div id="imagePreview" style="background-image: url(static/png/User.png);">
 
 		            </div>
 		            <small>تصویر پروفایل خود را با فلش سمت راست تغییر دهید</small>
@@ -62,7 +62,7 @@
 							{% endfor %}
 	          </div>
 
-	          <div class="col-md-12 mt-3 mb-md-0">
+	          <div class="col-md-6 mt-3 mb-md-0">
 	            <label for="password">{{form.password.label_tag}}</label>
 	            {{form.password}}
 	            <label class="mt-2" for="re_password">{{form.re_password.label_tag}}</label>
@@ -70,9 +70,17 @@
 	            {% for error in form.re_password.errors %}
 								<span class="text-danger">{{error}}</span>
 							{% endfor %}
+
 	          </div>
+
+						<div class="col-md-6 mt-3 mb-md-0">
+	            <label for="About">{{form.About.label_tag}}</label>
+	            {{form.About}}
+	          </div>
+
 	        </div>
-	        <button type="submit" class="btn btn-success">ثبت نام</button>
+	        <button type="submit" class="btn btn-success mb-5">ثبت نام</button>
+	        <p class="text-right">قبلا ثبت نام کرده اید ؟<a href="{% url 'Login' %}"> وارد شوید</a></p>
 	    </form>
 	</div>
 </section>
