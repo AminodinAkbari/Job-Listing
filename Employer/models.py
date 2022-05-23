@@ -69,7 +69,7 @@ class Advertisement(models.Model):
 applicant_status=(
 ('send' , 'در انتظار تأیین وضعیت'),
 ('seen' , 'توسط کارفرما مشاهده شد'),
-('accepted' , 'تأیید برای مساحبه'),
+('accepted' , 'تأیید برای مصاحبه'),
 ('rejected' , 'رد شده')
 )
 
