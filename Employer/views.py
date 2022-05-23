@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 from .forms import EditManagerInfoForm,UpdatePasswordManagersForm
 
@@ -10,7 +12,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 
 from jalali_date import datetime2jalali, date2jalali
-from .models import  Advertisement , Company , Manager
+from .models import  Advertisement , Company , Manager , Applicant
+from Employee.models import EmployeeModel
 
 from Controllers.models import passGenerator
 
@@ -42,8 +45,11 @@ class ManagerPanel(DetailView):
         except:
             manager = None
 
+        applicants = Applicant.objects.filter(ad__company__manager__email = self.request.user.username)
+
         context['object'] =  manager
         context['companies'] = company
+        context['applicants'] = applicants
         context['title'] = 'پنل مدیریت'
         return context
 
@@ -127,8 +133,6 @@ def NewAd(request):
     return render(request , 'Employer/New_Ad.html' , context)
 
 
-
-
 def NewCompany(request):
     if request.method == 'POST':
         form = NewCompanyForm(request.POST)
@@ -181,3 +185,20 @@ def DeleteCompany(request , pk):
         except:
             messages.error(request , 'خطایی رخ داد')
     return HttpResponseRedirect(reverse_lazy('ManagerPanel' , kwargs={'pk': manager.id}))
+
+def determine_the_status(request , pk,adver_id):
+    employee = EmployeeModel.objects.get(id = pk)
+    applicant = Applicant.objects.get(ad__id = adver_id)
+
+    if request.method == 'POST':
+        if request.POST['determine'] == 'accept':
+            applicant.status = 'accepted'
+            applicant.save()
+            return redirect('/')
+        else:
+            print('rejected')
+
+    context = {
+    'employee' : employee ,
+    }
+    return render(request , 'Employer/EmployeeDetermine.html' , context)
