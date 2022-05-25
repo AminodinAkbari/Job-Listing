@@ -1,0 +1,18 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+
+{% block common_content %}
+
+<section class="ftco-section bg-light" dir="rtl">
+	<div class="container">
+		<div class="row text-center">
+			<form method="POST">
+				{% csrf_token %}
+				{{employee.employee.get_full_name}}<hr>
+				<button class="btn btn-success btn-lg" name="determine" value="accept">Accept</button>
+				<button class="btn btn-danger btn-lg" name="determine" value="reject">Reject</button>
+			</form>
+		</div>
+	</div>
+</section>
+
+{% endblock %}

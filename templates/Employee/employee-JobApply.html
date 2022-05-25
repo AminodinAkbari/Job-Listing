@@ -1,0 +1,13 @@
+{% extends 'BASE_HTMLs/BASE.html' %}
+{% load Ads %}
+{% block common_content %}
+
+<section class="ftco-section bg-light" dir="rtl">
+		<div class="container ftco-animate">
+			<div class="row">
+				{% ads_job_apply request %}
+			</div>
+		</div>
+</section>
+
+{% endblock %}

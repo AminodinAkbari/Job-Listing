@@ -1,0 +1,152 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+
+{% block common_content %}
+
+    <div class="container">
+    	{% if messages %}
+			  {% for message in messages %}
+				<div class="alert alert-success alert-dismissible fade show mb-2 text-center" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+					<strong>{{message}}</strong>
+				</div>
+			  {% endfor %}
+		{% endif %}
+    </div>
+
+		<section class="ftco-section bg-light">
+			<div class="container ftco-animate">
+				<div class="row">
+					<div class="col-lg-8 bg-white p-4 text-right" dir="rtl">
+						<div class="company-area">
+						<h5 class="bb-1 pt-1 pb-2 mb-3"> ○ شرکت های ثبت شده توسط شما :</h5>
+						{% for company in companies %}
+							{% if company.valid %}
+							<div class="card text-white bg-success mb-3">
+							  <div class="card-header"><strong>{{company.name}} ←  
+							  تعداد آگهی های این شرکت : {{company.company.all|length}}</strong></div>
+							  <div class="card-body">
+							    <strong class="card-title text-white">{{company.underlie | truncatewords:9}}</strong>
+							    <p class="card-text">{{company.address}}</p>
+							    <a class="btn btn-light btn-sm" href="{% url 'EditCompanyView' pk=company.id %}">ویرایش</a>
+							    <a class="btn btn-danger btn-sm" href="{% url 'DeleteCompany' pk=company.id %}">حذف</a>
+							  </div>
+							</div>
+							{% else %}
+							<div class="card border-secondary mb-3">
+								<strong class="p-3 alert alert-danger">مدیر وب سایت هنوز صحت این شرکت را تایید نکرده</strong>
+							  <div class="card-header"><strong>{{company.name}} ← 
+							  تعداد آگهی های این شرکت : {{company.company.all|length}}</strong></div>
+							  <div class="card-body">
+							    <strong class="card-title">{{company.underlie | truncatewords:9}}</strong>
+							    <p class="card-text text-secondry">{{company.address}}</p>
+							    <a class="btn btn-light btn-sm" href="{% url 'EditCompanyView' pk=company.id %}">ویرایش</a>
+							    <a class="btn btn-danger btn-sm" href="{% url 'DeleteCompany' pk=company.id %}">حذف</a>
+							  </div>
+							</div>
+
+							{% endif %}
+
+						{% endfor %}
+						</div>
+						<div class="advertisiment-area">
+							<h5 class="bb-1 mt-5 pt-5 pb-3 mb-3"> ○ آگهی های ثبت شده توسط شما : </h5>
+							{% for company in companies %}
+					     	{%	for ad in company.company.all %}
+					     		<div class="card text-right bg-light mt-5 mb-5">
+								  <div class="card-body">
+								    <h5 class="card-title">{{ad.title}} | {{ad.company.name}}</h5>
+								    <p class="card-text bb-1">{{ad.text | truncatewords:12}}</p>
+								    <a href="{% url 'EditAdView' pk=ad.id %}" class="btn btn-link btn-sm">ویرایش</a>
+								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-danger btn-sm">حذف آگهی</a>
+								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-success btn-sm">رزومه های دریافتی در این آگهی</a>
+								  </div>
+								  {% for item in applicants %}
+									  {% if ad.id == item.ad.id and item.status != 'rejected' and item.status != 'accepted'%}
+									  {% for i in item.user.employee.all %}
+									  <div class="card-footer">
+									  	<div class="row text-center">
+									  		
+									  			<img class="col-md-2" src="{{i.profile_pic.url}}" width="100%" height="auto">
+									  		
+									  		<div class="col-md-3">{{item.user.get_full_name}}</div>
+									  		<div class="col-md-3">{{item.user.username}}</div>
+									  		<div class="col-md-3"><a href="{% url 'DetermineTheStatus' pk=i.id adver_id=ad.id %}">مشاهده رزومه</a></div>
+									  	</div>
+									  </div>
+									  {% endfor %}
+
+									  {% elif ad.id == item.ad.id and item.status == 'accepted' %}
+									  {% for i in item.user.employee.all %}
+									  
+
+									  <div class="card-footer">
+									  	<div class="row text-center">
+									  			<img class="col-md-1" src="{{i.profile_pic.url}}" width="10%">
+									  	<div class="row">
+									  		<div class="col-md-3"><h5 class="text-success">{{item.user.get_full_name}}</h5></div>
+									  		<div class="col-md-9 alert alert-success">
+									  			<a href="" class="btn btn-link">تأیید شده برای مصاحبه</a>
+									  		</div>
+									  	</div>
+									  	</div>
+									  </div>
+
+									 
+									  {% endfor %}
+									  {% endif %}
+								  {% endfor %}
+								</div>
+					     	{% endfor %}
+				     	{% endfor %}
+						</div>
+		      		</div>
+
+		      <div class="col-lg-4 sidebar">
+		        <div class="sidebar-box bg-white p-4 ftco-animate">
+		        	<h3 class="heading-sidebar"></h3>
+
+		    <div class="list-group">
+				  <a href="#" class="list-group-item list-group-item-action">
+				    <div class="d-flex w-100 justify-content-between" dir="rtl">
+				      <strong class="mb-1">شرکت ها</strong>
+				      <!--<small>3 days ago</small>-->
+				    </div>
+				    <p class="mb-1 text-right font-size-10 pt-1" dir="rtl">تعداد شرکت هایی ثبت شده شما :
+				     <span class="badge badge-pill badge-primary p-2">{{companies|length}}</span>
+				    </p>
+				  </a>
+
+				  <a href="#" class="list-group-item list-group-item-action">
+				    <div class="d-flex w-100 justify-content-between" dir="rtl">
+				      <strong class="mb-1">آگهی ها</strong>
+				      <!--<small>3 days ago</small>-->
+				    </div>
+				    <p class="mb-1 text-right font-size-10 pt-1" dir="rtl">تعدا همه آگهی های ثبت شده شما :
+				     <span class="badge badge-pill badge-primary p-2">
+				     		
+				     </span>
+				    </p>
+				  </a>
+			</div>
+
+		        </div>
+
+		        <div class="sidebar-box bg-white p-4 ftco-animate text-right">
+		        	<strong>اطلاعات شما</strong>
+								<div class="card mb-3 text-right no-border" dir="rtl">
+								  <img src="{{object.profile_pic.url}}" class="card-img-top" alt="profile_pic" width="100%">
+								  <div class="card-body">
+								    <strong class="card-title">{{object.name}} {{object.family}}</strong>
+								    <small class="mb-1 bb-1">{{object.email}} <br> {{object.phone}}</small>
+								    <p class="card-text text-justify">{{object.About}}</p>
+								    <a href="{% url 'EditManagerInfo' pk=manager.id %}" class="btn btn-light btn-sm">ویرایش اطلاعات</a>
+								  </div>
+								</div>
+		      	</div>
+
+			</div>
+		</div>
+	</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'BASE_HTMLs/BASE.html' %}
+{% load jalali_tags %}
+{% block common_content %}
+<section class="ftco-section bg-light">
+		<div class="container ftco-animate">
+			<div class="row">
+				<div class="col-md-8 text-right text-dark" dir="rtl">
+					<h4 class="bb-1">وضعیت درخواست</h4>
+					<ul class="bg-white pt-1 pb-5">
+						<li class="bg-white">
+							وضعیت در خواست همکاری شما : <br><br>
+						<strong class="p-5">{{object.get_status_display}}</strong> (در {{object.created_at|to_jalali}}) <br>
+						</li>
+					</ul>
+				</div>
+
+				<div class="col-md-4 text-right">
+					<div class="p-4 mb-3 bg-white">
+						<strong class="pb-5">آگهی</strong>
+						<p class="bg-light p-3">{{object.ad.title}}<hr>از شرکت » {{object.ad.company.name}}</p>
+						<a href="{% url 'AdDetail' pk=object.ad.id %}" class="btn btn-sm btn-primary">مشاهده آگهی</a>
+					</div>
+				<div class="p-4 mb-3 bg-white">
+					<strong class="pb-5">اطلاعات شما</strong>
+					<p class="bb-1 bg-light p-3">{{request.user.get_full_name}}</p>
+					<p class="bg-light p-3">{{request.user.username}}</p>
+					<a href="{% url 'UpdateResume' pk=employee.id %}" class="btn btn-success text-white text-center btn-block">مشاهده رزومه</a>
+		              <p class="text-center font-size-13 mt-3" dir="rtl">
+		               	آگهی تا <u>{{time_left}}</u> روز دیگر فعال می باشد
+		           	  </p>
+            	</div>
+            	<a href="{% url 'CancelingApplicant' pk=object.id %}" class="btn btn-link btn-sm text-danger">لغو درخواست همکاری</a>
+			</div>
+			</div>
+		</div>
+
+</section>
+{% endblock %}
