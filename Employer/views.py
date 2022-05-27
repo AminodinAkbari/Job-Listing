@@ -11,6 +11,10 @@ from django.contrib import messages
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 
+<<<<<<< HEAD
+=======
+from jalali_date import datetime2jalali, date2jalali
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 from .models import  Advertisement , Company , Manager , Applicant
 from Employee.models import EmployeeModel
 
@@ -24,8 +28,11 @@ EditAdInfoForm,
 EditCompanyForm,
 )
 
+<<<<<<< HEAD
 from django.utils import timezone
 now = timezone.now()
+=======
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 # Create your views here.
 
 class ManagerPanel(DetailView):
@@ -188,6 +195,7 @@ def DeleteCompany(request , pk):
     return HttpResponseRedirect(reverse_lazy('ManagerPanel' , kwargs={'pk': manager.id}))
 
 def determine_the_status(request , pk,adver_id):
+<<<<<<< HEAD
     employee = EmployeeModel.objects.filter(id = pk).first()
     if employee is not None:
         applicant = Applicant.objects.filter(ad__id = adver_id , user = employee.employee).first()
@@ -205,6 +213,19 @@ def determine_the_status(request , pk,adver_id):
                 applicant.status = 'rejected'
                 applicant.save()
                 return redirect('/')
+=======
+    employee = EmployeeModel.objects.get(id = pk)
+    applicant = Applicant.objects.get(ad__id = adver_id)
+
+    if request.method == 'POST':
+        if request.POST['determine'] == 'accept':
+            applicant.status = 'accepted'
+            applicant.save()
+            return redirect('/')
+        else:
+            print('rejected')
+
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
     context = {
     'employee' : employee ,
     }

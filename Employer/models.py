@@ -41,7 +41,11 @@ class Company(models.Model):
 	name = models.CharField(max_length = 250 , verbose_name = 'نام شرکت')
 	address = models.TextField(verbose_name = 'آدرس')
 	underlie = models.TextField(verbose_name = 'درباره شرکت (این متن در آگهی های شما نمایش داده می شود)')
+<<<<<<< HEAD
 	manager = models.ForeignKey(Manager , on_delete = models.CASCADE , default = 1 , related_name = 'Have_companies')
+=======
+	manager = models.ForeignKey(Manager , on_delete = models.CASCADE , default = 1)
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 	valid = models.BooleanField(verbose_name = 'تایید کنید این شرکت وجود خارجی دارد')
 
 	def __str__(self):

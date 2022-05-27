@@ -76,10 +76,17 @@ class AllAds_CBV(ListView):
 
 		return context
 # ___________End All Ads __________________
+<<<<<<< HEAD
 # ___________ALL EMPLOYEES and ALL EMPLOYERS_________________
 
 class ALLEmployees(ListView):
 	template_name = 'Home/All-Employees.html'
+=======
+# ___________ALL EMPLOYEES_________________
+
+class ALLEmployees(ListView):
+	template_name = 'Home/AllEmployees.html'
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 	paginate_by = 9
 
 	def get_queryset(self):
@@ -90,6 +97,7 @@ class ALLEmployees(ListView):
 		context['title'] = 'لیست کارجویان'
 		return context
 
+<<<<<<< HEAD
 class ALLCompanies(ListView):
 	template_name = 'Home/All-Employers.html'
 	paginate_by = 9
@@ -103,6 +111,9 @@ class ALLCompanies(ListView):
 		return context
 
 # ___________END______________
+=======
+# ___________END ALL EMPLYEES______________
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 class AdDetail(DetailView):
 	model = Advertisement
 	template_name = 'Employer/AdvertimentDetail.html'
@@ -132,8 +143,12 @@ class EmployeeDetail(DetailView):
 		context = super(EmployeeDetail , self).get_context_data(**kwargs)
 		obj = self.get_object()
 		context['title'] = 'رزومه کارجو'
+<<<<<<< HEAD
 		if obj.skills:
 			context['skills'] = self.object.skills.split('/')
+=======
+		context['skills'] = self.object.skills.split('/')
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 		return context
 
 class AdByCategory(ListView):

@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #pip
     'rest_framework',
+<<<<<<< HEAD
+=======
+    'rest_framework_swagger',
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 
     #StartApp
     'Employer',

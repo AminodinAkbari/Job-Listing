@@ -54,10 +54,15 @@
 							<h5 class="bb-1 mt-5 pt-5 pb-3 mb-3"> ○ آگهی های ثبت شده توسط شما : </h5>
 							{% for company in companies %}
 					     	{%	for ad in company.company.all %}
+<<<<<<< HEAD
+=======
+
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 					     		<div class="card text-right bg-light mt-5 mb-5">
 								  <div class="card-body">
 								    <h5 class="card-title">{{ad.title}} | {{ad.company.name}}</h5>
 								    <p class="card-text bb-1">{{ad.text | truncatewords:12}}</p>
+<<<<<<< HEAD
 								    <a href="{% url 'EditAdView' pk=ad.id %}" class="btn btn-link btn-sm">ویرایش</a>
 								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-danger btn-sm">حذف آگهی</a>
 								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-success btn-sm">رزومه های دریافتی در این آگهی</a>
@@ -98,6 +103,13 @@
 									  {% endif %}
 								  {% endfor %}
 								</div>
+=======
+								    <a href="{% url 'EditAdView' pk=ad.id %}" class="btn btn-primary btn-sm">ویرایش</a>
+								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-danger btn-sm">حذف آگهی</a>
+								  </div>
+								</div>
+
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 					     	{% endfor %}
 				     	{% endfor %}
 						</div>

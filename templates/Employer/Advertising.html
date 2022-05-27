@@ -52,12 +52,17 @@
 		    </div>
 		<div class="job-post-item-body d-block d-md-flex">
 			<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.ad.company}}</a></div>
+<<<<<<< HEAD
 			<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.ad.location|truncatewords:3}}</span></div>
+=======
+			<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.ad.location}}</span></div>
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 			<div><span class="icon-my_location">{{item.ad.salary}}</span></div>
 		</div>
 		</div>
 
 		    <div class=" ml-auto d-flex align-items-center mt-4 md-md-0">
+<<<<<<< HEAD
 		    	{% if item.status == "send" %}
 		        <a class="btn btn-lg btn-primary font-size-10">وضعیت : {{item.get_status_display}}</a>
 		        {% elif item.status == "seen" %}
@@ -71,6 +76,11 @@
 		    </div>
 		</div>
 		<a href="{% url 'ApplicantDetail' pk=item.id %}" class="btn btn-lg btn-link font-size-10">مشاهده جزئیات</a>
+=======
+		        <a class="btn btn-primary font-size-10">{{item.get_status_display}}</a>
+		    </div>
+	</div>
+>>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
 </div>
 {% endfor %}
 {% endif %}
