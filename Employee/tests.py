@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.test import TestCase,Client
 from Employee.models import EmployeeModel
 from django.contrib.auth.models import User
@@ -42,8 +41,3 @@ class Test(TestCase):
 		# obj.refresh_from_db()
 		# print(obj.phone)
 		# self.assertEqual(obj.phone,'12345')
-=======
-from django.test import TestCase
-
-# Create your tests here.
->>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa

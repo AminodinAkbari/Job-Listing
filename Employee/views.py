@@ -22,7 +22,7 @@ class UpdateResume(UpdateView):
 	form_class = PersonalInfo_ResumeForm
 	model = EmployeeModel
 	template_name = 'Employee/CreateResume.html'
-	
+
 	def dispatch(self , request , *args , **kwargs):
 		obj = self.get_object()
 		# print("----------------")
@@ -51,6 +51,7 @@ class UpdateResume(UpdateView):
 class ApplicantDetail(DetailView):
 	model = Applicant
 	template_name = 'Employee/Applicant-detail.html'
+	
 
 	def dispatch(self ,request , *args, **kwargs):
 		obj = self.get_object()

@@ -22,8 +22,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jalali_date',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,11 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #pip
     'rest_framework',
-<<<<<<< HEAD
-=======
-    'rest_framework_swagger',
->>>>>>> f1eee86f862167e6899b4c13b52add5a0b0166fa
-
+    'jalali_date',
     #StartApp
     'Employer',
     'Controllers',

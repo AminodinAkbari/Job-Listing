@@ -1,5 +1,5 @@
 import os
-from django_jalali.db import models as jmodels
+# from jalali_date.fields import JalaliDateField
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -35,7 +35,7 @@ class EmployeeModel(models.Model):
 	marital_status = models.CharField(max_length = 10 , choices=marital , verbose_name = 'وضعیت تأهل', blank = True , null = True)
 	about_me = models.TextField(verbose_name = 'درباره من' , blank = True , null = True)
 	skills = models.TextField(verbose_name = 'مهارت ها (مهارتهای خود را با "/ یا ،" از هم جدا کنید', blank = True , null = True)
-	birth = jmodels.jDateField(verbose_name = 'تارخ تولد' , blank=True , null = True)
+	# birth = JalaliDateField()
 	employee_soldier_ship = models.CharField(max_length = 25,choices=employee_soldier_ship_types , verbose_name = 'وضعیت نظام وظیفه (اگر خانم هستید نیاز به انتخاب گزینه نیست)', blank=True , null = True)
 	languages = models.ManyToManyField(Languages , verbose_name = 'زبانهای گفتاری مسلط') 
 	work_experience = models.TextField(verbose_name = 'سوابق شغلی' , blank = True , null = True)
