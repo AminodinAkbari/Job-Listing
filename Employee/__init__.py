@@ -1,1 +1,1 @@
-default_app_config = 'Employee.apps.NewEmployee'
+# default_app_config = 'Employee.apps.NewEmployee'
