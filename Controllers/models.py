@@ -36,12 +36,12 @@ states_iran = (
 )
 
 marital = (
-('Married','متأهل'), 
+('Married','متأهل'),
 ('Single' , 'مجرد'),
 )
 
 sex_types = (
-('Male','مرد') , 
+('Male','مرد') ,
 ('Female' , 'زن'),
 )
 
@@ -51,7 +51,6 @@ class Languages(models.Model):
 
     def __str__(self):
         return self.lang_fa_type
-
 
 class categories(models.Model):
 	name = models.CharField(max_length = 100)
@@ -76,7 +75,7 @@ def debugger(func):
     def wrapper(*args,**kwargs):
         reset_queries()
         start_time = datetime.time()
-        value = func(*args,**kwargs) 
+        value = func(*args,**kwargs)
         end_time = datetime.time()
         queries = len(connection.queries)
         print(f"\n-------------\nConection Numbers: {queries} \n taketime = {(end_time):.3f}\n-----------\n")
