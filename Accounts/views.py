@@ -23,7 +23,7 @@ class RegisterView(FormView):
 		return super(RegisterView, self).dispatch(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)		
+		context = super().get_context_data(**kwargs)
 		if self.request.method == "POST":
 			context['form'] = RegisterForm(self.request.POST ,self.request.FILES)
 		else:
@@ -92,23 +92,18 @@ class EmployeeRegisterView(FormView):
 		return super(EmployeeRegisterView, self).dispatch(request, *args, **kwargs)
 
 	def form_valid(self, form):
-		user = form.save()
+		user=form.save()
 		user.set_password(self.request.POST['password'])
 		form.save()
+		EmployeeModel.objects.create(employee = user)
 		return super(EmployeeRegisterView, self).form_valid(form)
 
 	def get_success_url(self):
-		employee_obj = self.request.user
 		username = self.request.POST['username']
 		password = self.request.POST['password']
 		user = authenticate(self.request , username = username , password = password)
 
-		if user is not None:
+		if user:
 			login(self.request , user)
 			EmployeeModel.objects.create(employee = self.request.user)
 		return reverse_lazy('Home')
-
-
-
-
-
