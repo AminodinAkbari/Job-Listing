@@ -33,11 +33,11 @@ class RegisterForm(ModelForm):
 
 	def clean_email(self):
 		email = self.cleaned_data.get('email')
-		email_is_exist = User.objects.filter(username = email)
-		if email_is_exist is not None:
+		email_is_exist = User.objects.filter(username = email).exists()
+		if email_is_exist :
 			raise forms.ValidationError('این ایمیل قبلا در سایت ثبت شده است !')
 		if ('@'and'.com') not in email:
-			raise ValidationError('ایمیل وارد شده معتبر نیست.')
+			raise forms.ValidationError('ایمیل وارد شده معتبر نیست.')
 		return email
 
 	def clean_re_password(self):
