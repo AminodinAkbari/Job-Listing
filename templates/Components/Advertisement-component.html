@@ -8,7 +8,7 @@
 		    </div>
 		<div class="job-post-item-body d-block d-md-flex">
 			<div class="ml-3"><span class="icon-layers"></span><a href=""> {{item.company}}{{item.ad.company}}</a></div>
-			<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.location}}{{item.ad.location}}</span></div>
+			<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.get_location_display}}{{item.ad.get_location_display}}</span></div>
 			<div><span class="icon-my_location">{{item.salary}}{{item.ad.salary}}</span></div>
 		</div>
 		</div>
@@ -44,7 +44,7 @@
 								    </div>
 								<div class="job-post-item-body d-block d-md-flex">
 									<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.ad.company}}</a></div>
-									<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.ad.location|truncatewords:3}}</span></div>
+									<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.ad.get_location_display|truncatewords:3}}</span></div>
 									<div><span class="icon-my_location">{{item.ad.salary}}</span></div>
 								</div>
 								</div>
