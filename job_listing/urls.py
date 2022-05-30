@@ -28,6 +28,7 @@ urlpatterns = [
     path('' , include('Accounts.urls')),
     path('' , include('Employee.urls')),
     path('' , include('Home.urls')),
+    path('' , include('Controllers.urls')),
     path('', include(router.urls)),
     path('', include('Rest_API.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
