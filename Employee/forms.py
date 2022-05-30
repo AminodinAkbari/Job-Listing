@@ -26,7 +26,11 @@ class PersonalInfo_ResumeForm(ModelForm):
 		super(PersonalInfo_ResumeForm, self).__init__(*args, **kwargs)
 
 		self.fields['skills'].widget.attrs = {'placeholder':'تسلط به نرم افزار هلو / تسلط به زبان انگلیسی / ...' , 'rows':'9'}
-		
+
+		self.fields['birth'] = JalaliDateField(label="تاریخ تولد",
+            widget=AdminJalaliDateWidget
+        )
+
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
 
@@ -38,6 +42,3 @@ class PersonalInfo_ResumeForm(ModelForm):
 		self.fields['languages'].label='به کدام زبان گفتاری مسلط هستید ؟'
 		self.fields['skills'].label='مهارت های خود را بنویسید (آنها را با علامت "/" جدا کنید)'
 		self.fields['birth'] = JalaliDateField(label=('تاریخ تولد'),widget=AdminJalaliDateWidget)
-
-
-
