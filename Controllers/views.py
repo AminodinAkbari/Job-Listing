@@ -82,10 +82,14 @@ class Search(ListView):
 	paginate_by = 10
 
 	def get_queryset(self):
-		return search_filter(self.request)
+		if self.kwargs and self.kwargs == 'category_id':
+			return Advertisement.objects.filter(category_id = self.kwargs['category_id'])
+		else:
+			return search_filter(self.request)
 
 	def get_context_data(self , **kwargs):
 		context = super(Search , self).get_context_data(**kwargs)
 		context['SearchForm'] = SearchForm
 		context['request'] = self.request
+		context['title'] = 'آگهی ها'
 		return context

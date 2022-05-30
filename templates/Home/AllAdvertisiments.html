@@ -1,5 +1,6 @@
 {% extends 'BASE_HTMLs/BASE.html' %}
 {% load components %}
+{% load template-parts %}
 {% block common_content %}
 <div class="container">
 	<div class="ftco-search my-md-5" dir="rtl">
@@ -7,7 +8,8 @@
 			<div class="col-md-12 tab-wrap">
 
 				<div class="tab-content p-4" id="v-pills-tabContent">
-					{% include 'Home/Search.html' %}
+					{% comment %}{% include 'Home/Search.html' %}{% endcomment %}
+					{% Search %}
 				</div>
 			</div>
 		</div>
@@ -35,6 +37,8 @@
 		      <div class="col-lg-9 pr-lg-4">
 					{% for item in object_list %}
 						{% ad_component_tag item request=request %}
+					{% empty %}
+							<h4 class="alert alert-primary text-center">موردی یافت نشد</h4>
 					{% endfor %}
 		      </div>
 		</div>
