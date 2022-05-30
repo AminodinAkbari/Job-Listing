@@ -1,10 +1,10 @@
 from django.shortcuts import redirect, render
 from Employer.models import Manager , Advertisement , Applicant
 from Employee.models import EmployeeModel
-from Controllers.models import categories
+
 from django.core.exceptions import ValidationError
 from django.views.generic import ListView
-from django.views.generic.edit import FormView
+
 from .forms import SearchForm
 
 from django.utils import timezone
@@ -55,7 +55,7 @@ def search_filter(request):
 		obj = obj.filter(title__icontains = title)
 
 	if is_valid_queryparam(location):
-		obj = obj.filter(location__icontains = location)
+		obj = obj.filter(location__iexact = location)
 
 	if is_valid_queryparam(category):
 		obj = obj.filter(category__name__iexact = category)
@@ -70,10 +70,10 @@ def search_filter(request):
 		obj = obj.filter(category__name__iexact = category , title__icontains = title)
 
 	if is_valid_queryparam(category) and is_valid_queryparam(location):
-		obj = obj.filter(category__name__iexact = category , location__icontains = location)
+		obj = obj.filter(category__name__iexact = category , location__iexact = location)
 
 	if is_valid_queryparam(title) and is_valid_queryparam(location):
-		obj = obj.filter(title__icontains = title , location__icontains = location)
+		obj = obj.filter(title__icontains = title , location__iexact = location)
 
 	return obj
 
@@ -86,5 +86,6 @@ class Search(ListView):
 
 	def get_context_data(self , **kwargs):
 		context = super(Search , self).get_context_data(**kwargs)
+		context['SearchForm'] = SearchForm
 		context['request'] = self.request
 		return context

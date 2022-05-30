@@ -1,10 +1,10 @@
 <div class="ftco-search my-md-5" dir="rtl">
   <div class="row">
-    <div class="col-md-12 nav-link-wrap">
+    <!-- <div class="col-md-12 nav-link-wrap">
       <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Find a Job</a>
       </div>
-    </div>
+    </div> -->
     <div class="col-md-12 tab-wrap">
 
       <div class="tab-content p-4" id="v-pills-tabContent">
@@ -38,8 +38,10 @@
               <div class="col-md ml-md-2">
                 <div class="form-group">
                   <div class="form-field">
-                    <div class="icon"><span class="icon-map-marker"></span></div>
-                    <input type="text" name="location" class="form-control" placeholder="نام استان یا شهر">
+                    <div class="select-wrap">
+                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                      {{SearchForm}}
+                    </div>
                   </div>
                 </div>
               </div>

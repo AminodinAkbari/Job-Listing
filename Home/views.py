@@ -2,9 +2,10 @@ from django.shortcuts import render
 from django.views.generic import ListView , DetailView
 
 from Controllers.views import Who_is
-from Controllers.models import categories ,job_nature
+from Controllers.models import categories ,job_nature , states_iran
 from Employer.models import Manager,Advertisement,Company
 from Employee.models import EmployeeModel
+from Controllers.forms import SearchForm
 
 from datetime import datetime
 from django.utils import timezone
@@ -31,6 +32,7 @@ def Index(request , user_type):
 	context['employees'] = EmployeeModel.objects.all()
 	context['is_a_manager'] = user_type
 	context['ads'] = Advertisement.objects.all()[:12]
+	context['SearchForm'] = SearchForm
 	if request.method == 'POST':
 		form = NewsletterEmailsForm(request.POST)
 		context['Newsletter'] = form
@@ -157,6 +159,7 @@ class TopCompanies(ListView):
 	template_name = 'index.html'
 	def get_context_data(self,**kwargs):
 		context = super(TopCompanies,self).get_context_data(**kwargs)
+		top_companies = Company.objects.all()
 		context['top_company'] = top_companies
 		return context
 
