@@ -24,7 +24,7 @@
 						{% for company in companies %}
 							{% if company.valid %}
 							<div class="card text-white bg-success mb-3">
-							  <div class="card-header"><strong>{{company.name}} ←  
+							  <div class="card-header"><strong>{{company.name}} ←
 							  تعداد آگهی های این شرکت : {{company.company.all|length}}</strong></div>
 							  <div class="card-body">
 							    <strong class="card-title text-white">{{company.underlie | truncatewords:9}}</strong>
@@ -36,7 +36,7 @@
 							{% else %}
 							<div class="card border-secondary mb-3">
 								<strong class="p-3 alert alert-danger">مدیر وب سایت هنوز صحت این شرکت را تایید نکرده</strong>
-							  <div class="card-header"><strong>{{company.name}} ← 
+							  <div class="card-header"><strong>{{company.name}} ←
 							  تعداد آگهی های این شرکت : {{company.company.all|length}}</strong></div>
 							  <div class="card-body">
 							    <strong class="card-title">{{company.underlie | truncatewords:9}}</strong>
@@ -60,16 +60,16 @@
 								    <p class="card-text bb-1">{{ad.text | truncatewords:12}}</p>
 								    <a href="{% url 'EditAdView' pk=ad.id %}" class="btn btn-link btn-sm">ویرایش</a>
 								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-danger btn-sm">حذف آگهی</a>
-								    <a href="{% url 'DeleteAd' pk=ad.id %}" class="btn btn-success btn-sm">رزومه های دریافتی در این آگهی</a>
+								    <a href="" class="btn btn-success btn-sm">رزومه های دریافتی در این آگهی</a>
 								  </div>
 								  {% for item in applicants %}
 									  {% if ad.id == item.ad.id and item.status != 'rejected' and item.status != 'accepted'%}
 									  {% for i in item.user.employee.all %}
 									  <div class="card-footer">
 									  	<div class="row text-center">
-									  		
+									  		{% if i.profile_pic %}
 									  			<img class="col-md-2" src="{{i.profile_pic.url}}" width="100%" height="auto">
-									  		
+									  		{% endif %}
 									  		<div class="col-md-3">{{item.user.get_full_name}}</div>
 									  		<div class="col-md-3">{{item.user.username}}</div>
 									  		<div class="col-md-3"><a href="{% url 'DetermineTheStatus' pk=i.id adver_id=ad.id %}">مشاهده رزومه</a></div>
@@ -79,11 +79,13 @@
 
 									  {% elif ad.id == item.ad.id and item.status == 'accepted' %}
 									  {% for i in item.user.employee.all %}
-									  
+
 
 									  <div class="card-footer">
 									  	<div class="row text-center">
+                        {% if i.profile_pic %}
 									  			<img class="col-md-1" src="{{i.profile_pic.url}}" width="10%">
+                        {% endif %}
 									  	<div class="row">
 									  		<div class="col-md-3"><h5 class="text-success">{{item.user.get_full_name}}</h5></div>
 									  		<div class="col-md-9 alert alert-success">
@@ -93,7 +95,7 @@
 									  	</div>
 									  </div>
 
-									 
+
 									  {% endfor %}
 									  {% endif %}
 								  {% endfor %}
@@ -125,7 +127,7 @@
 				    </div>
 				    <p class="mb-1 text-right font-size-10 pt-1" dir="rtl">تعدا همه آگهی های ثبت شده شما :
 				     <span class="badge badge-pill badge-primary p-2">
-				     		
+
 				     </span>
 				    </p>
 				  </a>
@@ -136,8 +138,10 @@
 		        <div class="sidebar-box bg-white p-4 ftco-animate text-right">
 		        	<strong>اطلاعات شما</strong>
 								<div class="card mb-3 text-right no-border" dir="rtl">
+                  {% if i.profile_pic %}
 								  <img src="{{object.profile_pic.url}}" class="card-img-top" alt="profile_pic" width="100%">
-								  <div class="card-body">
+                  {% endif %}
+                  <div class="card-body">
 								    <strong class="card-title">{{object.name}} {{object.family}}</strong>
 								    <small class="mb-1 bb-1">{{object.email}} <br> {{object.phone}}</small>
 								    <p class="card-text text-justify">{{object.About}}</p>

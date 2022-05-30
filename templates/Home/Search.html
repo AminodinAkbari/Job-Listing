@@ -1,0 +1,59 @@
+<div class="ftco-search my-md-5" dir="rtl">
+  <div class="row">
+    <div class="col-md-12 nav-link-wrap">
+      <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Find a Job</a>
+      </div>
+    </div>
+    <div class="col-md-12 tab-wrap">
+
+      <div class="tab-content p-4" id="v-pills-tabContent">
+
+        <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
+          <form method="GET" action="{% url 'Search' %}" class="search-job">
+            <div class="row no-gutters">
+              <div class="col-md ml-md-2">
+                <div class="form-group">
+                  <div class="form-field">
+                    <div class="icon"><span class="icon-briefcase"></span></div>
+                    <input type="text" class="form-control" name="title" placeholder="عنوان شغلی ، مهارت ...">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md ml-md-2">
+                <div class="form-group">
+                  <div class="form-field">
+                    <div class="select-wrap">
+                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                      <select name="category" class="form-control">
+                        <option value="">دسته بندی</option>
+                        {% for Category in categories %}
+                        <option value="{{Category.name}}">{{Category.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md ml-md-2">
+                <div class="form-group">
+                  <div class="form-field">
+                    <div class="icon"><span class="icon-map-marker"></span></div>
+                    <input type="text" name="location" class="form-control" placeholder="نام استان یا شهر">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md">
+                <div class="form-group">
+                  <div class="form-field">
+                    <button type="submit" class="form-control btn btn-primary">جستجو</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

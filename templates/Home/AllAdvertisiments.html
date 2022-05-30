@@ -1,37 +1,67 @@
 {% extends 'BASE_HTMLs/BASE.html' %}
 {% load Ads %}
 {% block common_content %}
+<div class="container">
+	<div class="ftco-search my-md-5" dir="rtl">
+		<div class="row">
+			<div class="col-md-12 tab-wrap">
+
+				<div class="tab-content p-4" id="v-pills-tabContent">
+
+					<div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
+						<form method="GET" action="{% url 'Search' %}" class="search-job">
+							<div class="row no-gutters">
+								<div class="col-md ml-md-2">
+									<div class="form-group">
+										<div class="form-field">
+											<div class="icon"><span class="icon-briefcase"></span></div>
+											<input type="text" class="form-control" name="title" placeholder="عنوان شغلی ، مهارت ...">
+										</div>
+									</div>
+								</div>
+								<div class="col-md ml-md-2">
+									<div class="form-group">
+										<div class="form-field">
+											<div class="select-wrap">
+												<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+												<select name="category" class="form-control">
+													<option value="">دسته بندی</option>
+													{% for Category in categories %}
+													<option value="{{Category.name}}">{{Category.name}}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md ml-md-2">
+									<div class="form-group">
+										<div class="form-field">
+											<div class="icon"><span class="icon-map-marker"></span></div>
+											<input type="text" name="location" class="form-control" placeholder="نام استان یا شهر">
+										</div>
+									</div>
+								</div>
+								<div class="col-md">
+									<div class="form-group">
+										<div class="form-field">
+											<button type="submit" class="form-control btn btn-primary">جستجو</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <section class="ftco-section bg-light">
+
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-3 sidebar">
-		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
-		        	<h3 class="heading-sidebar">دسته بندی ها</h3>
-		        <form action="" class="search-form mb-3" method="GET">
-	                <div class="form-group">
-	                  <span class="icon icon-search"></span>
-	                  <input type="text" class="form-control font-size-10" placeholder="جست و جو دسته بندی">
-	                </div>
-              	</form>
-		        	<form action="" class="browse-form" method="GET">
-		        		{% for item in categories %}
-							<label class="font-size-10" for="{{item.name}}"><input type="radio" id="{{item.name}}" name="category" value="{{item.name}}"> {{item.name}}</label><br>
-						{% endfor %}
-							  <hr>
-							  <button type="submit" class="btn btn-primary btn-sm">اعمال تغییرات</button>
-					</form>
-		        </div>
-
-		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
-		        	<h3 class="heading-sidebar">انتخاب استان</h3>
-		        	<form action="" class="search-form mb-3">
-                <div class="form-group">
-                  <input name="location" type="text" class="form-control font-size-10" dir="rtl" placeholder="جست و جو شهر یا استان"><br>
-                  <button type="submit" class="btn btn-primary btn-sm">جست و جو</button>
-                </div>
-              </form>
-
-		        </div>
 
 		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
 		        	<h3 class="heading-sidebar">نوع قرار داد</h3>
@@ -47,43 +77,7 @@
 		        </div>
 		      </div>
 		      <div class="col-lg-9 pr-lg-4">
-					{% for item in page_obj %}							
-						<div dir="rtl" class="col-md-12 ftco-animate">
-							<div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-								<div class="one-third mb-4 mb-md-0">
-								    <div class="job-post-item-header text-right">
-								        <span class="subadge">{{item.get_job_nature_display}}</span>
-								        <h5 class="mr-3 text-black"><a href="{% url 'AdDetail' pk=item.id %}">{{item.title}}</a></h5>
-								    </div>
-								<div class="job-post-item-body d-block d-md-flex">
-									<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.company}}</a></div>
-									<div class="ml-3"><span class="icon-my_location"></span> <span> {{item.location}}</span></div>
-									<div><span class="icon-my_location">{{item.salary}}</span></div>
-								</div>
-								</div>
-
-								    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-								        <div>
-								        	{% for item in marked %}
-								        	<a href="{% url 'AdUnsaved' pk=item.id %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
-									             <span class="icon-trash"></span>
-									        </a>
-								        	{% empty %}
-									        <a href="{% url 'Favorite' ad=item.id %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
-									             <span class="icon-heart"></span>
-									        </a>
-									        {% endfor %}
-								        </div>
-
-								        {% for item in applied_jobs %}
-								        <a href="" class="btn btn-light py-2">قبلا رزومه ارسال کردید</a>
-								        {% empty %}
-								        <a href="{% url 'ApplicantView' ad=item.id %}" class="btn btn-primary py-2">ارسال رزومه</a>
-								        {% endfor %}
-								    </div>
-							</div>
-						</div>
-					{% endfor %}
+						{% home_ads request %}
 		      </div>
 		</div>
 		<!--Paginate-->
@@ -111,6 +105,5 @@
 		<!--End Paginate-->
 	</div>
 </section>
-
 
 {% endblock %}

@@ -1,6 +1,7 @@
-{% extends 'BASE_HTMLs/Base.html' %} 
+{% extends 'BASE_HTMLs/Base.html' %}
 {% load static %}
-{% load Ads %}
+{% load components %}
+{% load template-parts %}
 {% block index_content %}
    <div class="hero-wrap img" style="background-image: url(static/images/bg_1.jpg);">
       <div class="overlay"></div>
@@ -74,117 +75,9 @@
 				          </div>
 				        </div>
 			        </div>
-							<div class="ftco-search my-md-5">
-								<div class="row">
-			            <div class="col-md-12 nav-link-wrap">
-				            <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-				              <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Find a Job</a>
 
-				              <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Find a Candidate</a>
+              {% include 'Home/Search.html' %}
 
-				            </div>
-				          </div>
-				          <div class="col-md-12 tab-wrap">
-				            
-				            <div class="tab-content p-4" id="v-pills-tabContent">
-
-				              <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
-				              	<form action="#" class="search-job">
-				              		<div class="row no-gutters">
-				              			<div class="col-md mr-md-2">
-				              				<div class="form-group">
-					              				<div class="form-field">
-					              					<div class="icon"><span class="icon-briefcase"></span></div>
-									                <input type="text" class="form-control" placeholder="eg. Garphic. Web Developer">
-									              </div>
-								              </div>
-				              			</div>
-				              			<div class="col-md mr-md-2">
-				              				<div class="form-group">
-				              					<div class="form-field">
-					              					<div class="select-wrap">
-							                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-							                      <select name="" id="" class="form-control">
-							                      	<option value="">Category</option>
-							                      	<option value="">Full Time</option>
-							                        <option value="">Part Time</option>
-							                        <option value="">Freelance</option>
-							                        <option value="">Internship</option>
-							                        <option value="">Temporary</option>
-							                      </select>
-							                    </div>
-									              </div>
-								              </div>
-				              			</div>
-				              			<div class="col-md mr-md-2">
-				              				<div class="form-group">
-				              					<div class="form-field">
-					              					<div class="icon"><span class="icon-map-marker"></span></div>
-									                <input type="text" class="form-control" placeholder="Location">
-									              </div>
-								              </div>
-				              			</div>
-				              			<div class="col-md">
-				              				<div class="form-group">
-				              					<div class="form-field">
-								                	<button type="submit" class="form-control btn btn-primary">Search</button>
-									              </div>
-								              </div>
-				              			</div>
-				              		</div>
-				              	</form>
-				              </div>
-
-				              <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-performance-tab">
-				              	<form action="#" class="search-job">
-				              		<div class="row">
-				              			<div class="col-md">
-				              				<div class="form-group">
-					              				<div class="form-field">
-					              					<div class="icon"><span class="icon-user"></span></div>
-									                <input type="text" class="form-control" placeholder="eg. Adam Scott">
-									              </div>
-								              </div>
-				              			</div>
-				              			<div class="col-md">
-				              				<div class="form-group">
-				              					<div class="form-field">
-					              					<div class="select-wrap">
-							                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-							                      <select name="" id="" class="form-control">
-							                      	<option value="">Category</option>
-							                      	<option value="">Full Time</option>
-							                        <option value="">Part Time</option>
-							                        <option value="">Freelance</option>
-							                        <option value="">Internship</option>
-							                        <option value="">Temporary</option>
-							                      </select>
-							                    </div>
-									              </div>
-								              </div>
-				              			</div>
-				              			<div class="col-md">
-				              				<div class="form-group">
-				              					<div class="form-field">
-					              					<div class="icon"><span class="icon-map-marker"></span></div>
-									                <input type="text" class="form-control" placeholder="Location">
-									              </div>
-								              </div>
-				              			</div>
-				              			<div class="col-md">
-				              				<div class="form-group">
-				              					<div class="form-field">
-									                <button type="submit" class="form-control btn btn-primary">Search</button>
-									              </div>
-								              </div>
-				              			</div>
-				              		</div>
-				              	</form>
-				              </div>
-				            </div>
-				          </div>
-				        </div>
-			        </div>
 	          </div>
 	        </div>
 	    	</div>
@@ -323,7 +216,7 @@
                 <h3 class="heading mb-3">Search Millions of Jobs</h3>
                 <p>A small river named Duden flows by their place and supplies.</p>
               </div>
-            </div>      
+            </div>
           </div>
           <div class="col-md-3 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services d-block">
@@ -332,7 +225,7 @@
                 <h3 class="heading mb-3">Easy To Manage Jobs</h3>
                 <p>A small river named Duden flows by their place and supplies.</p>
               </div>
-            </div>    
+            </div>
           </div>
           <div class="col-md-3 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services d-block">
@@ -341,7 +234,7 @@
                 <h3 class="heading mb-3">Top Careers</h3>
                 <p>A small river named Duden flows by their place and supplies.</p>
               </div>
-            </div>      
+            </div>
           </div>
           <div class="col-md-3 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services d-block">
@@ -350,7 +243,7 @@
                 <h3 class="heading mb-3">Search Expert Candidates</h3>
                 <p>A small river named Duden flows by their place and supplies.</p>
               </div>
-            </div>      
+            </div>
           </div>
         </div>
       </div>
@@ -367,7 +260,13 @@
 		          </div>
 		        </div>
 						<div class="row">
-							{% home_ads request %}
+							{% for item in ads %}
+                {% if request.user.is_authenticated %}
+                  {% ad_component_tag item request=request %}
+                {% else %}
+                  {% ad_component_tag item %}
+                {% endif %}
+              {% endfor %}
 							<a href="{% url 'AllAds' %}" class="btn btn-block btn-secondary btn-lg">مشاهده همه آگهی ها</a>
 		        </div>
 		      </div>
@@ -612,7 +511,7 @@
         </div>
       </div>
     </section>-->
-		
+
 		<section class="ftco-section-parallax">
       <div class="parallax-img d-flex align-items-center">
         <div class="container">
@@ -640,6 +539,6 @@
         </div>
       </div>
     </section>
-                          
+
 
 {% endblock %}
