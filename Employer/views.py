@@ -103,7 +103,7 @@ def UpdatePasswordManager(request):
 
             user_exist = User.objects.get(username = request.user.email)
             if user_exist:
-                user = authenticate(request ,username = request.user.username , password = old_password) 
+                user = authenticate(request ,username = request.user.username , password = old_password)
                 if user is not None:
                     if old_password == new_password:
                         update_password_form.add_error('old_password' ,'رمز عبور جدید باید با رمز عبور حال حاضر تفاوت داشته باشد')
@@ -141,11 +141,11 @@ def NewCompany(request):
             company_name = form.cleaned_data.get('name')
             company_address = form.cleaned_data.get('address')
             company_underlie = form.cleaned_data.get('underlie')
-            
+
             requested_manager = Manager.objects.get(email = request.user.username)
 
             Company.objects.create(name = company_name , address = company_address , underlie = company_underlie,manager = requested_manager  , valid = False)
-            messages.success(request , 'شرکت شما با موفقیت ثبت شد. مدیر وب سایت حال باید وب سایت صحت وجود این شرکت را بررسی نماید' , extra_tags = 'NewCompanyCreated')
+            messages.success(request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
             return redirect("Home")
     else:
         form = NewCompanyForm()
