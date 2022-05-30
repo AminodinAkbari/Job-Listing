@@ -15,6 +15,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 now = timezone.now()
+import datetime
+today = datetime.datetime.now().date()
 
 @Who_is
 def Index(request , user_type):
@@ -28,6 +30,7 @@ def Index(request , user_type):
 	context['top_companies'] = top_companies
 	context['employees'] = EmployeeModel.objects.all()
 	context['is_a_manager'] = user_type
+	context['ads'] = Advertisement.objects.all()[:12]
 	if request.method == 'POST':
 		form = NewsletterEmailsForm(request.POST)
 		context['Newsletter'] = form
@@ -38,7 +41,7 @@ def Index(request , user_type):
 			email_from = settings.EMAIL_HOST_USER
 			recipient_list = [user_email,]
 			send_mail( subject, message, email_from, recipient_list )
-			form.save()	
+			form.save()
 	else:
 		context['Newsletter'] = NewsletterEmailsForm()
 	return render(request , 'index.html' , context)
@@ -101,8 +104,8 @@ class ALLCompanies(ListView):
 		context = super(ALLCompanies,self).get_context_data(**kwargs)
 		context['title'] = 'لیست شرکت ها'
 		return context
-
 # ___________END______________
+
 class AdDetail(DetailView):
 	model = Advertisement
 	template_name = 'Employer/AdvertimentDetail.html'
@@ -121,13 +124,18 @@ class AdDetail(DetailView):
 				context['employee'] = employee
 		context['skills'] = self.object.skills.split('/')
 		context['title'] = self.object.title
+
+		ad_date = str(obj.expired_in)
+		ad_date = ad_date[:19]
+		time = datetime.datetime.strptime(ad_date, '%Y-%m-%d %H:%M:%S').date()
+		time_left = (time-today).days
 		context['time_left'] = time_left
+
 		return context
 
 class EmployeeDetail(DetailView):
 	model = EmployeeModel
 	template_name = 'Employee/EmployeeDetail.html'
-
 	def get_context_data(self , **kwargs):
 		context = super(EmployeeDetail , self).get_context_data(**kwargs)
 		obj = self.get_object()
@@ -147,9 +155,11 @@ from django.db.models import Count
 
 class TopCompanies(ListView):
 	template_name = 'index.html'
-
 	def get_context_data(self,**kwargs):
 		context = super(TopCompanies,self).get_context_data(**kwargs)
-		
 		context['top_company'] = top_companies
 		return context
+
+class CompanyView(DetailView):
+	model = Company
+	template_name = 'Employer/company-info.html'
