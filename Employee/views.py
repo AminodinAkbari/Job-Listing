@@ -14,8 +14,8 @@ from django.contrib.auth.models import User
 
 from django.contrib import messages
 
-from django.utils import timezone
-now = timezone.now()
+# from django.utils import timezone
+# now = timezone.now()
 # Create your views here.
 
 class UpdateResume(UpdateView):
@@ -25,10 +25,6 @@ class UpdateResume(UpdateView):
 
 	def dispatch(self , request , *args , **kwargs):
 		obj = self.get_object()
-		# print("----------------")
-		# print(obj.employee)
-		# print(self.request.user.username)
-		# print("----------------")
 		is_a_manager = Manager.objects.filter(email = self.request.user.username).exists()
 		if is_a_manager:
 			return redirect('/Managers_Cant_Biuld_Resume')
@@ -48,10 +44,11 @@ class UpdateResume(UpdateView):
 		messages.success(self.request , 'تغییرات با موفقیت ذخیره شد')
 		return reverse_lazy('UpdateResume' , kwargs = {'pk':obj.id})
 
+import datetime
+today = datetime.datetime.now().date()
 class ApplicantDetail(DetailView):
 	model = Applicant
 	template_name = 'Employee/Applicant-detail.html'
-	
 
 	def dispatch(self ,request , *args, **kwargs):
 		obj = self.get_object()
@@ -63,7 +60,7 @@ class ApplicantDetail(DetailView):
 		context = super().get_context_data(**kwargs)
 		context['employee'] = EmployeeModel.objects.filter(employee = self.request.user).first()
 		obj = self.get_object()
-		context['time_left'] = obj.ad.expired_in.day-now.day
+		# context['time_left'] = obj.ad.expired_in.day-now.day
 		return context
 
 @Who_is
@@ -106,7 +103,7 @@ def EmployeeJobApply(request , pk , employee):
 	applicants = Applicant.objects.filter(user = request.user)
 	context['employee'] = employee
 	context['Applicants'] = applicants
-	context['title'] = 'آگهی های ارسالی'
+	context['title'] = 'رزومه های ارسالی'
 	return render(request , 'Employee/employee-JobApply.html' , context)
 
 @employee_owner_can_access
@@ -114,10 +111,10 @@ def AdSaved(request , pk ,employee):
 	context = {}
 	ads = Favorite.objects.filter(user = request.user)
 	context['employee'] = employee
-	context['ads'] = ads
+	context['Ads'] = ads
 	return render(request , 'Employee/employee-AdsMarked.html' , context)
 
 def AdUnsaved(request , pk):
-	ad = Favorite.objects.get(user = request.user , id = pk)
+	ad = Favorite.objects.get(user = request.user , ad_id = pk)
 	ad.delete()
 	return redirect(reverse('AdsSaved' , kwargs = {'pk':request.user.id}))
