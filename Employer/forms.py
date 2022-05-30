@@ -60,7 +60,9 @@ class NewAdvertisementForm(ModelForm):
 		self.fields['title'].label='عنوان آگهی'
 
 		self.fields['location'].widget.attrs.update({'id':'location' , 'class':'form-control'})
-		self.fields['location'].label='آدرس'
+		self.fields['location'].label='استان'
+
+		self.fields['address'].widget.attrs.update({'id':'address' , 'class':'form-control'})
 
 		self.fields['category'].widget.attrs.update({'id':'category' , 'class':'form-control'})
 		self.fields['category'].label='دسته بندی'
