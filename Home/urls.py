@@ -9,6 +9,7 @@ TopCompanies,
 ALLEmployees,
 EmployeeDetail,
 ALLCompanies,
+CompanyView,
 )
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,4 +21,5 @@ urlpatterns = [
     path('employer-detail/<int:pk>', EmployeeDetail.as_view() , name = 'EmployerDetail'),
     path('all-ads/<int:category_id>', AdByCategory.as_view() , name = 'AdByCategory'),
     path('Top-Companies', TopCompanies.as_view() , name = 'TopCompanies'),
+    path('Detail-Companies/<int:pk>', CompanyView.as_view() , name = 'CompanyView'),
 ]
