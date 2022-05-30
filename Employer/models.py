@@ -56,7 +56,7 @@ class Advertisement(models.Model):
 	soldier_ship = models.CharField(max_length = 25, choices=soldiership_types , verbose_name = 'وضعیت خدمت کارجو')
 	skills = models.TextField(verbose_name = 'مهارتهای مدنظر')
 	job_nature = models.CharField(max_length = 30 , choices = job_nature , verbose_name = 'نوع قرارداد')
-	generate_in = models.DateTimeField(auto_now_add=True , verbose_name = 'تاریخ ایجاد',blank = True, null = True)
+	generate_in = models.DateField(auto_now_add=True , verbose_name = 'تاریخ ایجاد',blank = True, null = True)
 	expired_in = models.DateTimeField(verbose_name = 'تارخ انقضای این آگهی',blank = True, null = True)
 	salary = models.IntegerField(verbose_name = 'حقوق (تومان)')
 
@@ -78,6 +78,3 @@ class Applicant(models.Model):
     ad = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name="applicants")
     created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length = 15 , choices = applicant_status , default = 'send')
-
-
-
