@@ -1,0 +1,75 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+{% block common_content %}
+<section class="ftco-section bg-light" dir="rtl">
+<div class="container">
+
+  {% for message in messages %}
+    <h2 class="alert alert-success text-center mt-3 mb-3"><strong>{{message}}</strong></h2>
+  {% endfor %}
+
+<form action="" method="POST" dir="rtl">
+    {% csrf_token %}
+    <div class="row form-group text-right">
+      <div class="col-md-4 mb-3">
+        {{form.first_name}}
+      </div>
+      <div class="col-md-4 mb-3">
+        {{form.last_name}}
+      </div>
+      <div class="col-md-4 mb-3">
+        {{form.username}}
+      </div>
+    </div>
+    <button type="submit" name="email-name" class="btn btn-success" >اعمال تغییرات</button>
+</form>
+<br>
+
+<div class="col-md-10 text-right">
+  <p>
+    در این فرم با وارد کردن کلمه عبور حال حاضرتان و همچنین اضافه کردن کلمه عبور جدید برای همیشه کلمه عبور این حساب کاربری را که به نام <strong>{{request.user.get_full_name}}</strong> می باشد را تغییر دهید<br><br>
+    دقت داشته باشید موارد زیر را در کلمه عبور خود رعایت کنید:
+    <hr>
+    <ul>
+      <li>کلمه عبور باید بیشتر از 8 حرف داشته باشد</li>
+      <li>بهتر است از علائم نگارشی همچون (!,@,#,...) استفاده شود</li>
+      <li>رمز عبور پیشنهادی ما <strong><b>{{suggest_password}}</b></strong> است . (اگر از رمز پیشنهادی استفاده می کنید ، حتما آنرا یادداشت کنید)</li>
+
+    </ul>
+  </p>
+</div>
+
+<form action="" method="POST" class="mt-5">
+    {% csrf_token %}
+    <div class="row form-group text-right">
+  <div class="col-md-7 mb-3">
+    <label for="">{{password_form.old.label_tag}}</label><br>
+    {{password_form.old}}
+    {% for error in password_form.old.errors %}
+        <h5 class="alert alert-danger">{{error}}</h5>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6">
+    <label for="">{{password_form.new.label_tag}}</label><br>
+    {{password_form.new}}
+    {% for error in password_form.new.errors %}
+        <h5 class="alert alert-danger">{{error}}</h5>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6">
+    <label for="">{{password_form.re_new.label_tag}}</label><br>
+    {{password_form.re_new}}
+    {% for error in password_form.re_new.errors %}
+        <h5 class="alert alert-danger">{{error}}</h5>
+    {% endfor %}
+  </div>
+
+    </div>
+
+    <button class="btn btn-warning" type="submit" name="change-password" >تغییر رمز عبور</button>
+    <hr>
+</form>
+</div>
+</section>
+{% endblock %}

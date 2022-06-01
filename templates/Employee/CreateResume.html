@@ -10,10 +10,9 @@
       {% endfor %}
     </div>
     {% for error in form.profile_pic.errors %}
-    <h1>{{error}}</h1>
+    <h2 class="alert alert-warning text-center">{{error}}</h2>
     {% endfor %}
 			<div class="col-md-12">
-    
     
 		<form name = 'PersonalInfoForm' action="{% url 'UpdateResume' pk=user.id %}" class="p-5 bg-white" method="POST" dir="rtl" enctype="multipart/form-data">
 
@@ -33,6 +32,17 @@
           </div>
 
           <h5 class="bb-3 p-3"><strong>اطلاعات شخصی</strong></h5>
+
+          <div class="row form-group bb-1">
+            <div class="col-md-5">
+              {{request.user.get_full_name}}
+            </div>
+            <div class="col-md-5">
+              {{request.user.username}}
+            </div>
+            <a href="{% url 'EditNameOrEmail-Employee' pk=request.user.id %}" class="btn btn-light mb-3">تغییر نام و ایمیل</a>
+          </div>
+
             <div class="row form-group mb-5">
                 <div class="col-md-8 mb-4  mt-1">
                   <label for="title">{{form.phone.label_tag}}</label>

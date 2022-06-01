@@ -18,7 +18,7 @@
 										</svg></label>
 			        </div>
 			        <div class="avatar-preview">
-			            <div id="imagePreview" style="background-image: url({{user.profile_pic.url}});">
+			            <div id="imagePreview" style="background-image: url({% if user.profile_pic %}{{user.profile_pic.url}}{% endif %});">
 			            </div>
 			            <small>تصویر پروفایل خود را با فلش سمت راست تغییر دهید</small>
 			        </div>
