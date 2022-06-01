@@ -157,7 +157,7 @@ REST_FRAMEWORK = {
 
 }
 
-MAX_UPLOAD_SIZE = "5242880"
+MAX_UPLOAD_SIZE = "2242880"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
