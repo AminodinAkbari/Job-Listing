@@ -3,7 +3,7 @@ from django.views.generic import ListView , DetailView
 
 from Controllers.views import Who_is
 from Controllers.models import categories ,job_nature , states_iran
-from Employer.models import Manager,Advertisement,Company
+from Employer.models import Manager,Advertisement,Company , Applicant
 from Employee.models import EmployeeModel
 from Controllers.forms import SearchForm
 
@@ -82,7 +82,13 @@ class AdDetail(DetailView):
 	def get_context_data(self , **kwargs):
 		context = super(AdDetail , self).get_context_data(**kwargs)
 		obj = self.get_object()
-		time_left = obj.expired_in.day-now.day
+
+		applied_jobs = Applicant.objects.filter(user = self.request.user)
+		str_list_for_applid = []
+		for ad in applied_jobs:
+			str_list_for_applid.append(ad.ad)
+		context['applied_jobs'] = str_list_for_applid
+
 		Skills = []
 		if self.request.user.is_authenticated:
 			try:
@@ -107,6 +113,7 @@ class EmployeeDetail(DetailView):
 	template_name = 'Employee/EmployeeDetail.html'
 	def get_context_data(self , **kwargs):
 		context = super(EmployeeDetail , self).get_context_data(**kwargs)
+
 		obj = self.get_object()
 		context['title'] = 'رزومه کارجو'
 		if obj.skills:
