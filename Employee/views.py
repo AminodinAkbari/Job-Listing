@@ -16,8 +16,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from Controllers.models import passGenerator
-# from django.utils import timezone
-# now = timezone.now()
 # Create your views here.
 
 class UpdateResume(UpdateView):
@@ -46,8 +44,8 @@ class UpdateResume(UpdateView):
 		messages.success(self.request , 'تغییرات با موفقیت ذخیره شد')
 		return reverse_lazy('UpdateResume' , kwargs = {'pk':obj.id})
 
-
-def EditNameOrEmail_Employee(request , pk):
+@employee_owner_can_access
+def EditNameOrEmail_Employee(request , pk , employee):
 	current_user = User.objects.filter(id = pk)
 	single_parametr = current_user.first()
 	context = {}
@@ -104,7 +102,11 @@ class ApplicantDetail(DetailView):
 		context = super().get_context_data(**kwargs)
 		context['employee'] = EmployeeModel.objects.filter(employee = self.request.user).first()
 		obj = self.get_object()
-		# context['time_left'] = obj.ad.expired_in.day-now.day
+		ad_date = str(obj.ad.expired_in)
+		ad_date = ad_date[:19]
+		time = datetime.datetime.strptime(ad_date, '%Y-%m-%d %H:%M:%S').date()
+		time_left = (time-today).days
+		context['time_left'] = time_left
 		return context
 
 @Who_is
@@ -139,7 +141,7 @@ def FavoriteView(request , ad , user_type):
 		Favorite.objects.get(user = request.user , ad = ad)
 	except:
 		Favorite.objects.create(user = request.user , ad = advertisement)
-	return redirect('/')
+	return redirect(request.GET.get('next'))
 
 @employee_owner_can_access
 def EmployeeJobApply(request , pk , employee):
@@ -156,9 +158,14 @@ def AdSaved(request , pk ,employee):
 	ads = Favorite.objects.filter(user = request.user)
 	context['employee'] = employee
 	context['Ads'] = ads
+	context['title'] = 'آگهی های نشان شده'
 	return render(request , 'Employee/employee-AdsMarked.html' , context)
 
-def AdUnsaved(request , pk):
-	ad = Favorite.objects.get(user = request.user , ad_id = pk)
-	ad.delete()
-	return redirect(reverse('AdsSaved' , kwargs = {'pk':request.user.id}))
+@employee_owner_can_access
+def AdUnsaved(request , pk , employee):
+	try:
+		ad = Favorite.objects.get(user = request.user , ad_id = pk)
+		ad.delete()
+	except:
+		return redirect('Home')
+	return redirect(request.GET.get('next'))
