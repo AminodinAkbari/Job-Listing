@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from .models import Advertisement , Company , Manager
+from django.contrib.auth.models import User
 
 from urllib import request
 
@@ -26,14 +27,14 @@ class EditManagerInfoForm(ModelForm):
 		self.fields['About'].widget.attrs.update({'id':'About' , 'class':'form-control'})
 class UpdatePasswordManagersForm(forms.Form):
 
+	old_password = forms.CharField(widget=forms.PasswordInput,label='رمز عبور حال حاضر')
+	new_password = forms.CharField(widget=forms.PasswordInput,label='رمز جدید')
+	re_new_password = forms.CharField(widget=forms.PasswordInput,label='تکرار رمز جدید')
+
 	def __init__(self , *args , **kwargs):
 		super(UpdatePasswordManagersForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
-			
-	old_password = forms.CharField(widget=forms.PasswordInput,label='رمز عبور حال حاضر')
-	new_password = forms.CharField(widget=forms.PasswordInput,label='رمز جدید')
-	re_new_password = forms.CharField(widget=forms.PasswordInput,label='تکرار رمز جدید')
 
 	def clean_new_password(self):
 		new_password = self.cleaned_data.get('new_password')
@@ -47,6 +48,9 @@ class UpdatePasswordManagersForm(forms.Form):
 		if new_password != re_new_password :
 			raise forms.ValidationError('کلمه های عبور با یکدیگر مغایرت دارند !')
 		return re_new_password
+
+class EditEmailEmployer(forms.Form):
+	email = forms.EmailField(widget = forms.TextInput(attrs={'class':'form-control'}))
 
 class NewAdvertisementForm(ModelForm):
 	class Meta:
@@ -70,7 +74,7 @@ class NewAdvertisementForm(ModelForm):
 		self.fields['company'].widget.attrs.update({'id':'company' , 'class':'form-control'})
 		self.fields['company'].label='شرکت های معتبر شما '
 		self.fields['company'].queryset = Company.objects.filter(manager__email=user , valid = True)
-		
+
 
 		self.fields['text'].widget.attrs.update({'id':'text' , 'class':'form-control'})
 		self.fields['text'].label='متن آگهی'
@@ -141,7 +145,7 @@ class EditAdInfoForm(ModelForm):
 			raise forms.ValidationError('لطفا عنوان بهتری برای آگهی ایجادکنید (عنوان بسیار کوتاه است)')
 		return title
 
-		
+
 class NewCompanyForm(forms.Form):
 	def __init__(self ,*args, **kwargs):
 		super(NewCompanyForm, self).__init__(*args, **kwargs)
@@ -155,7 +159,7 @@ class NewCompanyForm(forms.Form):
 		widget=forms.Textarea(attrs={'placeholder':'استان تهران ، بخش غربی ، شهرک ...' ,'maxlength':'250' }),
 		label = 'آدرس'
     )
-	
+
 	underlie = forms.CharField(
         widget=forms.Textarea(attrs={'placeholder':'شرکت شما در چه زمینه های فعالیت میکند ?','maxlength':'550'}),
         label = 'درباره شرکت توضیح دهید (این متن در آگهی های شما نمایش داده خواهد شد)'
