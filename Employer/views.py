@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from .forms import EditManagerInfoForm,UpdatePasswordManagersForm
+from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer
 
 from django.contrib import messages
 
@@ -15,6 +15,7 @@ from .models import  Advertisement , Company , Manager , Applicant
 from Employee.models import EmployeeModel
 
 from Controllers.models import passGenerator
+from Controllers.views import Who_is
 
 
 from .forms import (
@@ -92,9 +93,13 @@ class EditAdView(UpdateView):
         current_manager = Manager.objects.get(email = self.request.user.username)
         return reverse_lazy('ManagerPanel', kwargs={'pk': current_manager.id})
 
-def UpdatePasswordManager(request):
+@Who_is
+def UpdatePasswordManager(request , user_type):
+    if user_type is None:
+        return redirect('Home')
     update_password_form = UpdatePasswordManagersForm()
-    if request.method == "POST":
+    edit_email_form = EditEmailEmployer(initial = {'email' : request.user.username})
+    if request.method == "POST" and 'update-pass' in request.POST:
         update_password_form = UpdatePasswordManagersForm(request.POST)
         if update_password_form.is_valid():
             old_password = update_password_form.cleaned_data.get('old_password')
@@ -114,9 +119,30 @@ def UpdatePasswordManager(request):
                         return redirect('/login')
                 else:
                     update_password_form.add_error('old_password' , 'رمز عبور حال حاضر شما اشتباه است !')
+    if request.method == "POST" and 'update-email' in request.POST:
+        edit_email_form = EditEmailEmployer(request.POST)
+        if edit_email_form.is_valid():
+            email = edit_email_form.cleaned_data.get('email')
+            try:
+                manager_user = User.objects.get(id = request.user.id)
+                manager_model = user_type
+                if manager_user and manager_model:
+                    manager_user.username = email
+                    manager_model.email = email
+                    manager_user.save()
+                    manager_model.save()
+                    messages.success(request , 'پروفایل شما آپدیت شد')
+            except:
+                messages.error(request , 'ایمیل معتبر نیست یا قبلا در سایت ثبت شده است')
+        else:
+            messages.error(request , 'ایمیل معتبر نیست یا قبلا در سایت ثبت شده است')
+
+
     context = {
     'UpdatePassword':update_password_form,
-    'suggest_password':passGenerator(10)
+    'UpdateEmail':edit_email_form,
+    'suggest_password':passGenerator(10),
+    'title':'تنظیمات حساب کاربری',
     }
 
     return render(request , 'Employer/UpdateManagersPassword.html' , context)
@@ -170,6 +196,12 @@ class EditCompanyView(UpdateView):
     form_class = EditCompanyForm
     model = Company
     template_name = 'Employer/EditCompanyInfo.html'
+
+    def dispatch(self , request , *args):
+        obj = self.object
+        if obj.manager.email != request.user.username:
+            return redirect('Home')
+        return super(EditCompanyView , self).dispatch(request , *args)
 
     def get_success_url(self):
         current_manager = Manager.objects.get(email = self.request.user.username)
