@@ -221,6 +221,7 @@ def DeleteCompany(request , pk):
 
 def determine_the_status(request , pk,adver_id):
     employee = EmployeeModel.objects.filter(id = pk).first()
+    manager = Manager.objects.get(email = request.user.username)
     if employee is not None:
         applicant = Applicant.objects.filter(ad__id = adver_id , user = employee.employee).first()
         if applicant is not None:
@@ -239,5 +240,8 @@ def determine_the_status(request , pk,adver_id):
                 return redirect('/')
     context = {
     'employee' : employee ,
+    'employee_skills' : employee.skills.split('/'),
+    'manager':manager,
+    'title':'جزئیات رزومه ارسالی'
     }
     return render(request , 'Employer/EmployeeDetermine.html' , context)

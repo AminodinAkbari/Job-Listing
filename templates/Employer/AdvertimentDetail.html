@@ -59,10 +59,14 @@
 					{% if request.user.is_authenticated %}
 						{% if employee %}
 			              <a href="{% url 'UpdateResume' pk=employee.id %}" class="p-4 btn btn-block btn-light">مشاهده رزومه</a>
-			              <a href="{% url 'ApplicantView' ad=object.id%}" class="btn btn-block btn-primary">ارسال رزومه</a>
+										{% if object in applied_jobs or object.ad in applied_jobs %}
+			              	<a class="btn btn-block btn-light">قبلا رزومه ارسال کرده اید</a>
+										{% else %}
+											<a href="{% url 'ApplicantView' ad=object.id%}" class="btn btn-block btn-primary">ارسال رزومه</a>
+										{% endif %}
 						{% endif %}
 		            {% endif %}
-		              
+
 		              <p class="text-center font-size-13 mt-3" dir="rtl">
 		               	فرصت ارسال رزومه : تا <u>{{time_left}}</u> روز دیگر
 		           	  </p>

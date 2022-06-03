@@ -15,11 +15,11 @@
 		    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
 		        <div>
 		        	{% if item in marked or item.ad in marked %}
-		        	<a href="{% if item.ad %}{% url 'AdUnsaved' pk=item.ad.id %}{% else %}{% url 'AdUnsaved' pk=item.id %}{% endif %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
+		        	<a href="{% if item.ad %}{% url 'AdUnsaved' pk=item.ad.id %}{% else %}{% url 'AdUnsaved' pk=item.id %}{% endif %}?next={{request.get_full_path}}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
 			             <span class="icon-trash"></span>
 			        </a>
 		        	{% else %}
-			        <a href="{% if item.ad %}{% url 'Favorite' ad=item.ad.id %}{% else %}{% url 'Favorite' ad=item.id %}{% endif %}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
+			        <a href="{% if item.ad %}{% url 'Favorite' ad=item.ad.id %}{% else %}{% url 'Favorite' ad=item.id %}{% endif %}?next={{request.get_full_path}}" class="icon text-center d-flex justify-content-center align-items-center icon ml-2">
 			             <span class="icon-heart"></span>
 			        </a>
 			        {% endif %}
@@ -33,14 +33,14 @@
 							</div>
 						</div>
 					</div>
-							
+
 						{% else %}
 						<div dir="rtl" class="col-md-6 ftco-animate">
 							<div class="job-post-item p-4 d-block d-lg-flex align-items-center">
 								<div class="one-third mb-4 mb-md-0">
 								    <div class="job-post-item-header text-right">
 								        <span class="subadge">{{item.ad.get_job_nature_display}}</span>
-								        <h5 class="mr-3 text-black"><a href="ad-details">{{item.ad.title}}</a></h5>
+								        <h5 class="mr-3 text-black"><a href="{% url 'AdDetail' pk=item.ad.id %}">{{item.ad.title}}</a></h5>
 								    </div>
 								<div class="job-post-item-body d-block d-md-flex">
 									<div class="ml-3"><span class="icon-layers"></span><a href="Company"> {{item.ad.company}}</a></div>
