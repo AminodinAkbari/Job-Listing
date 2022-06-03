@@ -239,7 +239,7 @@ def determine_the_status(request , pk,adver_id):
                 applicant.save()
                 return redirect('/')
     context = {
-    'employee' : employee ,
+    'object' : employee ,
     'employee_skills' : employee.skills.split('/'),
     'manager':manager,
     'title':'جزئیات رزومه ارسالی'
