@@ -83,7 +83,7 @@ class Search(ListView):
 
 	def get_queryset(self):
 		if self.kwargs and self.kwargs == 'category_id':
-			return Advertisement.objects.filter(category_id = self.kwargs['category_id'])
+			return redirect(reverse('AdByCategory' , kwargs = {"category_id":self.kwargs == 'category_id'}))
 		else:
 			return search_filter(self.request)
 
