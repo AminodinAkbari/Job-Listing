@@ -13,13 +13,13 @@
     <h2 class="alert alert-warning text-center">{{error}}</h2>
     {% endfor %}
 			<div class="col-md-12">
-    
+
 		<form name = 'PersonalInfoForm' action="{% url 'UpdateResume' pk=user.id %}" class="p-5 bg-white" method="POST" dir="rtl" enctype="multipart/form-data">
 
         <div class="avatar-upload mb-5">
               <div class="avatar-edit">
                   <input type='file' id="profile_pic" accept=".png, .jpg, .jpeg" name="profile_pic" />
-                  
+
                   <label for="profile_pic"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="currentColor" class="bi bi-arrow-down-left-circle" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-5.904-2.854a.5.5 0 1 1 .707.708L6.707 9.95h2.768a.5.5 0 1 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.475a.5.5 0 1 1 1 0v2.768l4.096-4.097z"/>
                     </svg></label>
@@ -130,9 +130,9 @@
                 </div>
 
             </div>
-            
+
             <button type="submit" class="btn btn-success" name = 'PersonalInfoForm-submit'>ذخیره تغییرات</button>
-            
+
             {% csrf_token %}
           </form>
 

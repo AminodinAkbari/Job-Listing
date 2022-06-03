@@ -1,18 +1,112 @@
 {% extends 'BASE_HTMLs/Base.html' %}
-
+{% load static %}
+{% load jalali_tags %}
 {% block common_content %}
-
-<section class="ftco-section bg-light" dir="rtl">
+<section class="ftco-section bg-light text-dark" dir="rtl">
 	<div class="container">
-		<div class="row text-center">
-			<form method="POST">
+		<div class="row">
+		    <div class="avatar-upload mb-5 col-md-6">
+              <div class="avatar-preview">
+                  <div id="imagePreview" style="background-image: {% if object.profile_pic %}url({{object.profile_pic.url}});{% endif %}">
+                  </div>
+              </div>
+          </div>
+
+         <div class="col-md-6 bg-white text-right mt-5 p-3" dir="rtl">
+				<div class="row mb-5">
+					<div class="col-md-6 font-size-13 mb-3">
+						نام :<br>
+						<button class="btn btn-dark btn-sm">{{object.employee.first_name}}</button>
+					</div>
+					<div class="col-md-6 font-size-13 mb-3">
+						نام خانوادگی :<br>
+						<button class="btn btn-dark btn-sm">{{object.employee.last_name}}</button>
+					</div>
+					<div class="col-md-6 font-size-13 mb-3">
+						تلفن :<br>
+						<button class="btn btn-dark btn-sm">{{object.phone}}</button>
+					</div>
+					<div class="col-md-6 font-size-13 mb-3">
+						استان محل سکونت :<br>
+						<button class="btn btn-dark btn-sm">{{object.get_state_display}}</button>
+					</div>
+					<div class="col-md-6 font-size-13 mb-3">
+						وضعیت نظام وظیفه :<br>
+						<button class="btn btn-dark btn-sm">
+							{% if object.employee_soldier_ship is None %}
+							نامشخص
+							{% else %}
+							{{object.get_employee_soldier_ship_display}}
+							{% endif %}
+						</button>
+					</div>
+					<div class="col-md-6 font-size-13 mb-3">
+						وضعیت تأهل :<br>
+						<button class="btn btn-dark btn-sm">{{object.get_marital_status_display}}</button>
+					</div>
+				</div>
+			</div>
+
+        </div>
+
+<div class="row">
+			<div class="col-md-12 bg-white text-right mt-5 p-3 bl-1" dir="rtl">
+				<strong>درباره من :</strong><br>
+				<p class="text-justify">{{object.about_me}}</p>
+			</div>
+
+			<div class="col-md-6 bg-white text-right mt-5 p-3" dir="rtl">
+				<p class="">
+					<strong>مهارت ها :</strong>
+					<ul class="text-dark">
+						{% for skill in employee_skills %}
+						{% if skill != '' %}
+							<li class="p-2">{{skill}}</li>
+						{% endif %}
+						{% endfor %}
+					</ul>
+				</p>
+			</div>
+</div>
+
+			<div class="row">
+			<div class="col-md-6 bg-white text-right mt-5 p-3 bl-1" dir="rtl">
+				<strong>سوابق کاری :</strong>
+				<p class="pt-2 text-justify">{{object.work_experience}}</p>
+			</div>
+			<div class="col-md-6 bg-white text-right mt-5 p-3" dir="rtl">
+				<strong>سوابق تحصیلی :</strong>
+				<p class="pt-2 text-justify">{{object.education}}</p>
+			</div>
+			</div>
+
+			<div class="col-md-12 bg-white text-right mt-5">
+				<div class="row">
+					<div class="col-md-4 font-size-13 mb-3">
+						تاریخ تولد (شمسی) :<br>
+						<button class="btn btn-dark btn-sm">{{object.birth|to_jalali:'%y/%m/%d'}}</button>
+					</div>
+					<div class="col-md-4 font-size-13 mb-3">
+						ایمیل :<br>
+						<button class="btn btn-dark btn-sm">{{object.employee.username}}</button>
+					</div>
+					<div class="col-md-4 font-size-13 mb-3">
+						زبان گفتاری مسلط :<br>
+						{% for lang in object.languages.all %}
+						<button class="btn btn-dark btn-sm">{{lang}}</button>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			<form method="POST" class="mt-5">
 				{% csrf_token %}
-				{{employee.employee.get_full_name}}<hr>
-				<button class="btn btn-success btn-lg" name="determine" value="accept">Accept</button>
-				<button class="btn btn-danger btn-lg" name="determine" value="reject">Reject</button>
+				<button class="btn btn-success btn-lg" name="determine" value="accept">تأیید کردن برای مصاحبه</button>
+				<button class="btn btn-danger btn-lg" name="determine" value="reject">رد کردن</button>
+				<a href="{% url 'ManagerPanel' pk=manager.id %}" class="btn btn-light btn-lg" name="determine" value="reject">بازگشت</a>
 			</form>
+
 		</div>
 	</div>
 </section>
-
 {% endblock %}

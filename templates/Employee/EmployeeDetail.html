@@ -15,7 +15,7 @@
 		        			{%else%}
 		        			<div class="img" style="background-image: url({% static 'png/User.png' %});"></div>
 		        			{% endif %}
-		        			
+
 		        		</div>
 		    			</div>
 		    			</div>
@@ -37,10 +37,6 @@
 					<div class="col-md-6 font-size-13 mb-3">
 						نام خانوادگی :<br>
 						<button class="btn btn-dark btn-sm">{{object.employee.last_name}}</button>
-					</div>
-					<div class="col-md-6 font-size-13 mb-3">
-						تلفن :<br>
-						<button class="btn btn-dark btn-sm">{{object.phone}}</button>
 					</div>
 					<div class="col-md-6 font-size-13 mb-3">
 						استان محل سکونت :<br>
@@ -101,14 +97,14 @@
 						<button class="btn btn-dark btn-sm">{{object.birth|to_jalali:'%y/%m/%d'}}</button>
 					</div>
 					<div class="col-md-4 font-size-13 mb-3">
-						ایمیل :<br>
-						<button class="btn btn-dark btn-sm">{{object.employee.username}}</button>
-					</div>
-					<div class="col-md-4 font-size-13 mb-3">
 						زبان گفتاری مسلط :<br>
 						{% for lang in object.languages.all %}
 						<button class="btn btn-dark btn-sm">{{lang}}</button>
 						{% endfor %}
+					</div>
+					<div class="col-md-4 mb-3">
+						<br>
+						<button class="btn btn-success btn-sm">پیشنهاد همکاری</button>
 					</div>
 				</div>
 			</div>

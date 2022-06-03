@@ -79,8 +79,6 @@
 
 									  {% elif ad.id == item.ad.id and item.status == 'accepted' %}
 									  {% for i in item.user.employee.all %}
-
-
 									  <div class="card-footer">
 									  	<div class="row text-center">
                         {% if i.profile_pic %}
@@ -142,7 +140,7 @@
 								  <img src="{{object.profile_pic.url}}" class="card-img-top" alt="profile_pic" width="100%">
                   {% endif %}
                   <div class="card-body">
-								    <strong class="card-title">{{object.name}} {{object.family}}</strong>
+								    <strong class="card-title">{{object.name}} {{object.family}}</strong><br>
 								    <small class="mb-1 bb-1">{{object.email}} <br> {{object.phone}}</small>
 								    <p class="card-text text-justify">{{object.About}}</p>
 								    <a href="{% url 'EditManagerInfo' pk=manager.id %}" class="btn btn-light btn-sm">ویرایش اطلاعات</a>
