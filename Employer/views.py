@@ -4,14 +4,14 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer
+from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer,HireForm
 
 from django.contrib import messages
 
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView , CreateView
 
-from .models import  Advertisement , Company , Manager , Applicant
+from .models import  Advertisement , Company , Manager , Applicant , Hire
 from Employee.models import EmployeeModel
 
 from Controllers.models import passGenerator
@@ -245,3 +245,24 @@ def determine_the_status(request , pk,adver_id):
     'title':'جزئیات رزومه ارسالی'
     }
     return render(request , 'Employer/EmployeeDetermine.html' , context)
+
+
+class NewHire(CreateView):
+    model = Hire
+    fields = '__all__'
+    template_name = 'test.html'
+
+    def form_valid(self , form):
+        employee = EmployeeModel.objects.get(id = self.kwargs['employee_id'])
+        check = Hire.objects.filter(user = employee.employee , ad = form.instance.ad).exists()
+        print(check)
+        if check:
+            messages.success(self.request , 'شما قبلا برای این کارجو درخواست فرستاده اید')
+            return redirect('/')
+        else:
+            form.instance.user = employee.employee
+            return super(NewHire , self).form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request , 'پیام شما به کارجو ارسال شد . وضعیت درخواست را میتوانید در پنل خود مشاهده کنید')
+        return reverse_lazy('Home')
