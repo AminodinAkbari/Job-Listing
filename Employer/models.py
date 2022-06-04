@@ -79,3 +79,18 @@ class Applicant(models.Model):
     ad = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name="applicants")
     created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length = 15 , choices = applicant_status , default = 'send')
+
+hire_status = (
+('waiting' , 'هنوز توسط کارجو مشاهده نشده'),
+('seen' , 'مشاهده شده'),
+('accepted','کارجو برای شما رزومه و اطلاعات تماس ارسال کرده است'),
+('rejected' , 'توسط کارجو رد شده است')
+)
+
+class Hire(models.Model):
+    user = models.ForeignKey(User , on_delete = models.CASCADE, blank = True , null = True , verbose_name = 'کاربر')
+    text = models.TextField(verbose_name = 'متن پیشنهاد همکاری')
+    contact = models.CharField(verbose_name = 'راه ارتباطی' , max_length = 200)
+    ad   = models.ForeignKey(Advertisement , on_delete = models.CASCADE , verbose_name = 'آگهی')
+    created_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(choices = hire_status , default = 'waiting' , verbose_name = 'وضعیت' , max_length = 100)

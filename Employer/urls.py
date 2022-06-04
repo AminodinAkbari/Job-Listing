@@ -10,6 +10,7 @@ from .views import (
 	DeleteCompany,
 	EditAdView,
 	determine_the_status,
+	NewHire,
 )
 from .views import 	EditMangerInfo , UpdatePasswordManager
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
 	path('delete_ad/<int:pk>' , login_required(DeleteAd) , name = 'DeleteAd'),
 	path('delete_company/<int:pk>' , login_required(DeleteCompany) , name = 'DeleteCompany'),
 	path('determine_the_status/<int:pk>/<int:adver_id>' , login_required(determine_the_status) , name = 'DetermineTheStatus'),
+	path('new_hire/<int:employee_id>' , login_required(NewHire.as_view()) , name = 'NewHire'),
 ]
