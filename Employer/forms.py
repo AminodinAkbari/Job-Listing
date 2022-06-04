@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Advertisement , Company , Manager
+from .models import Advertisement , Company , Manager , Hire
+from Employee.models import EmployeeModel
 from django.contrib.auth.models import User
 
 from urllib import request
@@ -174,3 +175,12 @@ class EditCompanyForm(ModelForm):
 		super(EditCompanyForm , self).__init__(*args , **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
+
+
+class HireForm(forms.ModelForm):
+	class Meta:
+		model = Hire
+		exclude = '__all__'
+	def __init__(self , *args , **kwargs):
+		super(HireForm , self).__init__(*args, **kwargs)
+		self.fields['ad'].queryset = Advertisement.objects.filter(company__valid = True)
