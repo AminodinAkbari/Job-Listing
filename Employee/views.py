@@ -6,10 +6,10 @@ from django.shortcuts import get_object_or_404
 from .forms import EditNameOrEmailForm, PersonalInfo_ResumeForm , ChangePassword_Employee
 from Controllers.views import Who_is ,employee_owner_can_access
 
-from django.views.generic.edit import FormView , UpdateView
-from django.views.generic import DetailView
+from django.views.generic.edit import FormView , UpdateView , CreateView
+from django.views.generic import DetailView , ListView
 
-from Employer.models import Manager , Applicant , Advertisement
+from Employer.models import Manager , Applicant , Advertisement , Hire
 from .models import EmployeeModel , Favorite
 from django.contrib.auth.models import User
 
@@ -143,23 +143,26 @@ def FavoriteView(request , ad , user_type):
 		Favorite.objects.create(user = request.user , ad = advertisement)
 	return redirect(request.GET.get('next'))
 
-@employee_owner_can_access
-def EmployeeJobApply(request , pk , employee):
-	context = {}
-	applicants = Applicant.objects.filter(user = request.user)
-	context['employee'] = employee
-	context['Applicants'] = applicants
-	context['title'] = 'رزومه های ارسالی'
-	return render(request , 'Employee/employee-JobApply.html' , context)
+class EmployeeJobApply(ListView):
+	model = Applicant
+	template_name = 'Employee/employee-JobApply.html'
+	def get_context_data(self):
+		context = super().get_context_data()
+		context ['title'] = 'رزومه های ارسالی'
+		context['Applicants'] = Applicant.objects.filter(user = self.request.user)
+		return context
 
-@employee_owner_can_access
-def AdSaved(request , pk ,employee):
-	context = {}
-	ads = Favorite.objects.filter(user = request.user)
-	context['employee'] = employee
-	context['Ads'] = ads
-	context['title'] = 'آگهی های نشان شده'
-	return render(request , 'Employee/employee-AdsMarked.html' , context)
+class EmployeeJobMarked(ListView):
+	model = Favorite
+	paginate_by = 10
+	template_name = 'Employee/employee-AdsMarked.html'
+	def get_context_data(self):
+		context = super().get_context_data()
+		context ['title'] = 'رزومه های ارسالی'
+		context['employee'] = get_object_or_404(EmployeeModel , employee = self.request.user)
+		context['page_obj'] = Favorite.objects.filter(user = self.request.user)
+		context['title'] = 'آگهی های نشان شده'
+		return context
 
 @employee_owner_can_access
 def AdUnsaved(request , pk , employee):
@@ -169,3 +172,9 @@ def AdUnsaved(request , pk , employee):
 	except:
 		return redirect('Home')
 	return redirect(request.GET.get('next'))
+
+class HiresList(ListView):
+	template_name = 'test.html'
+
+	def get_queryset(self):
+		return Hire.objects.filter(user_id = self.kwargs['pk'])
