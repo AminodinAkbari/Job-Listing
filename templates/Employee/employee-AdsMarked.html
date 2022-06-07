@@ -4,11 +4,36 @@
 
 <section class="ftco-section bg-light" dir="rtl">
 		<div class="container ftco-animate">
+			{% if page_obj|length > 0 %}
 			<div class="row">
-					{% for item in Ads %}
+					{% for item in page_obj %}
               {% ad_component_tag item request=request  %}
           {% endfor %}
 			</div>
+			<div class="row mt-5">
+			    <div class="col text-center">
+			        <div class="block-27">
+			            <ul>
+			              	{% if page_obj.has_previous %}
+			                <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+			                {% endif %}
+			                {% for page in paginator.page_range %}
+			                	{% if page == page_obj.number%}
+			                		<li class="active"><a href="?page={{page}}">{{page}}</a></li>
+			                	{% else %}
+			                		<li><a href="?page={{page}}">{{page}}</a></li>
+			                	{% endif %}
+			                {% endfor %}
+			                {% if page_obj.has_next %}
+			                <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+			                {% endif %}
+			            </ul>
+			        </div>
+			    </div>
+			</div>
+			{% else %}
+			<h3 class="alert alert-primary text-center">هنوز موردی اضافه نشده</h3>
+			{% endif %}
 		</div>
 </section>
 

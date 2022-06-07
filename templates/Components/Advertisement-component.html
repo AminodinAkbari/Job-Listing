@@ -4,7 +4,7 @@
 		<div class="one-third mb-4 mb-md-0">
 		    <div class="job-post-item-header text-right">
 		        <span class="subadge">{{item.get_job_nature_display}}{{item.ad.get_job_nature_display}}</span>
-		        <h5 class="mr-3 text-black"><a href="{% if item.ad %}{% url 'AdDetail' pk=item.ad.id %}{% else %}{% url 'AdDetail' pk=item.id %}{% endif %}">{{item.title}}</a></h5>
+		        <h5 class="mr-3 text-black"><a href="{% if item.ad %}{% url 'AdDetail' pk=item.ad.id %}{% else %}{% url 'AdDetail' pk=item.id %}{% endif %}">{{item.title}}{{item.ad.title}}</a></h5>
 		    </div>
 		<div class="job-post-item-body d-block d-md-flex">
 			<div class="ml-3"><span class="icon-layers"></span><a href=""> {{item.company}}{{item.ad.company}}</a></div>
@@ -28,7 +28,7 @@
 			        {% if item in applied_jobs or item.ad in applied_jobs %}
 			        	<a href="" class="btn btn-light py-2">قبلا رزومه ارسال کردید</a>
 			        {% else %}
-			        	<a href="{% url 'ApplicantView' ad=item.id %}" class="btn btn-primary py-2">ارسال رزومه</a>
+			        	<a href="{% if item.ad %}{% url 'ApplicantView' ad=item.ad.id %}{% else %}{% url 'ApplicantView' ad=item.id %}{% endif %}" class="btn btn-primary py-2">ارسال رزومه</a>
 			        {% endif %}
 							</div>
 						</div>

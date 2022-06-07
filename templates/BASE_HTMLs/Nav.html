@@ -35,11 +35,12 @@
 			  	<li>
 			  		<strong>{{request.user.get_full_name}}</strong>
 			  	</li>
+					<li><a class="dropdown-item" href="{% url 'HiresList' pk=is_a_employee.id %}">پیام های دریافتی</a></li>
 			  	<li><a class="dropdown-item" href="{% url 'UpdateResume' pk=is_a_employee.id %}">رزومه ساز</a></li>
-			  	<li><a class="dropdown-item" href="{% url 'EmployeeJobApply' pk=request.user.id %}">رزومه های ارسالی</a></li>
-			  	<li><a class="dropdown-item" href="{% url 'AdsSaved' pk=request.user.id %}">آگهی های نشان شده</a></li>
+			  	<li><a class="dropdown-item" href="{% url 'EmployeeJobApply' %}">رزومه های ارسالی</a></li>
+			  	<li><a class="dropdown-item" href="{% url 'AdsSaved' %}">آگهی های نشان شده</a></li>
 			  	<li><a class="dropdown-item" href="{% url 'Logout' %}">خروج</a></li>
-				  	
+
 			  </ul>
 
 			{% else %}
@@ -62,7 +63,7 @@
 	          <!--<li class="nav-item cta mr-md-1"><a href="new-post.html" class="nav-link">Post a Job</a></li>
 	          <li class="nav-item cta cta-colored"><a href="job-post.html" class="nav-link">Want a Job</a></li>-->
 
-	          
+
 
 	        </ul>
 	      </div>
