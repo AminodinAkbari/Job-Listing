@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from .forms import EditNameOrEmailForm, PersonalInfo_ResumeForm , ChangePassword_Employee
 from Controllers.views import Who_is ,employee_owner_can_access
 
-from django.views.generic.edit import FormView , UpdateView , CreateView
+from django.views.generic.edit import UpdateView
 from django.views.generic import DetailView , ListView
 
 from Employer.models import Manager , Applicant , Advertisement , Hire
@@ -109,40 +109,6 @@ class ApplicantDetail(DetailView):
 		context['time_left'] = time_left
 		return context
 
-@Who_is
-def ApplicantView(request , ad , user_type):
-	if user_type is not None:
-		return redirect('/')
-	advertisement = Advertisement.objects.get(id = ad)
-	try:
-		Applicant.objects.get(user = request.user , ad = ad)
-	except:
-		Applicant.objects.create(user = request.user , ad = advertisement)
-	return redirect('/')
-
-@Who_is
-def canceling_applicant(request , pk , user_type):
-	if user_type is None:
-		try:
-			target = Applicant.objects.get(id = pk)
-			if target.user == request.user:
-				target.delete()
-		except:
-			return redirect('/')
-	return redirect('/')
-
-
-@Who_is
-def FavoriteView(request , ad , user_type):
-	if user_type is not None:
-		return redirect('/')
-	advertisement = Advertisement.objects.get(id = ad)
-	try:
-		Favorite.objects.get(user = request.user , ad = ad)
-	except:
-		Favorite.objects.create(user = request.user , ad = advertisement)
-	return redirect(request.GET.get('next'))
-
 class EmployeeJobApply(ListView):
 	model = Applicant
 	template_name = 'Employee/employee-JobApply.html'
@@ -164,6 +130,11 @@ class EmployeeJobMarked(ListView):
 		context['title'] = 'آگهی های نشان شده'
 		return context
 
+class HiresList(ListView):
+	template_name = 'test.html'
+	def get_queryset(self):
+		return Hire.objects.filter(user_id = self.kwargs['pk'])
+
 @employee_owner_can_access
 def AdUnsaved(request , pk , employee):
 	try:
@@ -173,8 +144,35 @@ def AdUnsaved(request , pk , employee):
 		return redirect('Home')
 	return redirect(request.GET.get('next'))
 
-class HiresList(ListView):
-	template_name = 'test.html'
+@Who_is
+def AdSaved(request , ad , user_type):
+	if user_type is not None:
+		return redirect('/')
+	advertisement = Advertisement.objects.get(id = ad)
+	try:
+		Favorite.objects.get(user = request.user , ad = ad)
+	except:
+		Favorite.objects.create(user = request.user , ad = advertisement)
+	return redirect(request.GET.get('next'))
 
-	def get_queryset(self):
-		return Hire.objects.filter(user_id = self.kwargs['pk'])
+@Who_is
+def ApplicantView(request , ad , user_type):
+	if user_type is not None:
+		return redirect('/')
+	advertisement = Advertisement.objects.get(id = ad)
+	try:
+		Applicant.objects.get(user = request.user , ad = ad)
+	except:
+		Applicant.objects.create(user = request.user , ad = advertisement)
+	return redirect('/')
+
+@Who_is
+def canceling_applicant(request , pk , user_type):
+	if user_type is None:
+		try:
+			target = Applicant.objects.get(id = pk)
+			if target.user == request.user:
+				target.delete()
+		except:
+			return redirect('/')
+	return redirect('/')
