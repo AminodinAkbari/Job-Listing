@@ -14,8 +14,8 @@ from .views import (
 )
 from .views import 	EditMangerInfo , UpdatePasswordManager
 urlpatterns = [
-	path('new_ad' , login_required(NewAd) , name = 'NewAd'),
-	path('new_company' , login_required(NewCompany) , name = 'NewCompany'),
+	path('new_ad' , login_required(NewAd.as_view()) , name = 'NewAd'),
+	path('new_company' , login_required(NewCompany.as_view()) , name = 'NewCompany'),
 	path('edit_manager_info/<int:pk>' , login_required(EditMangerInfo.as_view()) , name = 'EditManagerInfo'),
 	path('edit_company_info/<int:pk>' , login_required(EditCompanyView.as_view()) , name = 'EditCompanyView'),
 	path('update_manager_password' , login_required(UpdatePasswordManager) , name = 'UpdatePasswordManager'),
