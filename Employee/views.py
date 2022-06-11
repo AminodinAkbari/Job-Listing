@@ -131,7 +131,7 @@ class EmployeeJobMarked(ListView):
 		return context
 
 class HiresList(ListView):
-	template_name = 'test.html'
+	template_name = 'Employee/Hire-messages.html'
 	def get_queryset(self):
 		return Hire.objects.filter(user_id = self.kwargs['pk'])
 
