@@ -9,7 +9,7 @@ from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmplo
 from django.contrib import messages
 
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView , CreateView
+from django.views.generic.edit import UpdateView , CreateView , FormView
 
 from .models import  Advertisement , Company , Manager , Applicant , Hire
 from Employee.models import EmployeeModel
@@ -147,38 +147,56 @@ def UpdatePasswordManager(request , user_type):
 
     return render(request , 'Employer/UpdateManagersPassword.html' , context)
 
+class NewAd(FormView):
+    form_class = NewAdvertisementForm
+    template_name = 'Employer/New_Ad.html'
 
-def NewAd(request):
-    form = NewAdvertisementForm(request.POST or None , user = request.user.email)
-    if form.is_valid():
+    def get_form_kwargs(self):
+        initial = super().get_form_kwargs()
+        initial['user'] = self.request.user.email
+        return initial
+
+    def form_valid(self , form):
         form.save()
-        messages.success(request , 'آگهی شما با موفقیت ایجاد شد' , extra_tags = 'NewAdCreated')
-        return redirect("Home")
-    context = {
-    "form":form
-    }
-    return render(request , 'Employer/New_Ad.html' , context)
+        messages.success(self.request , 'آگهی شما با موفقیت ایجاد شد' , extra_tags = 'NewAdCreated')
+        form = super(NewAd , self).form_valid(form)
+        return form
+
+    def get_success_url(self):
+        return reverse("Home")
 
 
-def NewCompany(request):
-    if request.method == 'POST':
-        form = NewCompanyForm(request.POST)
-        if form.is_valid():
-            company_name = form.cleaned_data.get('name')
-            company_address = form.cleaned_data.get('address')
-            company_underlie = form.cleaned_data.get('underlie')
+# def NewCompany(request):
+#     if request.method == 'POST':
+#         form = NewCompanyForm(request.POST)
+#         if form.is_valid():
+#             company_name = form.cleaned_data.get('name')
+#             company_address = form.cleaned_data.get('address')
+#             company_underlie = form.cleaned_data.get('underlie')
+#
+#             requested_manager = Manager.objects.get(email = request.user.username)
+#
+#             Company.objects.create(name = company_name , address = company_address , underlie = company_underlie,manager = requested_manager  , valid = False)
+#             messages.success(request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
+#             return redirect("Home")
+#     else:
+#         form = NewCompanyForm()
+#     context = {
+#     "form":form
+#     }
+#     return render(request , 'Employer/New_company.html' , context)
 
-            requested_manager = Manager.objects.get(email = request.user.username)
+class NewCompany(FormView):
+    form_class = NewCompanyForm
+    template_name = 'Employer/New_company.html'
 
-            Company.objects.create(name = company_name , address = company_address , underlie = company_underlie,manager = requested_manager  , valid = False)
-            messages.success(request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
-            return redirect("Home")
-    else:
-        form = NewCompanyForm()
-    context = {
-    "form":form
-    }
-    return render(request , 'Employer/New_company.html' , context)
+    def form_valid(self , form):
+        requested_manager = Manager.objects.get(email = self.request.user.username)
+        form.manager = requested_manager
+        form.save()
+        messages.success(self.request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
+        return super().form_valid(form)
+
 
 def DeleteAd(request , pk ,**kwargs):
     manager = Manager.objects.filter(email = request.user.username).first()
