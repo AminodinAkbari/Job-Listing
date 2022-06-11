@@ -147,24 +147,29 @@ class EditAdInfoForm(ModelForm):
 		return title
 
 
-class NewCompanyForm(forms.Form):
-	def __init__(self ,*args, **kwargs):
-		super(NewCompanyForm, self).__init__(*args, **kwargs)
-		for field in self.fields.values():
-			field.widget.attrs.update({'class': 'form-control rtl'})
-	name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder':'','maxlength':'80'}),
-        label = 'نام شرکت'
-    )
-	address = forms.CharField(
-		widget=forms.Textarea(attrs={'placeholder':'استان تهران ، بخش غربی ، شهرک ...' ,'maxlength':'250' }),
-		label = 'آدرس'
-    )
+# class NewCompanyForm(forms.Form):
+# 	def __init__(self ,*args, **kwargs):
+# 		super(NewCompanyForm, self).__init__(*args, **kwargs)
+# 		for field in self.fields.values():
+# 			field.widget.attrs.update({'class': 'form-control rtl'})
+# 	name = forms.CharField(
+#         widget=forms.TextInput(attrs={'placeholder':'','maxlength':'80'}),
+#         label = 'نام شرکت'
+#     )
+# 	address = forms.CharField(
+# 		widget=forms.Textarea(attrs={'placeholder':'استان تهران ، بخش غربی ، شهرک ...' ,'maxlength':'250' }),
+# 		label = 'آدرس'
+#     )
+#
+# 	underlie = forms.CharField(
+#         widget=forms.Textarea(attrs={'placeholder':'شرکت شما در چه زمینه های فعالیت میکند ?','maxlength':'550'}),
+#         label = 'درباره شرکت توضیح دهید (این متن در آگهی های شما نمایش داده خواهد شد)'
+#     )
 
-	underlie = forms.CharField(
-        widget=forms.Textarea(attrs={'placeholder':'شرکت شما در چه زمینه های فعالیت میکند ?','maxlength':'550'}),
-        label = 'درباره شرکت توضیح دهید (این متن در آگهی های شما نمایش داده خواهد شد)'
-    )
+class NewCompanyForm(forms.ModelForm):
+	class Meta:
+		model = Company
+		fields = '__all__'
 
 
 class EditCompanyForm(ModelForm):
