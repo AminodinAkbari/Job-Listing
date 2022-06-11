@@ -16,7 +16,7 @@
 		<section class="ftco-section bg-light">
       <div class="container">
         <div class="row">
-       
+
        <div class="col-lg-4">
             <div class="p-4 mb-3 bg-white">
               <h3 class="h5 text-black mb-3">Contact Info</h3>
@@ -30,7 +30,7 @@
               <p class="mb-0"><a href="#"><span class="__cf_email__" data-cfemail="671e081215020a060e0b2703080a060e094904080a">[email&#160;protected]</span></a></p>
 
             </div>
-            
+
             <div class="p-4 mb-3 bg-white">
               <h3 class="h5 text-black mb-3">More Info</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa ad iure porro mollitia architecto hic consequuntur. Distinctio nisi perferendis dolore, ipsa consectetur</p>
@@ -39,12 +39,19 @@
           </div>
 
           <div class="col-md-12 col-lg-8 mb-5">
-          
-			     <form class="p-5 bg-white" method="POST" dir="rtl">
+
+			     <form class="p-5 bg-white" method="POST" dir="rtl" enctype='multipart/form-data'>
 
             {% if user %}
             <p class="alert alert-primary text-center" dir="rtl"><strong>{{user.get_full_name}}</strong> به عنوان نماینده این شرکت در این وب سایت شناخته خواهد شد</p>
             {% endif %}
+
+            <div class="row form-group text-right">
+                <div class="col-md-12 mb-3 mb-md-0">
+                  <label for="title">{{form.logo.label_tag}}</label>
+                    {{form.logo}}
+                </div>
+            </div>
 
             <div class="row form-group text-right">
                 <div class="col-md-12 mb-3 mb-md-0">
@@ -76,7 +83,7 @@
         </div>
       </div>
     </section>
-		
+
 		<section class="ftco-section-parallax">
       <div class="parallax-img d-flex align-items-center">
         <div class="container">
