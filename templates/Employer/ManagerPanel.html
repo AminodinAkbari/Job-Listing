@@ -118,16 +118,16 @@
 				    </p>
 				  </a>
 
-				  <a href="#" class="list-group-item list-group-item-action">
+				  {% comment %}<a href="#" class="list-group-item list-group-item-action">
 				    <div class="d-flex w-100 justify-content-between" dir="rtl">
 				      <strong class="mb-1">آگهی ها</strong>
 				      <!--<small>3 days ago</small>-->
 				    </div>
 				    <p class="mb-1 text-right font-size-10 pt-1" dir="rtl">تعدا همه آگهی های ثبت شده شما :
 				     <span class="badge badge-pill badge-primary p-2">
-
+               {{companies.company.all|length}}
 				     </span>
-				    </p>
+				    </p>{% endcomment %}
 				  </a>
 			</div>
 

@@ -165,35 +165,17 @@ class NewAd(FormView):
     def get_success_url(self):
         return reverse("Home")
 
-
-# def NewCompany(request):
-#     if request.method == 'POST':
-#         form = NewCompanyForm(request.POST)
-#         if form.is_valid():
-#             company_name = form.cleaned_data.get('name')
-#             company_address = form.cleaned_data.get('address')
-#             company_underlie = form.cleaned_data.get('underlie')
-#
-#             requested_manager = Manager.objects.get(email = request.user.username)
-#
-#             Company.objects.create(name = company_name , address = company_address , underlie = company_underlie,manager = requested_manager  , valid = False)
-#             messages.success(request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
-#             return redirect("Home")
-#     else:
-#         form = NewCompanyForm()
-#     context = {
-#     "form":form
-#     }
-#     return render(request , 'Employer/New_company.html' , context)
-
 class NewCompany(FormView):
     form_class = NewCompanyForm
     template_name = 'Employer/New_company.html'
+    success_url   = '/'
 
     def form_valid(self , form):
         requested_manager = Manager.objects.get(email = self.request.user.username)
-        form.manager = requested_manager
+        print(requested_manager.email)
+        form.instance.manager = requested_manager
         form.save()
+        print(form.instance.manager)
         messages.success(self.request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
         return super().form_valid(form)
 
@@ -215,17 +197,24 @@ class EditCompanyView(UpdateView):
     model = Company
     template_name = 'Employer/EditCompanyInfo.html'
 
-    def dispatch(self , request , *args):
-        obj = self.object
+    def dispatch(self , request , *args, **kwargs):
+        obj = self.get_object()
         if obj.manager.email != request.user.username:
             return redirect('Home')
-        return super(EditCompanyView , self).dispatch(request , *args)
+        return super(EditCompanyView , self).dispatch(request , *args , **kwargs)
 
     def get_success_url(self):
         current_manager = Manager.objects.get(email = self.request.user.username)
         messages.success(self.request , 'تغییرات ذخیره شد')
         current_manager = Manager.objects.get(email = self.request.user.username)
         return reverse_lazy('ManagerPanel', kwargs={'pk': current_manager.id})
+
+    def get_context_data(self , **kwargs):
+        obj = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(id = obj.id)
+        return context
+
 
 def DeleteCompany(request , pk):
     manager = Manager.objects.filter(email = request.user.username).first()

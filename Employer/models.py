@@ -37,7 +37,7 @@ def upload_logo_path(instance , filename):
     return f"company-logos/{final_name}"
 
 class Company(models.Model):
-	logo = models.ImageField(null = True,blank = True,upload_to = upload_logo_path)
+	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_logo_path)
 	name = models.CharField(max_length = 250 , verbose_name = 'نام شرکت')
 	address = models.TextField(verbose_name = 'آدرس')
 	underlie = models.TextField(verbose_name = 'درباره شرکت (این متن در آگهی های شما نمایش داده می شود)')

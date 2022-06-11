@@ -9,8 +9,8 @@
     					{% for company in page_obj %}
 		    			<div class="col-md-12">
 		    				<div class="team d-md-flex p-4 bg-white">
-		        			{% if company.logo %}
-		        			<div class="img" style="background-image: url({{company.logo.url}});">
+		        			{% if company.profile_pic %}
+		        			<div class="img" style="background-image: url({{company.profile_pic.url}});">
 		        			{%else%}
 		        			<div class="img" style="background-image: url({% static 'png/User.png' %});">
 		        			{% endif %}
