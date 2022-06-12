@@ -77,6 +77,12 @@ def search_filter(request):
 
 	return obj
 
+def search_employee(request):
+	skill = request.GET.get('skill')
+	obj = EmployeeModel.objects.filter(skills__icontains = skill)
+	print(obj)
+	return obj
+
 class Search(ListView):
 	template_name = 'Home/AllAdvertisiments.html'
 	paginate_by = 10
@@ -85,7 +91,11 @@ class Search(ListView):
 		if self.kwargs and self.kwargs == 'category_id':
 			return redirect(reverse('AdByCategory' , kwargs = {"category_id":self.kwargs == 'category_id'}))
 		else:
-			return search_filter(self.request)
+			if self.request.GET.get('skill'):
+				return search_employee(self.request)
+			else:
+				return search_filter(self.request)
+
 
 	def get_context_data(self , **kwargs):
 		context = super(Search , self).get_context_data(**kwargs)

@@ -63,8 +63,9 @@ def search_filter(request):
 
 
 @register.inclusion_tag('Home/Search.html')
-def Search():
+def Search(request):
 	context = {}
+	context['is_a_manager'] = Manager.objects.filter(email = request.user.username).first()
 	context['categories'] = categories.objects.all()
 	context['SearchForm'] = SearchForm
 	return context
