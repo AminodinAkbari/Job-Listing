@@ -22,7 +22,7 @@
 			        			<span class="position">{{company.name}}</span>
                                 {% endfor %}{% endcomment %}
 			        			<p dir="rtl" class="mb-2 text-right">{{company.underlie|truncatewords:12}}</p>
-			        			<p><a href="" class="btn btn-primary">رزومه</a></p>
+			        			<p><a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-primary">رزومه</a></p>
 		        			</div>
 		        		</div>
 		    			</div>

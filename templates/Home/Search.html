@@ -12,11 +12,21 @@
         <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
           <form method="GET" action="{% url 'Search' %}" class="search-job">
             <div class="row no-gutters">
+              {% if is_a_manager %}
+              <div class="col-md ml-md-1">
+                <div class="form-group">
+                  <div class="form-field">
+                    <div class="icon"><span class="icon-briefcase"></span></div>
+                    <input type="text" class="form-control" name="skill" placeholder="مهارت در کارجو">
+                  </div>
+                </div>
+              </div>
+              {% endif %}
               <div class="col-md ml-md-2">
                 <div class="form-group">
                   <div class="form-field">
                     <div class="icon"><span class="icon-briefcase"></span></div>
-                    <input type="text" class="form-control" name="title" placeholder="عنوان شغلی ، مهارت ...">
+                    <input type="text" class="form-control" name="title" placeholder="عنوان شغلی در آگهی ها">
                   </div>
                 </div>
               </div>

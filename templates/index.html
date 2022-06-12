@@ -23,7 +23,15 @@
 										    <span aria-hidden="true">&times;</span>
 										  </button>
 										</div>
-									{% endif %}
+
+                  {% else %}
+                  <div class="alert alert-success alert-dismissible fade show mb-2 z-index-10" role="alert">
+                    <strong>{{message}}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  {% endif %}
 							  {% endfor %}
 							{% endif %}
       	</div>
@@ -76,7 +84,7 @@
 				        </div>
 			        </div>
 
-              {% include 'Home/Search.html' %}
+              {% Search request %}
 
 	          </div>
 	        </div>

@@ -1,4 +1,5 @@
 {% extends 'BASE_HTMLs/BASE.html' %}
+{% load static %}
 {% load components %}
 {% load template-parts %}
 {% block common_content %}
@@ -9,13 +10,13 @@
 
 				<div class="tab-content p-4" id="v-pills-tabContent">
 					{% comment %}{% include 'Home/Search.html' %}{% endcomment %}
-					{% Search %}
+					{% Search request %}
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<section class="ftco-section bg-light">
+<section class="ftco-section ftco-candidates ftco-candidates-2 bg-light">
 
 	<div class="container">
 		<div class="row">
@@ -35,16 +36,44 @@
 		        </div>
 		      </div>
 		      <div class="col-lg-9 pr-lg-4">
+						<div class="row">
 					{% for item in object_list %}
-						{% ad_component_tag item request=request %}
+
+					{% if item.employee %}
+								<div class="col-md-6 ftco-animate">
+									<div class="team d-md-flex p-4 bg-white">
+										{% if item.profile_pic %}
+										<div class="img" style="background-image: url({{item.profile_pic.url}});">
+										{%else%}
+										<div class="img" style="background-image: url({% static 'png/User.png' %});">
+										{% endif %}
+										</div>
+										<div class="text pl-md-4 text-right" dir="rtl">
+											<h2 class="text-dark">{{item.employee.get_full_name}}</h2>
+											<span class="position">{{item.get_state_display}}</span>
+											<p dir="rtl" class="mb-2 text-right font-size-10">{{item.about_me|truncatewords:5}}</p>
+											{% if item.employee_soldier_ship %}
+											<span class="text-dark">{{item.get_employee_soldier_ship_display}}</span>
+											{% else %}
+											<span class="text-dark"><br></span>
+											{% endif %}
+											<p><a href="{% url 'EmployeeDetail' pk=item.id %}" class="btn btn-primary">رزومه</a></p>
+										</div>
+									</div>
+								</div>
+					</div>
+
+						{% else %}
+							{% ad_component_tag item request=request %}
+						{% endif %}
 					{% empty %}
-							<h4 class="alert alert-primary text-center">موردی یافت نشد</h4>
+							<h4 class="alert alert-primary text-center col-md-12">موردی یافت نشد</h4>
 					{% endfor %}
 		      </div>
 		</div>
 		<!--Paginate-->
-		<div class="row mt-5">
-		    <div class="col text-center">
+
+		    <div class="col text-center mt-5">
 		        <div class="block-27">
 		            <ul>
 		              	{% if page_obj.has_previous %}
@@ -63,7 +92,7 @@
 		            </ul>
 		        </div>
 		    </div>
-		</div>
+
 		<!--End Paginate-->
 	</div>
 </section>
