@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView , DetailView
+from django.db.models import Count
 
 from Controllers.views import Who_is
 from Controllers.models import categories ,job_nature , states_iran
@@ -126,8 +127,6 @@ class AdByCategory(ListView):
 
 	def get_queryset(self):
 		return Advertisement.objects.filter(category_id = self.kwargs['category_id'])
-
-from django.db.models import Count
 
 class TopCompanies(ListView):
 	template_name = 'index.html'
