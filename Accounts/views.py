@@ -105,5 +105,4 @@ class EmployeeRegisterView(FormView):
 
 		if user:
 			login(self.request , user)
-			EmployeeModel.objects.create(employee = self.request.user)
 		return reverse_lazy('Home')
