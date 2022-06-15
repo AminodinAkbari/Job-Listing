@@ -13,14 +13,16 @@ class RegisterForm(ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(RegisterForm, self).__init__(*args, **kwargs)
-		self.fields['profile_pic'].widget.attrs.update({'id':'imageUpload','class':'form-control','accept':'.png, .jpg, .jpeg','type':'file'})
-		self.fields['name'].widget.attrs.update({'id':'name' , 'class':'form-control'})
-		self.fields['family'].widget.attrs.update({'id':'family' , 'class':'form-control'})
-		self.fields['email'].widget.attrs.update({'id':'email' , 'class':'form-control'})
-		self.fields['phone'].widget.attrs.update({'id':'phone' , 'class':'form-control'})
-		self.fields['About'].widget.attrs.update({'id':'About' , 'class':'form-control'})
-		self.fields['password'].widget.attrs.update({'id':'password' , 'class':'form-control'})
-		self.fields['re_password'].widget.attrs.update({'id':'re_password' , 'class':'form-control'})
+		for field in self.fields.values():
+			field.widget.attrs.update({'class': 'form-control rtl'})
+		self.fields['profile_pic'].widget.attrs.update({'id':'imageUpload','accept':'.png, .jpg, .jpeg','type':'file'})
+		self.fields['name'].widget.attrs.update({'id':'name'})
+		self.fields['family'].widget.attrs.update({'id':'family'})
+		self.fields['email'].widget.attrs.update({'id':'email'})
+		self.fields['phone'].widget.attrs.update({'id':'phone'})
+		self.fields['About'].widget.attrs.update({'id':'About'})
+		self.fields['password'].widget.attrs.update({'id':'password'})
+		self.fields['re_password'].widget.attrs.update({'id':'re_password'})
 
 	def clean_phone(self):
 		phone = self.cleaned_data.get('phone')
@@ -68,6 +70,12 @@ class EmployeeRegister(ModelForm):
 
 	def __init__(self,*args , **kwargs):
 		super(EmployeeRegister , self).__init__(*args , **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs.update({'class': 'form-control rtl'})
+		self.fields['first_name'].label = 'نام'
+		self.fields['last_name'].label = 'نام خانوادگی'
+		self.fields['username'].label = 'ایمیل'
+		self.fields['password'].label = 'رمز عبور'
 
 	def clean_re_password(self):
 		password = self.cleaned_data.get('password')
@@ -77,6 +85,15 @@ class EmployeeRegister(ModelForm):
 		if password != re_password :
 			raise forms.ValidationError('کلمه های عبور با یکدیگر مغایرت دارند !')
 		return password
+
+	def clean_username(self):
+		email = self.cleaned_data.get('username')
+		if '@' not in str(email) or '.com' not in str(email):
+			raise forms.ValidationError('ایمیل معتبر نیست')
+		duplicate = User.objects.filter(username = email).exists()
+		if duplicate:
+			raise forms.ValidationError('این ایمیل قبل در سایت ثبت نام شده است')
+		return email
 
 class NewsletterEmailsForm(forms.ModelForm):
 	class Meta:
