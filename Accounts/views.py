@@ -60,6 +60,7 @@ def LoginView(request):
 		password = login_form.cleaned_data.get('password')
 		user = authenticate(request ,username = username , password = password)
 		if user is not None:
+
 			login(request , user)
 			try:
 				return redirect(request.GET.get('next'))
