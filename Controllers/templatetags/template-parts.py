@@ -68,4 +68,5 @@ def Search(request):
 	context['is_a_manager'] = Manager.objects.filter(email = request.user.username).first()
 	context['categories'] = categories.objects.all()
 	context['SearchForm'] = SearchForm
+	context['request'] = request
 	return context

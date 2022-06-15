@@ -31,6 +31,7 @@ job_nature = (
 )
 
 states_iran = (
+('0' , 'استان مورد نظر'),
 ('Tehran' , 'تهران'),
 ('Shiraz' , 'شیراز'),
 )
