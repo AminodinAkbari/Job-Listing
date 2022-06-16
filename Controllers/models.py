@@ -54,10 +54,11 @@ class Languages(models.Model):
         return self.lang_fa_type
 
 class categories(models.Model):
-	name = models.CharField(max_length = 100)
+    name = models.CharField(max_length = 100)
+    icon = models.CharField(max_length = 80 , blank=True , null=True)
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+        return self.name
 
 def passGenerator(passlen):
       main_password=string.ascii_letters+string.digits+"!@#$%^&*_+\/~"
