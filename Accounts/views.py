@@ -28,6 +28,7 @@ class RegisterView(FormView):
 			context['form'] = RegisterForm(self.request.POST ,self.request.FILES)
 		else:
 			context['form'] = RegisterForm()
+		context['title'] = 'ثبت نام کارفرما'
 		return context
 
 	def get_success_url(self):
@@ -73,6 +74,7 @@ def LoginView(request):
 			except:
 				login_form.add_error('username','کاربری با این ایمیل یافت نشد')
 	context = {
+	'title':'ورود',
 	'login_form':login_form
 	}
 	return render(request , 'Accounts/login.html' , context)
@@ -91,6 +93,11 @@ class EmployeeRegisterView(FormView):
 		if request.user.is_authenticated:
 			return redirect('Home')
 		return super(EmployeeRegisterView, self).dispatch(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'ثبت نام کارجو'
+		return context
 
 	def form_valid(self, form):
 		user=form.save()
