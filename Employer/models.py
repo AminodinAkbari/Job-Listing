@@ -6,6 +6,7 @@ from django.utils import timezone
 now = timezone.now()
 
 from Controllers.models import soldiership_types , job_nature , categories, states_iran
+from Controllers.utils import Advertisement_time_left
 
 from django.contrib.auth.models import User
 
@@ -49,7 +50,7 @@ class Company(models.Model):
 
 class Advertisement(models.Model):
 	title = models.CharField(max_length = 300 , verbose_name = 'عنوان آگهی')
-	location = models.CharField(max_length = 100,choices=states_iran,verbose_name = 'شهر یا استان', blank=True , null = True)
+	location = models.CharField(max_length = 100,choices=states_iran ,default = states_iran[0][0],verbose_name = 'شهر یا استان')
 	address = models.TextField(verbose_name = 'آدرس' , blank=True , null = True)
 	category = models.ForeignKey(categories , on_delete = models.CASCADE , default = '' , verbose_name = 'دسته بندی' , related_name = 'advertisiment')
 	company = models.ForeignKey(Company , on_delete = models.CASCADE , verbose_name = 'مربوط به شرکت' , related_name='company')
@@ -64,8 +65,10 @@ class Advertisement(models.Model):
 	expired = models.BooleanField(verbose_name = 'این آگهی منقضی شده' , default = False)
 
 	def __str__(self):
-
 		return self.title
+
+	def get_time_left(self):
+		return Advertisement_time_left(self)
 
 applicant_status=(
 ('send' , 'در انتظار تأیین وضعیت'),
