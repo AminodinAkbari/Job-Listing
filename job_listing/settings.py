@@ -16,11 +16,10 @@ SECRET_KEY = 'django-insecure-$z$^vsn^8sfvub6b!4i5pv4b=5$(jei%_h*w3@r!69p+h)pu(k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     'Employee',
     'Home',
     'Rest_API',
+    'Site_settings'
 ]
 
 # default settings
@@ -48,14 +48,7 @@ JALALI_DATE_DEFAULTS = {
     },
     'Static': {
         'js': [
-            # loading datepicker
             'admin/js/django_jalali.min.js',
-            # OR
-            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
-            # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
-            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc.js',
-            # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
-            # 'admin/js/main.js',
         ],
         'css': {
             'all': [
