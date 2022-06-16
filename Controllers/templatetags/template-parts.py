@@ -1,27 +1,24 @@
 from django import template
-from django.views.generic.edit import FormView
 from Controllers.forms import SearchForm
 from Employer.models import Manager
 from Employee.models import EmployeeModel
 from Controllers.models import categories
 from Controllers.forms import SearchForm
+from Site_settings.models import Footer , SocialLinks
 register = template.Library()
 
 @register.inclusion_tag('BASE_HTMLs/Nav.html' , takes_context=True)
 def Navbar(context , request):
-	try:
-		is_a_manager = Manager.objects.get(email = request.user.username)
-	except:
-		is_a_manager = None
-	try:
-		is_a_employee = EmployeeModel.objects.get(employee = request.user)
-	except:
-		is_a_employee = None
-	context = {}
-	if request.user.is_authenticated:
-		context['is_a_manager'] = is_a_manager
-		context['is_a_employee'] = is_a_employee
-		context['request'] = request
+	context['request'] = request
+	context['settings'] = Footer.objects.filter(active = True).first()
+	return context
+
+@register.inclusion_tag('BASE_HTMLs/Footer.html' , takes_context=True)
+def FooterComponent(context):
+	footer = Footer.objects.filter(active = True).first()
+	Social = SocialLinks.objects.all()
+	context['Footer']  = footer
+	context['Social']  = Social
 	return context
 
 
