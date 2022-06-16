@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.views.generic import ListView , DetailView
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
 
 from Controllers.views import Who_is
+from Controllers.utils import Advertisement_time_left
 from Controllers.models import categories ,job_nature , states_iran
 from Employer.models import Manager,Advertisement,Company , Applicant
 from Employee.models import EmployeeModel
 from Controllers.forms import SearchForm
+from Controllers.utils import Advertisement_time_left
 
 from datetime import datetime
 from django.utils import timezone
@@ -64,13 +67,14 @@ class ALLEmployees(ListView):
 		return context
 
 class ALLCompanies(ListView):
-	template_name = 'Home/All-Employers.html'
+	template_name = 'Home/All-Companies.html'
 	paginate_by = 9
 
 	def get_queryset(self):
 		return Company.objects.all()
 
 	def get_context_data(self , **kwargs):
+		print(self.request.session['TYPE'])
 		context = super(ALLCompanies,self).get_context_data(**kwargs)
 		context['title'] = 'لیست شرکت ها'
 		return context
@@ -84,11 +88,12 @@ class AdDetail(DetailView):
 		context = super(AdDetail , self).get_context_data(**kwargs)
 		obj = self.get_object()
 
-		applied_jobs = Applicant.objects.filter(user = self.request.user)
-		str_list_for_applid = []
-		for ad in applied_jobs:
-			str_list_for_applid.append(ad.ad)
-		context['applied_jobs'] = str_list_for_applid
+		if self.request.user.is_authenticated:
+			applied_jobs = Applicant.objects.filter(user = self.request.user)
+			str_list_for_applid = []
+			for ad in applied_jobs:
+				str_list_for_applid.append(ad.ad)
+			context['applied_jobs'] = str_list_for_applid
 
 		Skills = []
 		if self.request.user.is_authenticated:
@@ -100,12 +105,7 @@ class AdDetail(DetailView):
 				context['employee'] = employee
 		context['skills'] = self.object.skills.split('/')
 		context['title'] = self.object.title
-
-		ad_date = str(obj.expired_in)
-		ad_date = ad_date[:19]
-		time = datetime.datetime.strptime(ad_date, '%Y-%m-%d %H:%M:%S').date()
-		time_left = (time-today).days
-		context['time_left'] = time_left
+		context['time_left'] = Advertisement_time_left(obj)
 
 		return context
 
@@ -128,6 +128,12 @@ class AdByCategory(ListView):
 	def get_queryset(self):
 		return Advertisement.objects.filter(category_id = self.kwargs['category_id'])
 
+	def get_context_data(self , **kwargs):
+		context = super().get_context_data(**kwargs)
+		category_name = get_object_or_404(categories , id = self.kwargs['category_id'])
+		context['title'] = category_name.name
+		return context
+
 class TopCompanies(ListView):
 	template_name = 'index.html'
 	def get_context_data(self,**kwargs):
@@ -139,3 +145,15 @@ class TopCompanies(ListView):
 class CompanyView(DetailView):
 	model = Company
 	template_name = 'Employer/company-info.html'
+
+	def get_context_data(self , **kwargs):
+		context = super().get_context_data(**kwargs)
+		ads_time_left = {}
+		ads = Advertisement.objects.filter(company_id = self.kwargs['pk'])
+		print(ads)
+		for item in ads:
+			time_left = Advertisement_time_left(item)
+			ads_time_left[f'{item.id}']=f'{time_left}'
+		print(ads_time_left)
+		context['ads_time_left'] = ads_time_left
+		return context
