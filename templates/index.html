@@ -101,9 +101,9 @@
     					<div class="row no-gutters" dir="rtl">
     						{% for category in categories|slice:":6" %}
     						<div class="col-md-2">
-    							<div class="top-category text-center no-border-left">
-    								<h3><a href="{% url 'AdByCategory' category_id=category.id %}">{{category.name}}</a></h3>
-    								<span class="icon flaticon-contact"></span>
+    							<div class="top-category text-center">
+    								<h3 class="font-size-13"><a class="text-center" href="{% url 'AdByCategory' category_id=category.id %}">{{category.name}}</a></h3>
+    								<span class="icon {{category.icon}}"></span>
     								<p><span class="number"><b>{{category.advertisiment.all|length}}</b></span> <span>فرصت شغلی</span></p>
     							</div>
     						</div>
@@ -172,7 +172,7 @@
     	</div>
     </section>
 {% endif %}
-{% if is_a_manager %}
+{% if request.session.TYPE == 'Emplooyer' %}
 <section class="ftco-section ftco-candidates ftco-candidates-2 bg-light">
     	<div class="container">
     		<div class="row justify-content-center mb-5">
@@ -188,7 +188,7 @@
 		        			{% if employee.profile_pic %}
 		        			<div class="img" style="background-image: url({{employee.profile_pic.url}});">
 		        			{%else%}
-		        			<div class="img" style="background-image: url({% static 'png/User.png' %});">
+		        			<div class="img" style="background-image: url('static/png/User.png');">
 		        			{% endif %}
 		        			</div>
 		        			<div class="text pl-md-4 text-right" dir="rtl">

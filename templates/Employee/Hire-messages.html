@@ -4,12 +4,18 @@
 <section class="ftco-section bg-light text-dark" dir="rtl">
 	<div class="container bg-white">
     <div class="row">
-      <div class="col-md-12 bb-1 text-right"><h5 class="">پیام های پیشنهاد کار از سمت کارفرمایان</h5></div>
-{% for item in object_list %}
-      <div class="col-md-12 text-center">
-        لطفا از این آگهی دیدن کنید : <a class="btn btn-primary m-2" href="{% url 'AdDetail' pk=item.ad.id %}">{{item.ad.title}}</a> از طرف {{item.user.get_full_name}} | {{item.created_at|to_jalali}}
-      </div>
-{% endfor %}
+      <div class="col-md-12 bb-1 text-right"><h4 class="">پیشنهادهای همکاری شما</h4></div>
+{% if object_list|length > 0 %}
+	{% for item in object_list %}
+	      <div class="col-md-12 text-center">
+	        لطفا از این آگهی دیدن کنید : <a class="btn btn-primary m-2" href="{% url 'AdDetail' pk=item.ad.id %}">{{item.ad.title}}</a> از طرف {{item.user.get_full_name}} | {{item.created_at|to_jalali}}
+	      </div>
+	{% endfor %}
+	{% else %}
+	<div class="col-md-12 text-center">
+	<h3 class="text-primary text-center p-5">موردی یافت نشد</h3>
+	</div>
+{% endif %}
     </div>
   </div>
   </section>

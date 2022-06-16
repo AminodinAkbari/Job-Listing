@@ -1,31 +1,17 @@
 {% extends 'BASE_HTMLs/Base.html' %}
 {% block common_content %}
-<div class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text align-items-end justify-content-start">
-          <div class="col-md-12 ftco-animate text-center mb-5">
-          	<p class="breadcrumbs mb-0"><span class="mr-3"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reigster</span></p>
-            <h1 class="mb-3 bread">Reigster Manager</h1>
-          </div>
-        </div>
-      </div>
-    </div>
-
 <section class="ftco-section bg-light">
 	<div class="container">
 		<form class="p-5 bg-white manager-register" method="POST" dir="rtl" enctype="multipart/form-data">
 			{% csrf_token %}
 
-		    <h1>فرم ثبت نام مدیر کمپانی 
+		    <h1> فرم ثبت نام کارفرما
 		        <small>لطفا با پر کردن فرم زیر خود را به کارجویان بشناسانید و از طرف آنها امیتاز دریافت کنید</small>
 		    </h1>
 
 		    <div class="avatar-upload">
 		        <div class="avatar-edit">
-		            <!--<input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />-->
 		            {{form.profile_pic}}
-		            
 		            <label for="imageUpload"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="currentColor" class="bi bi-arrow-down-left-circle" viewBox="0 0 16 16">
 									  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-5.904-2.854a.5.5 0 1 1 .707.708L6.707 9.95h2.768a.5.5 0 1 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.475a.5.5 0 1 1 1 0v2.768l4.096-4.097z"/>
 									</svg></label>

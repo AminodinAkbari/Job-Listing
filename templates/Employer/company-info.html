@@ -1,4 +1,44 @@
-{{object}}<hr>
-{% for i in object.company.all %}
-{{i}}
-{% endfor %}
+{% extends 'BASE_HTMLs/Base.html' %}
+{% load static %}
+{% load jalali_tags %}
+{% block common_content %}
+<section class="ftco-section bg-light" dir="rtl">
+  <div class="container ftco-animate">
+    <div class="row">
+      {% if company.profile_pic %}
+      <img src="{{object.profile_pic.url}}" class="col-md-6">
+      {%else%}
+      <img src="{% static 'png/User.png' %}" class="col-md-6">
+      {% endif %}
+      <div class="col-md-6 text-right">
+        <h3 class="mt-5">درباره شرکت {{object.name}} :</h3><hr>
+        <p class="text-justify">{{object.underlie}}</p><hr>
+        <h3 class="mt-5">آگهی ها:</h3><hr>
+        <div class="list-group">
+        {% for ad in object.company.all %}
+          {% if ad.get_time_left > 0 %}
+            <a href="{% url 'AdDetail' pk=ad.id %}" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 font-size-10">{{ad.category}}</h5>
+                <small>فرصت ارسال رزومه تا {{ad.get_time_left}} روز دیگر</small>
+              </div>
+              <p class="mb-1">{{ad.title}}</p>
+              <small>{{ad.get_job_nature_display}}</small>
+            </a>
+          {% else %}
+          <a href="{% url 'AdDetail' pk=ad.id %}" class="list-group-item list-group-item-action bg-danger text-white">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1 font-size-10 text-white">{{ad.category}}</h5>
+              <small>منقضی شده</small>
+            </div>
+            <p class="mb-1">{{ad.title}}</p>
+            <small>{{ad.get_job_nature_display}}</small>
+          </a>
+          {% endif %}
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

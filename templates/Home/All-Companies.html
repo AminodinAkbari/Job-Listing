@@ -1,0 +1,62 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+{% load static %}
+{% block common_content %}
+<section class="ftco-section ftco-candidates ftco-candidates-2 bg-light">
+    	<div class="container">
+    		<div class="row">
+    			<div class="col-lg-10 pr-lg-4">
+    				<div class="row">
+    					{% for company in page_obj %}
+		    			<div class="col-md-12">
+		    				<div class="team d-md-flex p-4 bg-white">
+		        			{% if company.profile_pic %}
+		        			<div class="img" style="background-image: url({{company.profile_pic.url}});">
+		        			{%else%}
+		        			<div class="img" style="background-image: url({% static 'png/User.png' %});">
+		        			{% endif %}
+		        			</div>
+		        			<div class="text pl-md-4 text-right" dir="rtl">
+		        				<span class="location mb-0">{{company.address}}</span>
+		        				<h2>{{company.name}}</h2>
+                                {% comment %}{% for company in company.manager.all %}
+			        			<span class="position">{{company.name}}</span>
+                                {% endfor %}{% endcomment %}
+			        			<p dir="rtl" class="mb-2 text-right">{{company.underlie|truncatewords:30}}</p>
+			        			<p>
+                      <a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-primary">رزومه</a>
+                      <a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-success">Score</a>
+                    </p>
+		        			</div>
+		        		</div>
+		    			</div>
+		    			{% endfor %}
+		    		</div>
+		    		<div class="row mt-5">
+		          <div class="col text-center">
+		            <div class="row mt-5">
+		    <div class="col text-center">
+		        <div class="block-27">
+		            <ul>
+		              	{% if page_obj.has_previous %}
+		                <li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+		                {% endif %}
+		                {% for page in paginator.page_range %}
+		                	{% if page == page_obj.number%}
+		                		<li class="active"><a href="?page={{page}}">{{page}}</a></li>
+		                	{% else %}
+		                		<li><a href="?page={{page}}">{{page}}</a></li>
+		                	{% endif %}
+		                {% endfor %}
+		                {% if page_obj.has_next %}
+		                <li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
+		                {% endif %}
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+		          </div>
+		        </div>
+		    	</div>
+
+    </section>
+{% endblock %}

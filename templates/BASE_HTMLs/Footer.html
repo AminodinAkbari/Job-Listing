@@ -1,62 +1,69 @@
     <footer class="ftco-footer ftco-bg-dark ftco-section">
       <div class="container">
-        <div class="row mb-5">
+        <div class="row">
         	<div class="col-md">
-             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Skillhunt Jobboard</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+             <div class="ftco-footer-widget mb-4 text-center">
+              <h2 class="ftco-heading-2">{{Footer.logo}}</h2>
+              <p class="font-size-12 text-right"><strong>{{Footer.short_text}}</strong></p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                {% for item in Social %}
+                <li class="ftco-animate"><a href="#"><span class="icon-{{item.name}}"></span></a></li>
+                {% endfor %}
               </ul>
             </div>
           </div>
+          {% if request.user.is_authenticated %}
+            {% if request.session.TYPE == 'Employee' %}
+            <div class="col-md text-center">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2 bb-1 pb-3">کارجو</h2>
+                <ul class="list-unstyled font-size-13">
+                  <li><a href="{% url 'HiresList' pk=request.user.id %}" class="pb-1 d-block"><strong>پیام های دریافتی</strong></a></li>
+                  <li><a href="{% url 'UpdateResume' pk=request.user.id %}"><strong>رزومه ساز</strong></a></li>
+                  <li><a href="{% url 'EmployeeJobApply' %}"><strong>رزومه های ارسالی</strong></a></li>
+                  <li><a href="{% url 'AdsSaved' %}"><strong>آگهی های نشان شده</strong></a></li>
+                </ul>
+              </div>
+            </div>
+            {% else %}
+            <div class="col-md text-center">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2 bb-1 pb-3">کارجو</h2>
+                <ul class="list-unstyled font-size-13">
+                  <li>
+                    <strong>{{request.user.get_full_name}}</strong>
+                  </li>
+                    <li><a href="{% url 'ManagerPanel' pk=is_a_manager.id %}">پنل مدیریت</a></li>
+                    <li><a href="{% url 'NewCompany'%}">افزودن شرکت جدید</a></li>
+                    <li><a href="{% url 'NewAd'%}">افزودن آگهی جدید</a></li>
+                    <li><a href="{% url 'EditManagerInfo' pk=is_a_manager.id %}">ویرایش اطلاعات</a></li>
+                    <li><a href="{% url 'Logout' %}">خروج از حساب کاربری</a></li>
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+        <div class="col-md text-center">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2 bb-1 pb-3">منو کاربر</h2>
+            <ul class="list-unstyled font-size-13">
+              <li>
+                <strong>{{request.user.get_full_name}}</strong>
+              </li>
+              <li><a href=""><strong>خانه</strong></a></li>
+              <li><a href=""><strong>آگهی</strong></a></li>
+              <li><a href=""><strong>شرکت ها</strong></a></li>
+              <li><a href=""><strong>مقالات</strong></a></li>
+            </ul>
+          </div>
+        </div>
+
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Employers</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="pb-1 d-block">Browse Candidates</a></li>
-                <li><a href="#" class="pb-1 d-block">Post a Job</a></li>
-                <li><a href="#" class="pb-1 d-block">Employer Listing</a></li>
-                <li><a href="#" class="pb-1 d-block">Resume Page</a></li>
-                <li><a href="#" class="pb-1 d-block">Dashboard</a></li>
-                <li><a href="#" class="pb-1 d-block">Job Packages</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-4">
-              <h2 class="ftco-heading-2">Candidate</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="pb-1 d-block">Browse Jobs</a></li>
-                <li><a href="#" class="pb-1 d-block">Submit Resume</a></li>
-                <li><a href="#" class="pb-1 d-block">Dashboard</a></li>
-                <li><a href="#" class="pb-1 d-block">Browse Categories</a></li>
-                <li><a href="#" class="pb-1 d-block">My Bookmarks</a></li>
-                <li><a href="#" class="pb-1 d-block">Candidate Listing</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-4">
-              <h2 class="ftco-heading-2">Account</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="pb-1 d-block">My Account</a></li>
-                <li><a href="#" class="pb-1 d-block">Sign In</a></li>
-                <li><a href="#" class="pb-1 d-block">Create Account</a></li>
-                <li><a href="#" class="pb-1 d-block">Checkout</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">Have a Questions?</h2>
+            	<h2 class="ftco-heading-2">سوالی دارید</h2>
             	<div class="block-23 mb-3">
 	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+	                <li><a href=""><span class="icon icon-envelope"></span> | <span class="text">{{Footer.email}}</span></a></li>
 	              </ul>
 	            </div>
             </div>
@@ -66,7 +73,7 @@
           <div class="col-md-12 text-center">
 
             <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy; All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  &copy; تمامی حقوق برای {{Footer.logo}} محفوظ است . قدرت گرفته شده از پایتون |  برنامه نویس<a href="https://aminodin.pythonanywhere.com/" target="_blank"> امین الدین اکبری</a> | <script>document.write(new Date().getFullYear())</script>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
           </div>
         </div>
