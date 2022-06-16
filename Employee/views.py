@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 
 from .forms import EditNameOrEmailForm, PersonalInfo_ResumeForm , ChangePassword_Employee
 from Controllers.views import Who_is ,employee_owner_can_access
+from Controllers.utils import Advertisement_time_left
 
 from django.views.generic.edit import UpdateView
 from django.views.generic import DetailView , ListView
@@ -86,8 +87,6 @@ def EditNameOrEmail_Employee(request , pk , employee):
 	context['suggest_password'] = passGenerator(10)
 	return render(request , 'Employee/EditNameOrEmail-Employee.html' , context)
 
-import datetime
-today = datetime.datetime.now().date()
 class ApplicantDetail(DetailView):
 	model = Applicant
 	template_name = 'Employee/Applicant-detail.html'
@@ -102,11 +101,7 @@ class ApplicantDetail(DetailView):
 		context = super().get_context_data(**kwargs)
 		context['employee'] = EmployeeModel.objects.filter(employee = self.request.user).first()
 		obj = self.get_object()
-		ad_date = str(obj.ad.expired_in)
-		ad_date = ad_date[:19]
-		time = datetime.datetime.strptime(ad_date, '%Y-%m-%d %H:%M:%S').date()
-		time_left = (time-today).days
-		context['time_left'] = time_left
+		context['time_left'] = Advertisement_time_left(obj.ad)
 		return context
 
 class EmployeeJobApply(ListView):
@@ -134,6 +129,10 @@ class HiresList(ListView):
 	template_name = 'Employee/Hire-messages.html'
 	def get_queryset(self):
 		return Hire.objects.filter(user_id = self.kwargs['pk'])
+	def get_context_data(self , **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['title'] = 'پیشنهادهای همکاری'
+		return context
 
 @employee_owner_can_access
 def AdUnsaved(request , pk , employee):

@@ -23,7 +23,6 @@ class PersonalInfo_ResumeForm(ModelForm):
 		super(PersonalInfo_ResumeForm, self).__init__(*args, **kwargs)
 
 		self.fields['skills'].widget.attrs = {'placeholder':'تسلط به نرم افزار هلو / تسلط به زبان انگلیسی / ...' , 'rows':'9'}
-
 		self.fields['birth'] = JalaliDateField(label="تاریخ تولد",
             widget=AdminJalaliDateWidget
         )
