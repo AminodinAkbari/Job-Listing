@@ -123,6 +123,7 @@ class EditAdInfoForm(ModelForm):
 		super(EditAdInfoForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
+		self.fields['expired_in'] = JalaliDateField(label=('تاریخ انقضای این آگهی'),widget=AdminJalaliDateWidget)
 
 
 	def clean_skills(self):
