@@ -3,6 +3,3 @@
 	{{form}}
 	<button type="submit" name="test-btn" value="True">Send</button>
 </form>
-{% for i in object_list %}
-<a href="{% url 'AdDetail' pk=i.ad.id %}">{{i.ad.title}}</a>
-{% endfor %}
