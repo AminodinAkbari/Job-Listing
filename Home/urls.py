@@ -9,8 +9,8 @@ ALLEmployees,
 EmployeeDetail,
 ALLCompanies,
 CompanyView,
+
 )
-from Controllers.views import Search
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Index , name = 'Home'),
