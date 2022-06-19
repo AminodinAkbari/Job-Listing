@@ -3,7 +3,6 @@
 
     <section class="ftco-section bg-light" dir="rtl">
 		<div class="container ftco-animate text-right">
-
     <div class="text-center">
       {% for message in messages%}
       <h5 class="alert alert-success">{{message}}</h5>
@@ -13,8 +12,11 @@
     <h2 class="alert alert-warning text-center">{{error}}</h2>
     {% endfor %}
 			<div class="col-md-12">
+        {% if form.errors %}
+        <h3 class="alert alert-warning text-center">فرم دارای خطاست . لطفا دوباره بررسی کنید</h3>
+        {% endif %}
 
-		<form name = 'PersonalInfoForm' action="{% url 'UpdateResume' pk=user.id %}" class="p-5 bg-white" method="POST" dir="rtl" enctype="multipart/form-data">
+		<form novalidate name = 'PersonalInfoForm' action="{% url 'UpdateResume' pk=user.id %}" class="p-5 bg-white" method="POST" dir="rtl" enctype="multipart/form-data">
 
         <div class="avatar-upload mb-5">
               <div class="avatar-edit">
@@ -55,11 +57,17 @@
                 <div class="col-md-4 mb-4  mt-1">
                   <label for="state">{{form.state.label_tag}}</label>
                     {{form.state}}
+                    {% for error in form.state.errors %}
+                      <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                    {% endfor %}
                 </div>
 
                 <div class="col-md-12 mb-4  mt-1">
                   <label for="address">{{form.address.label_tag}}</label>
                     {{form.address}}
+                    {% for error in form.address.errors %}
+                      <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                    {% endfor %}
                 </div>
 
                 <div class="col-md-6 mb-4">
@@ -73,16 +81,25 @@
                 <div class="col-md-6 mb-4">
                   <label for="marital_status">{{form.marital_status.label_tag}}</label>
                     {{form.marital_status}}
+                    {% for error in form.marital_status.errors %}
+                      <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                    {% endfor %}
                 </div>
 
                 <div class="col-md-6 mb-4">
                   <label for="birth">{{form.birth.label_tag}}</label>
                     {{form.birth}}
+                    {% for error in form.birth.errors %}
+                      <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                    {% endfor %}
                 </div>
 
                 <div class="col-md-6 mb-4">
                   <small><label for="employee_soldier_ship">{{form.employee_soldier_ship.label_tag}}</label></small>
                     {{form.employee_soldier_ship}}
+                    {% for error in form.employee_soldier_ship.errors %}
+                      <strong class="alert alert-warning mb-2">{{error}}</strong><br>
+                    {% endfor %}
                 </div>
 
             </div>
@@ -92,24 +109,15 @@
                 <div class="col-md-12 mb-4">
                   <label for="skills">{{form.about_me.label_tag}}</label>
                     {{form.about_me}}
-                      {% for error in form.about_me.errors %}
-                        <strong class="alert alert-warning mb-2">{{error}}</strong>
-                      {% endfor %}
                 </div>
               <div class="col-md-12 mb-4">
                   <label for="skills">{{form.skills.label_tag}}</label>
                     {{form.skills}}
-                      {% for error in form.skills.errors %}
-                        <strong class="alert alert-warning mb-2">{{error}}</strong>
-                      {% endfor %}
                 </div>
 
                 <div class="col-md-12 mb-4">
                   <label for="skills">{{form.languages.label_tag}}</label>
                     {{form.languages}}
-                      {% for error in form.languages.errors %}
-                        <strong class="alert alert-warning mb-2">{{error}}</strong>
-                      {% endfor %}
                 </div>
 
             </div>
