@@ -20,12 +20,23 @@ class PersonalInfo_ResumeForm(ModelForm):
 	languages = forms.ModelMultipleChoiceField(queryset=Languages.objects.all(),widget=forms.CheckboxSelectMultiple ,required = False)
 
 	def __init__(self , *args , **kwargs):
+		self.user = kwargs.pop('user',None)
 		super(PersonalInfo_ResumeForm, self).__init__(*args, **kwargs)
 
 		self.fields['skills'].widget.attrs = {'placeholder':'تسلط به نرم افزار هلو / تسلط به زبان انگلیسی / ...' , 'rows':'9'}
-		self.fields['birth'] = JalaliDateField(label="تاریخ تولد",
-            widget=AdminJalaliDateWidget
-        )
+
+		self.fields['phone'].required = True
+		self.fields['phone'].error_messages = {'required': 'شماره تلفن ضروری است'}
+
+		self.fields['sex'].required = True
+		self.fields['sex'].error_messages = {'required':'لطفا جنسیت خود را مشخص کنید'}
+
+		self.fields['marital_status'].required = True
+		self.fields['marital_status'].error_messages = {'required':'لطفا وضعیت تأهل خود را مشخص کنید'}
+
+		self.fields['employee_soldier_ship'].required = True
+		self.fields['employee_soldier_ship'].error_messages = {'required':'وضعیت خدمت شما نمیتواند خالی باشد'}
+
 
 
 		for field in self.fields.values():
@@ -39,6 +50,19 @@ class PersonalInfo_ResumeForm(ModelForm):
 		self.fields['languages'].label='به کدام زبان گفتاری مسلط هستید ؟'
 		self.fields['skills'].label='مهارت های خود را بنویسید (آنها را با علامت "/" جدا کنید)'
 		self.fields['birth'] = JalaliDateField(label=('تاریخ تولد'),widget=AdminJalaliDateWidget)
+		self.fields['birth'].required = True
+		self.fields['birth'].error_messages = {'required':'تاریخ تولد الزامی است'}
+
+
+	def clean_phone(self):
+		phone = self.cleaned_data.get('phone')
+		exist = EmployeeModel.objects.filter(phone = phone).exclude(
+		employee_id = self.user.id).exists()
+		if exist:
+			raise forms.ValidationError('این شماره تلفن قبلا در سایت ثبت نام شده !')
+		if len(phone) < 11:
+			raise forms.ValidationError('شماره تلفن معتبر نیست')
+		return phone
 
 class EditNameOrEmailForm(forms.Form):
 	first_name = forms.CharField(widget = forms.TextInput , label = 'نام')
@@ -48,6 +72,7 @@ class EditNameOrEmailForm(forms.Form):
 		super(EditNameOrEmailForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl mb-3'})
+			field.error_messages = {"required" : "نمیتواند خالی باشد"}
 
 
 class ChangePassword_Employee(forms.Form):
@@ -56,6 +81,7 @@ class ChangePassword_Employee(forms.Form):
 		super(ChangePassword_Employee, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl mb-2'})
+			field.error_messages = {'required' : 'نمی تواند خالی باشد'}
 
 	old = forms.CharField(widget=forms.PasswordInput,label='رمز عبور حال حاضر')
 	new = forms.CharField(widget=forms.PasswordInput,label='رمز جدید')

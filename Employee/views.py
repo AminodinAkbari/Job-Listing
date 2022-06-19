@@ -15,6 +15,7 @@ from .models import EmployeeModel , Favorite
 from django.contrib.auth.models import User
 
 from django.contrib import messages
+from django import forms
 
 from Controllers.models import passGenerator
 # Create your views here.
@@ -23,6 +24,11 @@ class UpdateResume(UpdateView):
 	form_class = PersonalInfo_ResumeForm
 	model = EmployeeModel
 	template_name = 'Employee/CreateResume.html'
+
+	def get_form_kwargs(self, *args, **kwargs):
+		kwargs = super(UpdateResume, self).get_form_kwargs(*args, **kwargs)
+		kwargs['user'] = self.request.user
+		return kwargs
 
 	def dispatch(self , request , *args , **kwargs):
 		obj = self.get_object()
