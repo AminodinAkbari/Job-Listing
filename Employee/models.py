@@ -26,7 +26,7 @@ def upload_image_path(instance, filename):
     return f"Employee-ProfilePics/{final_name}"
 
 class EmployeeModel(models.Model):
-	employee = models.ForeignKey(User , on_delete =models.CASCADE , related_name='employee')
+	employee = models.ForeignKey(User , on_delete =models.CASCADE , related_name='employee' , blank=True , null = True)
 	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_image_path)
 	phone = models.CharField(max_length = 11 , verbose_name = 'تلفن', blank = True , null = True)
 	state = models.CharField(max_length = 50 , choices = states_iran , verbose_name = 'استان محل سکونت' , blank = True , null = True)
