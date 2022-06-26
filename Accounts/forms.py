@@ -15,10 +15,12 @@ class RegisterForm(ModelForm):
 		super(RegisterForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
+			field.error_messages = {'required':'نمیتواند خالی باشد'}
 		self.fields['profile_pic'].widget.attrs.update({'id':'imageUpload','accept':'.png, .jpg, .jpeg','type':'file'})
 		self.fields['name'].widget.attrs.update({'id':'name'})
 		self.fields['family'].widget.attrs.update({'id':'family'})
 		self.fields['email'].widget.attrs.update({'id':'email'})
+		self.fields['email'].error_messages={'invalid' : 'ایمیل وارد شده معتبر نیست.',}
 		self.fields['phone'].widget.attrs.update({'id':'phone'})
 		self.fields['About'].widget.attrs.update({'id':'About'})
 		self.fields['password'].widget.attrs.update({'id':'password'})
@@ -38,8 +40,6 @@ class RegisterForm(ModelForm):
 		email_is_exist = User.objects.filter(username = email).exists()
 		if email_is_exist :
 			raise forms.ValidationError('این ایمیل قبلا در سایت ثبت شده است !')
-		if ('@'and'.com') not in email:
-			raise forms.ValidationError('ایمیل وارد شده معتبر نیست.')
 		return email
 
 	def clean_re_password(self):
