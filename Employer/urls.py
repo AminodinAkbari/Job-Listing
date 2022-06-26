@@ -11,6 +11,7 @@ from .views import (
 	EditAdView,
 	determine_the_status,
 	NewHire,
+	# ChangePassword,
 )
 from .views import 	EditMangerInfo , UpdatePasswordManager
 urlpatterns = [
@@ -18,7 +19,8 @@ urlpatterns = [
 	path('new_company' , login_required(NewCompany.as_view()) , name = 'NewCompany'),
 	path('edit_manager_info/<int:pk>' , login_required(EditMangerInfo.as_view()) , name = 'EditManagerInfo'),
 	path('edit_company_info/<int:pk>' , login_required(EditCompanyView.as_view()) , name = 'EditCompanyView'),
-	path('update_manager_password' , login_required(UpdatePasswordManager) , name = 'UpdatePasswordManager'),
+	path('update_manager_password' , login_required(UpdatePasswordManager.as_view()) , name = 'UpdatePasswordManager'),
+	# path('updatepassword' , login_required(ChangePassword.as_view()) , name = 'ChangePassword'),
 	path('manager_panel/<int:pk>' , login_required(ManagerPanel.as_view()) , name = 'ManagerPanel'),
 	path('editad_view/<int:pk>' , login_required(EditAdView.as_view()) , name = 'EditAdView'),
 	path('delete_ad/<int:pk>' , login_required(DeleteAd) , name = 'DeleteAd'),

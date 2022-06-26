@@ -6,7 +6,7 @@ from jalali_date.admin import ModelAdminJalaliMixin
 # Register your models here.
 
 class ManagerAdmin(admin.ModelAdmin):
-	list_display = ['__str__' , 'family' , 'phone']
+	list_display = ['__str__' , 'email' ,'family' , 'phone']
 	# exclude = ('password',)
 
 class CompanyAdmin(admin.ModelAdmin):

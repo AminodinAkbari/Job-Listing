@@ -27,7 +27,7 @@ class Manager(models.Model):
 	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_image_path)
 	email 		= models.EmailField(verbose_name = 'ایمیل')
 	phone 		= models.CharField(max_length = 11 , verbose_name = 'شماره تلفن')
-	About 		= models.TextField(verbose_name = 'درباره شما ' , default='test')
+	About 		= models.TextField(verbose_name = 'درباره شما ' , default='متن معرفی کارفرما')
 
 	def __str__(self):
 		return self.name
