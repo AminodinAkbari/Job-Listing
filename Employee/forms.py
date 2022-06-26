@@ -3,6 +3,7 @@ from django.forms import ModelForm
 
 from Employee.models import EmployeeModel
 from Controllers.views import file_size
+from Employer.models import Manager
 
 from jalali_date.fields import JalaliDateField
 from jalali_date.widgets import AdminJalaliDateWidget
@@ -56,9 +57,12 @@ class PersonalInfo_ResumeForm(ModelForm):
 
 	def clean_phone(self):
 		phone = self.cleaned_data.get('phone')
-		exist = EmployeeModel.objects.filter(phone = phone).exclude(
-		employee_id = self.user.id).exists()
-		if exist:
+		exist = EmployeeModel.objects.filter(phone = phone)
+		if self.user is not None:
+			exist.exclude(employee_id = self.user.id).exists()
+			print('user not None')
+		is_employer = Manager.objects.filter(phone = phone).exists()
+		if exist or is_employer:
 			raise forms.ValidationError('این شماره تلفن قبلا در سایت ثبت نام شده !')
 		if len(phone) < 11:
 			raise forms.ValidationError('شماره تلفن معتبر نیست')
@@ -89,6 +93,11 @@ class ChangePassword_Employee(forms.Form):
 
 	def clean_new(self):
 		new = self.cleaned_data.get('new')
+		old = self.cleaned_data.get('old')
+		re_new = self.cleaned_data.get('re_new')
+		if new == old:
+			raise forms.ValidationError('رمز عبور جدید باید متفاوت با رمز عبور قبلی باشد')
+			new = None
 		if len(new)<8:
 			raise forms.ValidationError('کلمه عبور باید حداقل 8 کاراکتر باشد')
 		return new
@@ -96,6 +105,6 @@ class ChangePassword_Employee(forms.Form):
 	def clean_re_new(self):
 		new = self.cleaned_data.get('new')
 		re_new = self.cleaned_data.get('re_new')
-		if new != re_new :
+		if new is not None and new != re_new :
 			raise forms.ValidationError('کلمه های عبور با یکدیگر مغایرت دارند !')
 		return re_new
