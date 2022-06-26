@@ -16,12 +16,15 @@
 			  	<li>
 			  		<strong>{{request.user.get_full_name}}</strong>
 			  	</li>
-				  	<li><a class="dropdown-item" href="{% url 'ManagerPanel' pk=is_a_manager.id %}">پنل مدیریت</a></li>
+					{% if user_id %}
+				  	<li><a class="dropdown-item" href="{% url 'ManagerPanel' pk=user_id %}">پنل مدیریت</a></li>
+					{% endif %}
+
 				  <li><hr class="dropdown-divider"></li>
 				    <li><a class="dropdown-item" href="{% url 'NewCompany'%}">افزودن شرکت جدید</a></li>
 				    <li><a class="dropdown-item" href="{% url 'NewAd'%}">افزودن آگهی جدید</a></li>
 			    <li><hr class="dropdown-divider"></li>
-				    <li><a class="dropdown-item" href="{% url 'EditManagerInfo' pk=is_a_manager.id %}">ویرایش اطلاعات</a></li>
+				    <li><a class="dropdown-item" href="{% url 'EditManagerInfo' pk=user_id %}">ویرایش اطلاعات</a></li>
 			    <li><hr class="dropdown-divider"></li>
 			    	<li><a class="dropdown-item" href="{% url 'Logout' %}">خروج از حساب کاربری</a></li>
 			  </ul>

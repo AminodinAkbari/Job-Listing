@@ -2,11 +2,11 @@
 {% block common_content %}
 <section class="ftco-section bg-light">
 	<div class="container">
-		<form class="p-5 bg-white manager-register" method="POST" dir="rtl" enctype="multipart/form-data">
+		<form class="p-5 bg-white manager-register" novalidate method="POST" dir="rtl" enctype="multipart/form-data">
 			{% csrf_token %}
 
 		    <h1> فرم ثبت نام کارفرما
-		        <small>لطفا با پر کردن فرم زیر خود را به کارجویان بشناسانید و از طرف آنها امیتاز دریافت کنید</small>
+		        <small>لطفا با پر کردن فرم زیر خود را به کارجویان بشناسانید</small>
 		    </h1>
 
 		    <div class="avatar-upload">
@@ -28,10 +28,16 @@
 	          <div class="col-md-6 mt-3 mb-md-0">
 	            <label for="name">{{form.name.label_tag}}</label>
 	            {{form.name}}
+							{% for error in form.name.errors %}
+								<span class="text-danger">{{error}}</span>
+							{% endfor %}
 	          </div>
 	          <div class="col-md-6 mt-3 mb-md-0">
 	            <label for="name">{{form.family.label_tag}}</label>
 	            {{form.family}}
+							{% for error in form.family.errors %}
+								<span class="text-danger">{{error}}</span>
+							{% endfor %}
 	          </div>
 	          <div class="col-md-6 mt-3 mb-md-0">
 	            <label for="email">{{form.email.label_tag}}</label>
@@ -51,6 +57,9 @@
 	          <div class="col-md-6 mt-3 mb-md-0">
 	            <label for="password">{{form.password.label_tag}}</label>
 	            {{form.password}}
+							{% for error in form.password.errors %}
+								<span class="text-danger">{{error}}</span>
+							{% endfor %}
 	            <label class="mt-2" for="re_password">{{form.re_password.label_tag}}</label>
 	            {{form.re_password}}
 	            {% for error in form.re_password.errors %}
