@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect , get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -10,6 +10,7 @@ from django.contrib import messages
 
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView , CreateView , FormView
+from django.views.generic.base import View , TemplateView
 
 from .models import  Advertisement , Company , Manager , Applicant , Hire
 from Employee.models import EmployeeModel
@@ -60,6 +61,11 @@ class EditMangerInfo(UpdateView):
     model = Manager
     template_name = 'Employer/EditManagersInfo.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(EditMangerInfo, self).get_form_kwargs(*args, **kwargs)
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
         if obj.email != self.request.user.username:
@@ -74,7 +80,7 @@ class EditMangerInfo(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'تغییر اطلاعات (کارفرما)'
-        context['user'] = Manager.objects.get(email = self.request.user.username)
+        context['user'] = get_object_or_404(Manager,email = self.request.user.username)
         return context
 
 class EditAdView(UpdateView):
@@ -93,59 +99,53 @@ class EditAdView(UpdateView):
         current_manager = Manager.objects.get(email = self.request.user.username)
         return reverse_lazy('ManagerPanel', kwargs={'pk': current_manager.id})
 
-@Who_is
-def UpdatePasswordManager(request , user_type):
-    if user_type is None:
-        return redirect('Home')
-    update_password_form = UpdatePasswordManagersForm()
-    edit_email_form = EditEmailEmployer(initial = {'email' : request.user.username})
-    if request.method == "POST" and 'update-pass' in request.POST:
-        update_password_form = UpdatePasswordManagersForm(request.POST)
-        if update_password_form.is_valid():
-            old_password = update_password_form.cleaned_data.get('old_password')
-            new_password = update_password_form.cleaned_data.get('new_password')
-            re_new_password = update_password_form.cleaned_data.get('re_new_password')
+class UpdatePasswordManager(TemplateView):
+    template_name = 'Employer/UpdateManagersPassword.html'
 
-            user_exist = User.objects.get(username = request.user.email)
-            if user_exist:
-                user = authenticate(request ,username = request.user.username , password = old_password)
-                if user is not None:
-                    if old_password == new_password:
-                        update_password_form.add_error('old_password' ,'رمز عبور جدید باید با رمز عبور حال حاضر تفاوت داشته باشد')
-                    else:
-                        user_exist.set_password(new_password)
-                        user_exist.save()
-                        messages.success(request , 'رمز عبور شما با موفقیت تغییر کرد')
-                        return redirect('/login')
-                else:
-                    update_password_form.add_error('old_password' , 'رمز عبور حال حاضر شما اشتباه است !')
-    if request.method == "POST" and 'update-email' in request.POST:
-        edit_email_form = EditEmailEmployer(request.POST)
-        if edit_email_form.is_valid():
-            email = edit_email_form.cleaned_data.get('email')
-            try:
-                manager_user = User.objects.get(id = request.user.id)
-                manager_model = user_type
-                if manager_user and manager_model:
-                    manager_user.username = email
-                    manager_model.email = email
-                    manager_user.save()
-                    manager_model.save()
+    def get(self , request , *args , **kwargs):
+        password_form = UpdatePasswordManagersForm(user = request.user)
+        email_form = EditEmailEmployer(initial = {'email':request.user.username})
+        context = {'UpdatePassword':password_form , 'UpdateEmail' : email_form}
+        return render(request , 'Employer/UpdateManagersPassword.html' , context)
+
+    def post(self, request, *args, **kwargs):
+        if 'update-email' in request.POST:
+            password_form = UpdatePasswordManagersForm()
+            email_form = EditEmailEmployer(request.POST , user=request.user)
+            if email_form.is_valid():
+                email = email_form.cleaned_data.get('email')
+                try:
+                    user = User.objects.get(username = request.user.username)
+                    manager = Manager.objects.get(email = request.user.username)
+                    user.username = email
+                    manager.email = email
+                    user.save()
+                    manager.save()
                     messages.success(request , 'پروفایل شما آپدیت شد')
-            except:
-                messages.error(request , 'ایمیل معتبر نیست یا قبلا در سایت ثبت شده است')
+                    return redirect(reverse('ManagerPanel' , kwargs={'pk':manager_model.id}))
+                except:
+                    pass
+            return render(request , 'Employer/UpdateManagersPassword.html' , {'UpdatePassword':password_form,'UpdateEmail':email_form})
         else:
-            messages.error(request , 'ایمیل معتبر نیست یا قبلا در سایت ثبت شده است')
+            password_form = UpdatePasswordManagersForm(request.POST , user = request.user)
+            email_form = EditEmailEmployer()
+            if password_form.is_valid():
+                old_password = password_form.cleaned_data.get('old_password')
+                new_password = password_form.cleaned_data.get('new_password')
+                user_exist = User.objects.get(username = request.user.email)
+                user = authenticate(self.request , username = self.request.user.username , password = old_password)
+                if user is not None:
+                    user_exist.set_password(new_password)
+                    user_exist.save()
+                    messages.success(request , 'رمز عبور شما با موفقیت تغییر کرد')
+                    return redirect('/login')
+            return render(request , 'Employer/UpdateManagersPassword.html' , {'UpdatePassword':password_form , 'UpdateEmail':email_form})
 
+    def form_invalid(self , password_form , **kwargs):
+        password_form = UpdatePasswordManagersForm(self.request.POST)
+        context = {'UpdatePassword':password_form}
+        return render(self.request , 'Employer/UpdateManagersPassword.html' , context)
 
-    context = {
-    'UpdatePassword':update_password_form,
-    'UpdateEmail':edit_email_form,
-    'suggest_password':passGenerator(10),
-    'title':'تنظیمات حساب کاربری',
-    }
-
-    return render(request , 'Employer/UpdateManagersPassword.html' , context)
 
 class NewAd(FormView):
     form_class = NewAdvertisementForm
