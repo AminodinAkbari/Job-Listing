@@ -26,7 +26,7 @@ class UpdateResume(UpdateView):
 	template_name = 'Employee/CreateResume.html'
 
 	def get_form_kwargs(self, *args, **kwargs):
-		kwargs = super(UpdateResume, self).get_form_kwargs(*args, **kwargs)
+		kwargs = super().get_form_kwargs(*args, **kwargs)
 		kwargs['user'] = self.request.user
 		return kwargs
 
@@ -76,13 +76,10 @@ def EditNameOrEmail_Employee(request , pk , employee):
 			re_new = change_pass_form.cleaned_data.get('re_new')
 			user = authenticate(request, username = request.user.username ,password = old)
 			if user is not None:
-				if old == new:
-					change_pass_form.add_error('old' ,'رمز عبور جدید باید با رمز عبور حال حاضر تفاوت داشته باشد')
-				else:
-					single_parametr.set_password(new)
-					single_parametr.save()
-					messages.success(request , 'رمز عبور شما به روز رسانی شد . لطفا دوباره وارد شوید')
-					return redirect(reverse('Login'))
+				single_parametr.set_password(new)
+				single_parametr.save()
+				messages.success(request , 'رمز عبور شما به روز رسانی شد . لطفا دوباره وارد شوید')
+				return redirect(reverse('Login'))
 			else:
 				change_pass_form.add_error('old' , 'رمز عبور وارد شده اشتباه است')
 	else:
