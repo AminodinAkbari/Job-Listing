@@ -168,3 +168,5 @@ class TestEmployerForms(TestCase):
         created = form.save()
         self.assertTrue(form.is_valid())
         self.assertIsInstance(created , Company)
+
+#------------------ Hire Form -----------------
