@@ -10,8 +10,9 @@ from django.contrib.auth import get_user_model
 class TestForms(TestCase):
 
 	def setUp(self):
-		user = User.objects.create_user('amin','amin@gmail.com' , 'PaSs0w0rd')
-		EmployeeModel.objects.create(employee = user , phone = self.unvalid_user['phone'],
+		self.user = User.objects.create_user('test@gmail.com' ,'amin@gmail.com' ,'aminamin')
+		User.objects.create_user('amin@gmail.com' ,'amin@gmail.com' ,'aminamin')
+		EmployeeModel.objects.create(employee = self.user , phone = self.unvalid_user['phone'],
 		sex = self.unvalid_user['sex'] , marital_status = self.unvalid_user['marital_status'] ,
 		employee_soldier_ship = self.unvalid_user['employee_soldier_ship'] , birth = self.unvalid_user['birth']
 		)
@@ -56,29 +57,40 @@ class TestForms(TestCase):
 		self.assertTrue(form.is_valid())
 		self.assertIsInstance(user , EmployeeModel)
 
-class TestChangeEmailAndPass_Employee(TestCase):
-
-	def test_email_form_errors(self):
+#----------------Change Email Employee Tests --------------------
+	def test_email_form_requireds(self):
 		change_email_form_EMPTY = EditNameOrEmailForm(data = {})
 		self.assertEqual(change_email_form_EMPTY.errors['first_name'] , ['نمیتواند خالی باشد'])
 		self.assertEqual(change_email_form_EMPTY.errors['last_name'] , ['نمیتواند خالی باشد'])
 		self.assertEqual(change_email_form_EMPTY.errors['username'] , ['نمیتواند خالی باشد'])
 
-	def test_valid_email_form(self):
-		change_email_form_FULL = EditNameOrEmailForm(data = {'first_name':'test' , 'last_name' : 'test' , 'username':'test'})
-		self.assertTrue(change_email_form_FULL.is_valid())
+	def test_duplicate_change_email(self):
+		duplicate_email_form = EditNameOrEmailForm(data = {'first_name':'test' , 'last_name' : 'test' ,
+		 'username':'amin@gmail.com'} , user = self.user)
+		self.assertEqual(duplicate_email_form.errors['username'] , ['این ایمیل قبلا در سایت ثبت نام شده است'])
 
+	def test_invalid_change_email(self):
+		invalid_change_email_form = EditNameOrEmailForm(data = {'first_name':'test' , 'last_name' : 'test' ,
+		 'username':'amin@gmail.wrong'} , user = self.user)
+		self.assertEqual(invalid_change_email_form.errors['username'] , ['ایمیل معتبر نیست لطفا از درست وارد کردن ایمیل مطمئن شوید'])
+
+	def test_valid_change_email_form(self):
+		change_email_form_FULL = EditNameOrEmailForm(data = {'first_name':'test' , 'last_name' : 'test' , 'username':'test@gmail.com'})
+		print(change_email_form_FULL.errors)
+		self.assertTrue(change_email_form_FULL.is_valid())
+	
+#-----------------------Change Password Form Test ---------------------------
 	def test_passwords_form_errors(self):
 		change_password_form_EMPTY = ChangePassword_Employee(data = {})
-		clean_methodes_change_password_form = ChangePassword_Employee(data = {'new' : '123' , 'old':'123' , 're_new' : '123'})
 		self.assertEqual(change_password_form_EMPTY.errors['old'] , ['نمی تواند خالی باشد'])
 		self.assertEqual(change_password_form_EMPTY.errors['new'] , ['نمی تواند خالی باشد'])
 		self.assertEqual(change_password_form_EMPTY.errors['re_new'] , ['نمی تواند خالی باشد'])
-		self.assertTrue(clean_methodes_change_password_form.errors)
 
-	def test_same_new_password_and_old_password(self):
-		form = ChangePassword_Employee(data = {'new':'1234567890' , 're_new':'1234567890' , 'old':'1234567890'})
-		self.assertEqual(form.errors['new'] , ['رمز عبور جدید باید متفاوت با رمز عبور قبلی باشد'])
+	def change_password_clean_methods(self):
+		form1 = ChangePassword_Employee(data = {'old' : '1234' , 'new':'123' , 're_new' : '123'})
+		form2 = ChangePassword_Employee(data = {'new':'1234567890' , 're_new':'1234567890' , 'old':'1234567890'})
+		self.assertEqual(form1.errors['new'] , ['کلمه عبور باید حداقل 8 کاراکتر باشد'])
+		self.assertEqual(form2.errors['new'] , ['رمز عبور جدید باید متفاوت با رمز عبور قبلی باشد'])
 
 	def test_valid_pass_form(self):
 		healthy_change_password_form = ChangePassword_Employee(data = {'new':'1234567890' , 're_new':'1234567890' , 'old':'123456789'})
