@@ -20,6 +20,7 @@ class TestEmployerForms(TestCase):
     'phone' : '12345678901',
     'About' : 'test',
     'email' : 'temp@gmail.com',
+    'password':'123456789' , 're_password' : '123456789',
     }
 
     unvalid_manager= {

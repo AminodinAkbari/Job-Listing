@@ -11,8 +11,8 @@ class TestForms(TestCase):
 
 	def setUp(self):
 		self.user = User.objects.create_user('test@gmail.com' ,'amin@gmail.com' ,'aminamin')
-		User.objects.create_user('amin@gmail.com' ,'amin@gmail.com' ,'aminamin')
-		EmployeeModel.objects.create(employee = self.user , phone = self.unvalid_user['phone'],
+		user = User.objects.create_user('amin@gmail.com' ,'amin@gmail.com' ,'aminamin')
+		EmployeeModel.objects.create(employee = user , phone = self.unvalid_user['phone'],
 		sex = self.unvalid_user['sex'] , marital_status = self.unvalid_user['marital_status'] ,
 		employee_soldier_ship = self.unvalid_user['employee_soldier_ship'] , birth = self.unvalid_user['birth']
 		)
@@ -46,7 +46,8 @@ class TestForms(TestCase):
 		self.assertEqual(form.errors["birth"], ["تاریخ تولد الزامی است"])
 
 	def test_resume_clean_phone(self):
-		form = PersonalInfo_ResumeForm(data = self.unvalid_user)
+		print(self.user.id)
+		form = PersonalInfo_ResumeForm(data = self.unvalid_user , user = self.user)
 		self.assertFalse(form.is_valid())
 		self.assertEqual(form.errors['phone'] , ['این شماره تلفن قبلا در سایت ثبت نام شده !'])
 
@@ -78,7 +79,7 @@ class TestForms(TestCase):
 		change_email_form_FULL = EditNameOrEmailForm(data = {'first_name':'test' , 'last_name' : 'test' , 'username':'test@gmail.com'})
 		print(change_email_form_FULL.errors)
 		self.assertTrue(change_email_form_FULL.is_valid())
-	
+
 #-----------------------Change Password Form Test ---------------------------
 	def test_passwords_form_errors(self):
 		change_password_form_EMPTY = ChangePassword_Employee(data = {})

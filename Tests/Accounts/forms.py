@@ -5,6 +5,13 @@ from Employee.models import EmployeeModel
 from django.contrib.auth.models import User
 from Tests.Employer.forms import TestEmployerForms
 class TestAccountForms(TestCase):
+    valid_register = {
+    'username' : 'AminEmail@gmail.com',
+    'first_name' : 'Amin',
+    'last_name' : 'Akbari',
+    'password' : '123456789',
+    're_password' : '123456789',
+    }
     unvalid_register = {
     'name':'amin',
     'family':'akbari',
@@ -17,7 +24,7 @@ class TestAccountForms(TestCase):
     'username' : 'test',
     'password' : '2012',
     're_password' : '123',
-    'first_name' : 'amin' , 
+    'first_name' : 'amin' ,
     'last_name' : 'akbari'
     }
 
@@ -25,7 +32,7 @@ class TestAccountForms(TestCase):
     'username' : 'amin@gmail.com',
     'password' : '2012',
     're_password' : '123',
-    'first_name' : 'amin' , 
+    'first_name' : 'amin' ,
     'last_name' : 'akbari'
     }
 
@@ -37,7 +44,7 @@ class TestAccountForms(TestCase):
     'employee_soldier_ship' : 'D',
     'birth' : '2022-2-3'
     }
-    
+
     def setUp(self):
         self.user = User.objects.create_user('amin@gmail.com' ,'amin@gmail.com' ,'aminamin')
         Manager.objects.create(name = TestEmployerForms.valid_manager['name'] , family = TestEmployerForms.valid_manager['family'],
@@ -61,8 +68,8 @@ class TestAccountForms(TestCase):
         self.assertEqual(unvalidform.errors['email'] , ['ایمیل معتبر نیست لطفا از درست وارد کردن ایمیل مطمئن شوید'])
 
     def test_valid_and_save(self):
-        """form valid not True Fix this"""
         form = RegisterForm(data = TestEmployerForms.valid_manager)
+        print(form.errors)
         form.is_valid()
         user = form.save()
         self.assertIsInstance(user, Manager)
@@ -74,9 +81,13 @@ class TestAccountForms(TestCase):
 
 # ---------- EmployeeRegister Form -------
     def test_unvalid_employee_register_form(self):
-        invalid_email_form = EmployeeRegister(data = self.unvalid_register_employee_invalid_email) 
+        invalid_email_form = EmployeeRegister(data = self.unvalid_register_employee_invalid_email)
         duplicate_email_form = EmployeeRegister(data = self.unvalid_register_employee_duplicate_email)
         bad_password_form = EmployeeRegister(data = self.unvalid_register_employee_invalid_email)
         self.assertEqual(invalid_email_form.errors['username'] , ['ایمیل معتبر نیست لطفا از درست وارد کردن ایمیل مطمئن شوید'])
         self.assertEqual(duplicate_email_form.errors['username'] , ['این ایمیل قبل در سایت ثبت نام شده است'])
         self.assertEqual(bad_password_form.errors['re_password'] , ['کلمه عبور باید حداقل 8 کاراکتر باشد'])
+
+    def test_valid_emploee_register(self):
+        valid_form = EmployeeRegister(data = self.valid_register )
+        self.assertTrue(valid_form.is_valid())
