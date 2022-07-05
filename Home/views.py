@@ -3,7 +3,6 @@ from django.views.generic import ListView , DetailView
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 
-from Controllers.views import Who_is
 from Controllers.utils import Advertisement_time_left
 from Controllers.models import categories ,job_nature , states_iran
 from Employer.models import Manager,Advertisement,Company , Applicant
@@ -23,8 +22,7 @@ now = timezone.now()
 import datetime
 today = datetime.datetime.now().date()
 
-@Who_is
-def Index(request , user_type):
+def Index(request):
 	context = {}
 	Categories = categories.objects.all()
 	All_emails = Newsletter.objects.all()
@@ -34,7 +32,6 @@ def Index(request , user_type):
 	context['companies'] = companies
 	context['top_companies'] = top_companies
 	context['employees'] = EmployeeModel.objects.all()
-	context['is_a_manager'] = user_type
 	context['ads'] = Advertisement.objects.all()[:12]
 	context['SearchForm'] = SearchForm
 	if request.method == 'POST':
