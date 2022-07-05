@@ -1,7 +1,9 @@
 from django.test import TestCase
+from django.urls import reverse , resolve
+
 from django.contrib.auth.models import User
+from Accounts.views import LoginView
 from Employee.models import EmployeeModel
-from django.urls import reverse
 
 valid_Employer = {
 'name' : 'Amin',
