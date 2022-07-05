@@ -1,5 +1,6 @@
 from django.shortcuts import render , redirect
 from django.views.generic.edit import FormView , UpdateView
+from django.views.generic.base import TemplateView
 from django.contrib import messages
 
 from django.urls import reverse,reverse_lazy
@@ -8,6 +9,8 @@ from django.contrib.auth import authenticate, login,logout
 
 from Controllers.models import passGenerator
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+
 from Employer.models import Manager
 from Employee.models import EmployeeModel
 # Create your views here.
@@ -19,7 +22,7 @@ class RegisterView(FormView):
 
 	def dispatch(self, request, *args, **kwargs):
 		if request.user.is_authenticated:
-			return redirect('Home')
+			return HttpResponseRedirect('/')
 		return super(RegisterView, self).dispatch(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
@@ -52,32 +55,38 @@ class RegisterView(FormView):
 
 		return reverse('Register')
 
-def LoginView(request):
-	if request.user.is_authenticated:
-		return redirect('Home')
-	login_form = LoginForm(request.POST or None)
-	if login_form.is_valid():
-		username = login_form.cleaned_data.get('username')
-		password = login_form.cleaned_data.get('password')
-		user = authenticate(request ,username = username , password = password)
-		if user is not None:
+class LoginView(TemplateView):
+	template_name = 'Accounts/login.html'
+	success_url = '/'
 
-			login(request , user)
-			try:
-				return redirect(request.GET.get('next'))
-			except:
-				return redirect('/')
-		else:
-			try:
-				user_exist = User.objects.get(username = username)
-				login_form.add_error('password','رمز عبور اشتباه است')
-			except:
-				login_form.add_error('username','کاربری با این ایمیل یافت نشد')
-	context = {
-	'title':'ورود',
-	'login_form':login_form
-	}
-	return render(request , 'Accounts/login.html' , context)
+	def get(self , request , *args , **kwargs):
+		if request.user.is_authenticated:
+			return HttpResponseRedirect(self.success_url)
+		login_form = LoginForm()
+		context = {'login_form' : login_form , 'title' : 'ورود'}
+		return render(request , self.template_name , context)
+
+	def post(self,request,*args,**kwargs):
+		login_form = LoginForm(request.POST)
+		if login_form.is_valid():
+			username = login_form.cleaned_data.get('username')
+			password = login_form.cleaned_data.get('password')
+			user = authenticate(request ,username = username , password = password)
+			if user is not None:
+				login(request , user)
+				try:
+					return redirect(request.GET.get('next'))
+				except:
+					return redirect('/')
+			else:
+				try:
+					user_exist = User.objects.get(username = username)
+					login_form.add_error('password','رمز عبور اشتباه است')
+				except:
+					login_form.add_error('username','کاربری با این ایمیل یافت نشد')
+		context = {'login_form' : login_form , 'title' : 'ورود'}
+		return render(request , self.template_name , context)
+
 
 def LogoutView(request):
 	logout(request)

@@ -8,6 +8,6 @@ LogoutView,
 urlpatterns = [
 		path('register' , RegisterView.as_view() , name = 'Register'),
 		path('employee-register' , EmployeeRegisterView.as_view() , name = 'EmployeeRegister'),
-		path('login' , LoginView , name = 'Login'),
+		path('login' , LoginView.as_view() , name = 'Login'),
 		path('logout' , LogoutView , name = 'Logout'),
 ]
