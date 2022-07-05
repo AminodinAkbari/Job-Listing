@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
+from django.contrib.auth import authenticate
 from Employee.models import EmployeeModel
 from Controllers.views import file_size
 from Employer.models import Manager
@@ -57,15 +58,13 @@ class PersonalInfo_ResumeForm(ModelForm):
 
 	def clean_phone(self):
 		phone = self.cleaned_data.get('phone')
-		exist = EmployeeModel.objects.filter(phone = phone)
 		if self.user is not None:
-			exist.exclude(employee_id = self.user.id).exists()
-			print('user not None')
-		is_employer = Manager.objects.filter(phone = phone).exists()
-		if exist or is_employer:
-			raise forms.ValidationError('این شماره تلفن قبلا در سایت ثبت نام شده !')
-		if len(phone) < 11:
-			raise forms.ValidationError('شماره تلفن معتبر نیست')
+			exist = EmployeeModel.objects.filter(phone = phone).exclude(employee__username = self.user.username)
+			is_employer = Manager.objects.filter(phone = phone).exists()
+			if exist or is_employer:
+				raise forms.ValidationError('این شماره تلفن قبلا در سایت ثبت نام شده !')
+			if len(phone) < 11:
+				raise forms.ValidationError('شماره تلفن معتبر نیست')
 		return phone
 
 class EditNameOrEmailForm(forms.Form):
@@ -73,15 +72,27 @@ class EditNameOrEmailForm(forms.Form):
 	last_name = forms.CharField(widget = forms.TextInput , label = 'نام خانوادگی')
 	username = forms.CharField(widget = forms.TextInput , label = 'ایمیل')
 	def __init__(self , *args , **kwargs):
+		self.user = kwargs.pop('user' , None)
 		super(EditNameOrEmailForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl mb-3'})
-			field.error_messages = {"required" : "نمیتواند خالی باشد"}
+			field.error_messages = {"required" : "نمیتواند خالی باشد" , "invalid" : "ایمیل معتبر نمی‌باشد"}
+
+	def clean_username(self):
+		username = self.cleaned_data.get('username')
+		if username[len(username)-4 : ] != '.com':
+			raise forms.ValidationError('ایمیل معتبر نیست لطفا از درست وارد کردن ایمیل مطمئن شوید')
+		if self.user:
+			exists = User.objects.filter(username = username).exclude(id = self.user.id)
+			if exists:
+				raise forms.ValidationError('این ایمیل قبلا در سایت ثبت نام شده است')
+		return username
 
 
 class ChangePassword_Employee(forms.Form):
 
 	def __init__(self , *args , **kwargs):
+		self.user = kwargs.pop('user' , None)
 		super(ChangePassword_Employee, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl mb-2'})
@@ -91,10 +102,18 @@ class ChangePassword_Employee(forms.Form):
 	new = forms.CharField(widget=forms.PasswordInput,label='رمز جدید')
 	re_new = forms.CharField(widget=forms.PasswordInput,label='تکرار رمز جدید')
 
+
+	def clean_old(self):
+		old = self.cleaned_data.get('old')
+		if self.user:
+			user = authenticate(self.user , username = self.user.user.username , password = old)
+			if user is None:
+				raise forms.ValidationError('رمز عبور حال حاضر اشتباه است')
+		return old
+
 	def clean_new(self):
 		new = self.cleaned_data.get('new')
 		old = self.cleaned_data.get('old')
-		re_new = self.cleaned_data.get('re_new')
 		if new == old:
 			raise forms.ValidationError('رمز عبور جدید باید متفاوت با رمز عبور قبلی باشد')
 			new = None
