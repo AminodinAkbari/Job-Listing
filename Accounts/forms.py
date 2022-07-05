@@ -15,12 +15,12 @@ class RegisterForm(ModelForm):
 		super(RegisterForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
-			field.error_messages = {'required':'نمیتواند خالی باشد'}
+			field.error_messages = {'required' : 'نمیتواند خالی باشد' , 'invalid' : 'ایمیل وارد شده معتبر نیست.'}
+
 		self.fields['profile_pic'].widget.attrs.update({'id':'imageUpload','accept':'.png, .jpg, .jpeg','type':'file'})
 		self.fields['name'].widget.attrs.update({'id':'name'})
 		self.fields['family'].widget.attrs.update({'id':'family'})
 		self.fields['email'].widget.attrs.update({'id':'email'})
-		self.fields['email'].error_messages={'invalid' : 'ایمیل وارد شده معتبر نیست.',}
 		self.fields['phone'].widget.attrs.update({'id':'phone'})
 		self.fields['About'].widget.attrs.update({'id':'About'})
 		self.fields['password'].widget.attrs.update({'id':'password'})
@@ -37,6 +37,8 @@ class RegisterForm(ModelForm):
 
 	def clean_email(self):
 		email = self.cleaned_data.get('email')
+		if email[len(email)-4 : ] != '.com':
+			raise forms.ValidationError('ایمیل معتبر نیست لطفا از درست وارد کردن ایمیل مطمئن شوید')
 		email_is_exist = User.objects.filter(username = email).exists()
 		if email_is_exist :
 			raise forms.ValidationError('این ایمیل قبلا در سایت ثبت شده است !')
@@ -72,6 +74,9 @@ class EmployeeRegister(ModelForm):
 		super(EmployeeRegister , self).__init__(*args , **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
+			field.error_messages = {'required' : 'نمیتواند خالی باشد'}
+			field.required = True
+
 		self.fields['first_name'].label = 'نام'
 		self.fields['last_name'].label = 'نام خانوادگی'
 		self.fields['username'].label = 'ایمیل'
@@ -88,8 +93,8 @@ class EmployeeRegister(ModelForm):
 
 	def clean_username(self):
 		email = self.cleaned_data.get('username')
-		if '@' not in str(email) or '.com' not in str(email):
-			raise forms.ValidationError('ایمیل معتبر نیست')
+		if email[len(email)-4 : ] != '.com':
+			raise forms.ValidationError('ایمیل معتبر نیست لطفا از درست وارد کردن ایمیل مطمئن شوید')
 		duplicate = User.objects.filter(username = email).exists()
 		if duplicate:
 			raise forms.ValidationError('این ایمیل قبل در سایت ثبت نام شده است')
