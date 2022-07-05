@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Advertisement , Company , Manager , Hire
+from .models import Advertisement , Company , Manager
 from Employee.models import EmployeeModel
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -150,7 +150,7 @@ class NewAdvertisementForm(ModelForm):
 		self.fields['job_nature'].label='نوع قرار داد'
 
 		self.fields['expired_in'] = JalaliDateField(label=('این آگهی تا چه تاریخی اعتبار دارد ؟'),widget=AdminJalaliDateWidget)
-		self.fields['expired_in'].error_messages = {'required' : 'نمیاند خالی باشد'}
+		self.fields['expired_in'].error_messages = {'required' : 'میتواند خالی باشد'}
 
 		self.fields['salary'].widget.attrs.update({'id':'salary'})
 		self.fields['salary'].label='ملبغ قرارداد (ماهیانه)'
@@ -228,12 +228,3 @@ class EditCompanyForm(ModelForm):
 		super(EditCompanyForm , self).__init__(*args , **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
-
-
-class HireForm(forms.ModelForm):
-	class Meta:
-		model = Hire
-		exclude = '__all__'
-	def __init__(self , *args , **kwargs):
-		super(HireForm , self).__init__(*args, **kwargs)
-		self.fields['ad'].queryset = Advertisement.objects.filter(company__valid = True)
