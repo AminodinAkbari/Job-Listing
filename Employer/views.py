@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer,HireForm
+from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer
 
 from django.contrib import messages
 
@@ -16,7 +16,6 @@ from .models import  Advertisement , Company , Manager , Applicant , Hire
 from Employee.models import EmployeeModel
 
 from Controllers.models import passGenerator
-from Controllers.views import Who_is
 
 
 from .forms import (
@@ -262,7 +261,6 @@ class NewHire(CreateView):
     def form_valid(self , form):
         employee = EmployeeModel.objects.get(id = self.kwargs['employee_id'])
         check = Hire.objects.filter(user = employee.employee , ad = form.instance.ad).exists()
-        print(check)
         if check:
             messages.success(self.request , 'شما قبلا برای این کارجو درخواست فرستاده اید')
             return redirect('/')
