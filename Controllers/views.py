@@ -11,21 +11,6 @@ from django.utils import timezone
 now = timezone.now()
 
 # Create your views here.
-def Who_is(func):
-	def wrapper(request,*args , **kwargs):
-		if request.user.is_authenticated:
-			try:
-				manager = Manager.objects.get(email = request.user.username)
-				request.session['TYPE'] = 'Employer'
-			except:
-				manager = None
-				request.session['TYPE'] = 'Employee'
-		else:
-			manager = 'Unknown'
-			request.session['TYPE'] = 'Unknown'
-		return func(request,*args , **kwargs , user_type = manager)
-	return wrapper
-
 
 def employee_owner_can_access(func):
 	def wrapper(request ,pk , *args , **kwargs):

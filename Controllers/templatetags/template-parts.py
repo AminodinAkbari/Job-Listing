@@ -10,6 +10,11 @@ register = template.Library()
 @register.inclusion_tag('BASE_HTMLs/Nav.html' , takes_context=True)
 def Navbar(context , request):
 	context['request'] = request
+	if request.user.is_authenticated:
+		if request.session['TYPE'] == 'Employer':
+			context['user_id'] = Manager.objects.get(email = request.user.username).id
+		else:
+			context['user_id'] = None
 	context['settings'] = Footer.objects.filter(active = True).first()
 	return context
 
