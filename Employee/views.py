@@ -4,10 +4,11 @@ from django.urls import reverse,reverse_lazy
 from django.shortcuts import get_object_or_404
 
 from .forms import EditNameOrEmailForm, PersonalInfo_ResumeForm , ChangePassword_Employee
-from Controllers.views import Who_is ,employee_owner_can_access
+from Controllers.views import employee_owner_can_access
 from Controllers.utils import Advertisement_time_left
 
 from django.views.generic.edit import UpdateView
+from django.views.generic.base import TemplateView
 from django.views.generic import DetailView , ListView
 
 from Employer.models import Manager , Applicant , Advertisement , Hire
@@ -51,44 +52,43 @@ class UpdateResume(UpdateView):
 		messages.success(self.request , 'تغییرات با موفقیت ذخیره شد')
 		return reverse_lazy('UpdateResume' , kwargs = {'pk':obj.id})
 
-@employee_owner_can_access
-def EditNameOrEmail_Employee(request , pk , employee):
-	current_user = User.objects.filter(id = pk)
-	single_parametr = current_user.first()
-	context = {}
-	if request.method == "POST" and 'email-name' in request.POST:
-		form = EditNameOrEmailForm(request.POST)
-		if form.is_valid():
-			f_name = form.cleaned_data.get('first_name')
-			l_name = form.cleaned_data.get('last_name')
-			u_name = form.cleaned_data.get('username')
-			current_user.update(first_name = f_name , last_name = l_name , username = u_name )
-			messages.success(request , 'پروفایل شما بروزرسانی شد')
-			return redirect(reverse('EditNameOrEmail-Employee' , kwargs={'pk' : single_parametr.id}))
-	else:
-		form = EditNameOrEmailForm(initial = {'first_name':single_parametr.first_name ,
-		 'last_name':single_parametr.last_name , 'username':single_parametr.username})
-	if request.method == "POST" and 'change-password' in request.POST:
-		change_pass_form = ChangePassword_Employee(request.POST)
-		if change_pass_form.is_valid():
-			old = change_pass_form.cleaned_data.get('old')
-			new = change_pass_form.cleaned_data.get('new')
-			re_new = change_pass_form.cleaned_data.get('re_new')
-			user = authenticate(request, username = request.user.username ,password = old)
-			if user is not None:
-				single_parametr.set_password(new)
-				single_parametr.save()
+
+class EditNameOrEmail_Employee(TemplateView):
+
+	def get(self , request , *args , **kwargs):
+		email_form = EditNameOrEmailForm(initial = {'first_name':request.user.first_name ,
+		 'last_name':request.user.last_name , 'username':request.user.username} , user=request.user)
+		pass_form = ChangePassword_Employee()
+		context = {'form' : email_form , 'password_form':pass_form}
+		return render(request , 'Employee/EditNameOrEmail-Employee.html' , context)
+
+	def post(self, request, *args, **kwargs):
+		current_user = User.objects.filter(id = request.user.id)
+		if 'email-name' in request.POST:
+			form = EditNameOrEmailForm(request.POST , user=request.user)
+			password_form = ChangePassword_Employee()
+			if form.is_valid():
+				f_name = form.cleaned_data.get('first_name')
+				l_name = form.cleaned_data.get('last_name')
+				u_name = form.cleaned_data.get('username')
+				current_user.update(first_name = f_name , last_name = l_name , username = u_name )
+				messages.success(request , 'پروفایل شما بروزرسانی شد')
+				return redirect(reverse('EditNameOrEmail-Employee' , kwargs={'pk' : request.user.id}))
+
+		elif 'change-password' in request.POST:
+			form = EditNameOrEmailForm(initial = {'first_name':request.user.first_name ,
+			 'last_name':request.user.last_name , 'username':request.user.username})
+			password_form = ChangePassword_Employee(request.POST , user=request)
+			if password_form.is_valid():
+				old = password_form.cleaned_data.get('old')
+				new = password_form.cleaned_data.get('new')
+				re_new = password_form.cleaned_data.get('re_new')
+				user = User.objects.get(username = request.user.username)
+				user.set_password(new)
+				user.save()
 				messages.success(request , 'رمز عبور شما به روز رسانی شد . لطفا دوباره وارد شوید')
 				return redirect(reverse('Login'))
-			else:
-				change_pass_form.add_error('old' , 'رمز عبور وارد شده اشتباه است')
-	else:
-		change_pass_form = ChangePassword_Employee()
-	context['password_form'] = change_pass_form
-	context['form'] = form
-	context['title'] = 'تنظیمات حساب کاربری'
-	context['suggest_password'] = passGenerator(10)
-	return render(request , 'Employee/EditNameOrEmail-Employee.html' , context)
+		return render(request , 'Employee/EditNameOrEmail-Employee.html' , {'form':form , 'password_form':password_form})
 
 class ApplicantDetail(DetailView):
 	model = Applicant
@@ -146,8 +146,8 @@ def AdUnsaved(request , pk , employee):
 		return redirect('Home')
 	return redirect(request.GET.get('next'))
 
-@Who_is
-def AdSaved(request , ad , user_type):
+
+def AdSaved(request , ad):
 	if user_type is not None:
 		return redirect('/')
 	advertisement = Advertisement.objects.get(id = ad)
@@ -157,8 +157,7 @@ def AdSaved(request , ad , user_type):
 		Favorite.objects.create(user = request.user , ad = advertisement)
 	return redirect(request.GET.get('next'))
 
-@Who_is
-def ApplicantView(request , ad , user_type):
+def ApplicantView(request , ad):
 	if user_type is not None:
 		return redirect('/')
 	advertisement = Advertisement.objects.get(id = ad)
@@ -168,13 +167,11 @@ def ApplicantView(request , ad , user_type):
 		Applicant.objects.create(user = request.user , ad = advertisement)
 	return redirect('/')
 
-@Who_is
-def canceling_applicant(request , pk , user_type):
-	if user_type is None:
-		try:
-			target = Applicant.objects.get(id = pk)
-			if target.user == request.user:
-				target.delete()
-		except:
-			return redirect('/')
+def canceling_applicant(request , pk):
+	try:
+		target = Applicant.objects.get(id = pk)
+		if target.user == request.user:
+			target.delete()
+	except:
+		return redirect('/')
 	return redirect('/')
