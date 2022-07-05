@@ -10,19 +10,22 @@
 <form action="" method="POST" dir="rtl">
     {% csrf_token %}
     <div class="row form-group text-right">
-      <div class="col-md-4 mb-3">
+      <div class="col-md-3 mb-3">
         {{form.first_name}}
       </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-3 mb-3">
         {{form.last_name}}
       </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-6 mb-3">
         {{form.username}}
+        {% for error in form.username.errors %}
+        <strong class="alert alert-danger mb-2">{{error}}</strong><br>
+        {% endfor %}
       </div>
     </div>
     <button type="submit" name="email-name" class="btn btn-success" >اعمال تغییرات</button>
 </form>
-<br>
+<hr>
 
 <div class="col-md-10 text-right">
   <p>
@@ -38,7 +41,7 @@
   </p>
 </div>
 
-<form action="" method="POST" class="mt-5">
+<form action="" method="POST" class="mt-5" novalidate>
     {% csrf_token %}
     <div class="row form-group text-right">
   <div class="col-md-7 mb-3">
