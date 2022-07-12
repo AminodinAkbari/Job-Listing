@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Advertisement , Company , Manager
+from .models import Advertisement , Company , Manager , Hire
 from Employee.models import EmployeeModel
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -228,3 +228,19 @@ class EditCompanyForm(ModelForm):
 		super(EditCompanyForm , self).__init__(*args , **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs.update({'class': 'form-control rtl'})
+
+class NewHireForm(ModelForm):
+	class Meta:
+		model = Hire
+		exclude = ('created_at' , 'status')
+
+	def __init__(self , *args , **kwargs):
+		super().__init__(*args , **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs.update({'class': 'form-control rtl'})
+			field.error_messages = {'required' : 'نمیتواند خالی باشد'}
+
+		self.fields['contact'].widget.attrs.update({'placeholder' : 'شماره تلفن یا ایمیل شما برای دریافت پاسخ کارجو'})
+		self.fields['contact'].required = True
+
+		self.fields['ad'].required = True
