@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render , reverse
+from django.shortcuts import redirect, render , reverse , get_object_or_404
 from Employer.models import Manager , Advertisement , Applicant
 from Employee.models import EmployeeModel
 
@@ -14,16 +14,9 @@ now = timezone.now()
 
 def employee_owner_can_access(func):
 	def wrapper(request ,pk , *args , **kwargs):
-		try:
-			employee = EmployeeModel.objects.filter(employee = pk).first()
-		except:
-			employee = None
+		employee = get_object_or_404(EmployeeModel,employee = pk)
+		if employee.employee != request.user:
 			return redirect('/')
-
-		if employee is not None:
-			if employee.employee != request.user:
-				return redirect('/')
-
 		return func(request , pk ,*args , **kwargs , employee = employee)
 	return wrapper
 
@@ -36,7 +29,7 @@ def is_valid_queryparam(param):
     return param != '' and param is not None and param != '0'
 
 def search_filter(request):
-	obj = Advertisement.objects.all()
+	obj = Advertisement.objects.filter(expired_in__gt = now)
 	category = request.GET.get('category')
 	location = request.GET.get('location')
 	title = request.GET.get('title')
