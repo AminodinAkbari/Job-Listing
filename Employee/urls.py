@@ -13,5 +13,5 @@ urlpatterns = [
 	path('add_favorite/<int:ad>' , login_required(AdSaved) , name = 'Favorite'),
 	path('ads-saved/' , login_required(EmployeeJobMarked.as_view()) , name = 'AdsSaved'),
 	path('ad-delete/<int:pk>' , login_required(AdUnsaved) , name = 'AdUnsaved'),
-	path('hire-messages/<int:pk>' , login_required(HiresList.as_view()) , name = 'HiresList'),
+	path('hire-messages' , login_required(HiresList.as_view()) , name = 'HiresList'),
 ]
