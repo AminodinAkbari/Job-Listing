@@ -131,7 +131,7 @@ class EmployeeJobMarked(ListView):
 class HiresList(ListView):
 	template_name = 'Employee/Hire-messages.html'
 	def get_queryset(self):
-		return Hire.objects.filter(user_id = self.kwargs['pk'])
+		return Hire.objects.filter(user = self.request.user)
 	def get_context_data(self , **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['title'] = 'پیشنهادهای همکاری'
@@ -140,7 +140,7 @@ class HiresList(ListView):
 @employee_owner_can_access
 def AdUnsaved(request , pk , employee):
 	try:
-		ad = Favorite.objects.get(user = request.user , ad_id = pk)
+		ad = get_object_or_404(Favorite,user = request.user , ad_id = pk)
 		ad.delete()
 	except:
 		return redirect('Home')
@@ -150,26 +150,24 @@ def AdUnsaved(request , pk , employee):
 def AdSaved(request , ad):
 	if user_type is not None:
 		return redirect('/')
-	advertisement = Advertisement.objects.get(id = ad)
+	advertisement = get_object_or_404(Advertisement,id = ad)
 	try:
-		Favorite.objects.get(user = request.user , ad = ad)
+		get_object_or_404(Favorite,user = request.user , ad = ad)
 	except:
 		Favorite.objects.create(user = request.user , ad = advertisement)
 	return redirect(request.GET.get('next'))
 
 def ApplicantView(request , ad):
-	if user_type is not None:
-		return redirect('/')
-	advertisement = Advertisement.objects.get(id = ad)
+	advertisement = get_object_or_404(Advertisement,id = ad)
 	try:
-		Applicant.objects.get(user = request.user , ad = ad)
+		get_object_or_404(Applicant,user = request.user , ad = ad)
 	except:
 		Applicant.objects.create(user = request.user , ad = advertisement)
 	return redirect('/')
 
 def canceling_applicant(request , pk):
 	try:
-		target = Applicant.objects.get(id = pk)
+		target = get_object_or_404(Applicant,id = pk)
 		if target.user == request.user:
 			target.delete()
 	except:
