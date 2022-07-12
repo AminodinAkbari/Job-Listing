@@ -18,7 +18,7 @@
               <div class="ftco-footer-widget mb-4">
                 <h2 class="ftco-heading-2 bb-1 pb-3">کارجو</h2>
                 <ul class="list-unstyled font-size-13">
-                  <li><a href="{% url 'HiresList' pk=request.user.id %}" class="pb-1 d-block"><strong>پیام های دریافتی</strong></a></li>
+                  <li><a href="{% url 'HiresList' %}" class="pb-1 d-block"><strong>پیام های دریافتی</strong></a></li>
                   <li><a href="{% url 'UpdateResume' pk=request.user.id %}"><strong>رزومه ساز</strong></a></li>
                   <li><a href="{% url 'EmployeeJobApply' %}"><strong>رزومه های ارسالی</strong></a></li>
                   <li><a href="{% url 'AdsSaved' %}"><strong>آگهی های نشان شده</strong></a></li>

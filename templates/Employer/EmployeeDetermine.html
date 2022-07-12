@@ -101,9 +101,9 @@
 
 			<form method="POST" class="mt-5">
 				{% csrf_token %}
-				<button class="btn btn-success btn-lg" name="determine" value="accept">تأیید کردن برای مصاحبه</button>
-				<button class="btn btn-danger btn-lg" name="determine" value="reject">رد کردن</button>
-				<a href="{% url 'ManagerPanel' pk=manager.id %}" class="btn btn-light btn-lg" name="determine" value="reject">بازگشت</a>
+				<button class="btn btn-success btn-lg" name="accepted">تأیید کردن برای مصاحبه</button>
+				<button class="btn btn-danger btn-lg" name="rejected">رد کردن</button>
+				<a href="{% url 'ManagerPanel' pk=manager.id %}" class="btn btn-light btn-lg">بازگشت</a>
 			</form>
 
 		</div>
