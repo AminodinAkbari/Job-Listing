@@ -41,7 +41,7 @@ class Company(models.Model):
 	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_logo_path)
 	name = models.CharField(max_length = 250 , verbose_name = 'نام شرکت')
 	address = models.TextField(verbose_name = 'آدرس')
-	underlie = models.TextField(verbose_name = 'درباره شرکت (این متن در آگهی های شما نمایش داده می شود)')
+	underlie = models.TextField(verbose_name = 'درباره شرکت (این متن در آگهی های شما نمایش داده می شود)' , max_length = 2000)
 	manager = models.ForeignKey(Manager , on_delete = models.CASCADE , related_name = 'Have_companies' , blank = True , null=True)
 	valid = models.BooleanField(verbose_name = 'تایید کنید این شرکت وجود خارجی دارد' , default = False)
 
