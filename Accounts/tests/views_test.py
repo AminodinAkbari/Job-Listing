@@ -15,7 +15,7 @@ valid_Employer = {
 're_password' : '123456789',
 }
 
-class BaseTest(TestCase):
+class TestAccountsModels(TestCase):
     def setUp(self):
         user = User.objects.create_user(username = 'test@gmail.com' , password = 'ami123.789')
         EmployeeModel.objects.create(employee = user)

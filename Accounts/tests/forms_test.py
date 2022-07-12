@@ -3,8 +3,9 @@ from Accounts.forms import RegisterForm , LoginForm , EmployeeRegister
 from Employer.models import Manager
 from Employee.models import EmployeeModel
 from django.contrib.auth.models import User
-from Tests.Employer.forms import TestEmployerForms
+from Employer.tests.forms_test import TestEmployerForms
 class TestAccountForms(TestCase):
+    print('♠ Testing Accounts.forms.py')
     valid_register = {
     'username' : 'AminEmail@gmail.com',
     'first_name' : 'Amin',
@@ -91,3 +92,5 @@ class TestAccountForms(TestCase):
     def test_valid_emploee_register(self):
         valid_form = EmployeeRegister(data = self.valid_register )
         self.assertTrue(valid_form.is_valid())
+
+        print('____________end_____________')
