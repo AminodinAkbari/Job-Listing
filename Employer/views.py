@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer
+from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmployer,NewHireForm
 
 from django.contrib import messages
 
@@ -108,61 +108,51 @@ class UpdatePasswordManager(TemplateView):
         return render(request , 'Employer/UpdateManagersPassword.html' , context)
 
     def post(self, request, *args, **kwargs):
+        current_user = get_object_or_404(User,id = request.user.id)
         if 'update-email' in request.POST:
             password_form = UpdatePasswordManagersForm()
             email_form = EditEmailEmployer(request.POST , user=request.user)
             if email_form.is_valid():
                 email = email_form.cleaned_data.get('email')
-                try:
-                    user = User.objects.get(username = request.user.username)
-                    manager = Manager.objects.get(email = request.user.username)
-                    user.username = email
-                    manager.email = email
-                    user.save()
-                    manager.save()
-                    messages.success(request , 'پروفایل شما آپدیت شد')
-                    return redirect(reverse('ManagerPanel' , kwargs={'pk':manager_model.id}))
-                except:
-                    pass
-            return render(request , 'Employer/UpdateManagersPassword.html' , {'UpdatePassword':password_form,'UpdateEmail':email_form})
-        else:
+                user = User.objects.get(username = request.user.username)
+                manager = Manager.objects.get(email = user.username)
+                user.username = email
+                manager.email = email
+                user.save()
+                manager.save()
+                messages.success(request , 'پروفایل شما آپدیت شد')
+                return redirect(reverse('ManagerPanel' , kwargs={'pk':manager.id}))
+
+        elif 'update-pass' in request.POST:
             password_form = UpdatePasswordManagersForm(request.POST , user = request.user)
-            email_form = EditEmailEmployer()
+            email_form = EditEmailEmployer(initial = {'email':request.user.username})
             if password_form.is_valid():
                 old_password = password_form.cleaned_data.get('old_password')
                 new_password = password_form.cleaned_data.get('new_password')
-                user_exist = User.objects.get(username = request.user.email)
-                user = authenticate(self.request , username = self.request.user.username , password = old_password)
-                if user is not None:
-                    user_exist.set_password(new_password)
-                    user_exist.save()
-                    messages.success(request , 'رمز عبور شما با موفقیت تغییر کرد')
-                    return redirect('/login')
-            return render(request , 'Employer/UpdateManagersPassword.html' , {'UpdatePassword':password_form , 'UpdateEmail':email_form})
+                user_exist = User.objects.get(username = request.user.username)
+                current_user.set_password(new_password)
+                current_user.save()
+                messages.success(request , 'رمز عبور شما با موفقیت تغییر کرد')
+                return redirect(reverse('Login'))
 
-    def form_invalid(self , password_form , **kwargs):
-        password_form = UpdatePasswordManagersForm(self.request.POST)
-        context = {'UpdatePassword':password_form}
-        return render(self.request , 'Employer/UpdateManagersPassword.html' , context)
-
+        return render(request , 'Employer/UpdateManagersPassword.html' , {'UpdatePassword':password_form , 'UpdateEmail' : email_form})
 
 class NewAd(FormView):
     form_class = NewAdvertisementForm
+    model = Advertisement
     template_name = 'Employer/New_Ad.html'
+    success_url = '/'
 
     def get_form_kwargs(self):
         initial = super().get_form_kwargs()
-        initial['user'] = self.request.user.email
+        initial['user'] = self.request.user.username
         return initial
 
     def form_valid(self , form):
         form.save()
         messages.success(self.request , 'آگهی شما با موفقیت ایجاد شد' , extra_tags = 'NewAdCreated')
-        form = super(NewAd , self).form_valid(form)
+        form = super().form_valid(form)
         return form
-
-    def get_success_url(self):
-        return reverse("Home")
 
 class NewCompany(FormView):
     form_class = NewCompanyForm
@@ -181,14 +171,9 @@ class NewCompany(FormView):
 
 def DeleteAd(request , pk ,**kwargs):
     manager = Manager.objects.filter(email = request.user.username).first()
-    ad = Advertisement.objects.get(company__manager = manager.id , id=pk)
-    print(manager)
-    if manager is not None and ad is not None:
-        try:
-            print(ad)
-            ad.delete()
-        except:
-            messages.error(request , 'آگهی در پایگاه داده پیدا نشد')
+    ad = get_object_or_404(Advertisement,company__manager = manager.id , id=pk)
+    if manager is not None and ad:
+        ad.delete()
     return HttpResponseRedirect(reverse_lazy('ManagerPanel' , kwargs={'pk': manager.id}))
 
 class EditCompanyView(UpdateView):
@@ -217,33 +202,32 @@ class EditCompanyView(UpdateView):
 
 def DeleteCompany(request , pk):
     manager = Manager.objects.filter(email = request.user.username).first()
-    company= Company.objects.get(manager = manager.id , id=pk)
+    company= get_object_or_404(Company,manager = manager.id , id=pk)
     if manager is not None and company is not None:
-        try:
-            company.delete()
-        except:
-            messages.error(request , 'خطایی رخ داد')
+        company.delete()
     return HttpResponseRedirect(reverse_lazy('ManagerPanel' , kwargs={'pk': manager.id}))
 
 def determine_the_status(request , pk,adver_id):
-    employee = EmployeeModel.objects.filter(id = pk).first()
-    manager = Manager.objects.get(email = request.user.username)
-    if employee is not None:
+    employee = get_object_or_404(EmployeeModel,id = pk)
+    manager = get_object_or_404(Manager,email = request.user.username)
+    if employee and manager:
         applicant = Applicant.objects.filter(ad__id = adver_id , user = employee.employee).first()
-        if applicant is not None:
+        if applicant:
             applicant.status = "seen"
+            # The Date is Change But This Is'nt Correct Way
+            # Later Should Fix This
             applicant.created_at = now
+            #-------------------------
             applicant.save()
-    if request.method == 'POST' and applicant is not None:
-        if request.method == 'POST':
-            if request.POST['determine'] == 'accept':
-                applicant.status = 'accepted'
-                applicant.save()
-                return redirect('/')
-            else:
-                applicant.status = 'rejected'
-                applicant.save()
-                return redirect('/')
+    if request.method == 'POST' and applicant:
+        if 'accepted' in request.POST:
+            applicant.status = 'accepted'
+            applicant.save()
+            return redirect('/')
+        elif 'rejected' in request.POST:
+            applicant.status = 'rejected'
+            applicant.save()
+            return redirect('/')
     context = {
     'object' : employee ,
     'employee_skills' : employee.skills.split('/'),
@@ -254,9 +238,14 @@ def determine_the_status(request , pk,adver_id):
 
 
 class NewHire(CreateView):
+    form_class = NewHireForm
     model = Hire
-    fields = '__all__'
-    template_name = 'test.html'
+    template_name = 'Employer/NewHire.html'
+
+    def get_context_data(self , *args , **kwargs):
+        context = super().get_context_data(*args , **kwargs)
+        context['item'] = get_object_or_404(EmployeeModel,id = self.kwargs['employee_id']).first()
+        return context
 
     def form_valid(self , form):
         employee = EmployeeModel.objects.get(id = self.kwargs['employee_id'])
