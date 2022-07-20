@@ -11,8 +11,8 @@ register = template.Library()
 def Navbar(context , request):
 	context['request'] = request
 	if request.user.is_authenticated:
-		if request.session['Employer_ID'] and request.session['TYPE'] == 'Employer':
-			context['user_id'] = request.session['Employer_ID']
+		if request.session['USER_ID']:
+			context['user_id'] = request.session['USER_ID']
 		else:
 			context['user_id'] = None
 	context['settings'] = Footer.objects.filter(active = True).first()
