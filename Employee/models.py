@@ -37,7 +37,7 @@ class EmployeeModel(models.Model):
 	skills = models.TextField(verbose_name = 'مهارت ها (مهارتهای خود را با "/ یا ،" از هم جدا کنید', blank = True , null = True)
 	birth = models.DateField(blank=True , null=True)
 	employee_soldier_ship = models.CharField(max_length = 25,choices=employee_soldier_ship_types , verbose_name = 'وضعیت نظام وظیفه (اگر خانم هستید نیاز به انتخاب گزینه نیست)', blank=True , null = True)
-	languages = models.ManyToManyField(Languages , verbose_name = 'زبانهای گفتاری مسلط')
+	languages = models.ManyToManyField(Languages , verbose_name = 'زبانهای گفتاری مسلط' , blank = True)
 	work_experience = models.TextField(verbose_name = 'سوابق شغلی' , blank = True , null = True)
 	education = models.TextField(verbose_name = 'تحصیلات', blank=True , null = True)
 
