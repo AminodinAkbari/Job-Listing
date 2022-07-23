@@ -1,8 +1,12 @@
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.mixins import CreateModelMixin
+from rest_framework import generics , status
+
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 from . import serializers
 from Employer import models
-from rest_framework import generics , status
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,12 +15,14 @@ from rest_framework.decorators import api_view
 from Rest_API.permissions import IsAdManager , IsSuperUser
 from Rest_API.serializers import AllManagerFullSerializer
 
+"""In This File I Show My Skills with Any Method Of APIS (Functional , Class Base , APIView)"""
+# Hope Its Helped
+
 class EmployerDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.AllManagerFullSerializer
     queryset = models.Manager.objects.all()
     permission_classes = [(IsSuperUser),]
 
-# See And Update
 """THIS POST METHOD CAN ADD DUPLICATED EMAIL IN EMPLOYERS MODEL"""
 class AllManagers(APIView):
     def get (self , request):
@@ -33,18 +39,18 @@ class AllManagers(APIView):
 class RetriveManager(APIView):
 
     def get (self , request,pk):
-        obj = models.Manager.objects.get(id=pk)
+        obj = get_object_or_404(models.Manager,id=pk)
         data = serializers.AllManagerFullSerializer(obj).data
         return Response(data)
 
     def patch(self , request , pk):
-        qs = models.Manager.objects.get(id = pk)
+        qs = get_object_or_404(models.Manager,id = pk)
         serializer = AllManagerFullSerializer(qs , data= request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
 
     def delete(self , request , pk):
-        qs = models.Manager.objects.get(id = pk)
+        qs = get_object_or_404(models.Manager,id = pk)
         qs.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
 
@@ -74,10 +80,7 @@ def all_managers_FBV_list(request):
 @api_view(['GET','PATCH','DELETE'])
 def all_managers_FBV_detail(request , pk):
 
-    try:
-        qs = models.Manager.objects.get(id = pk)
-    except:
-        return Response(status=404)
+    qs = get_object_or_404(models.Manager,id = pk)
 
     if request.method == 'GET':
         serializer = AllManagerFullSerializer(qs)
@@ -92,4 +95,48 @@ def all_managers_FBV_detail(request , pk):
 
     elif request.method == 'DELETE':
         qs.delete()
-        return Response(status = 204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# ----------------- Applcant Model APIs -----------------
+class AllApplicants(CreateModelMixin,generics.ListAPIView):
+    serializer_class = serializers.ApplicantFullSerializer
+    queryset = models.Applicant.objects.all()
+
+    def post(self , request):
+        return self.create(request)
+
+class ApplicantDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.ApplicantFullSerializer
+    queryset = models.Applicant.objects.all()
+# ------------------Company Model APIs------------------
+class AllCompanies(CreateModelMixin,generics.ListAPIView):
+    serializer_class = serializers.AllCompaniesFullSerializer
+    queryset = models.Company.objects.all()
+    def post(self , request):
+        return self.create(request)
+
+class CompaniesDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.AllCompaniesFullSerializer
+    queryset = models.Company.objects.all()
+
+#----------------- Advertisement Model APIs ------------------
+class ALLAds(CreateModelMixin,generics.ListAPIView):
+    queryset = models.Advertisement.objects.all()
+    serializer_class = serializers.AdvertisementMiniSerilalzer
+
+class ADDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.AdvertisementsFullSerializer
+    queryset = models.Advertisement.objects.all()
+    permission_classes = ((IsAdManager,))
+
+#----------------- Hire Model APIs ------------------
+class AllHires(CreateModelMixin,generics.ListAPIView):
+    serializer_class = serializers.HrieModelFullSerializer
+    queryset = models.Hire.objects.all()
+
+    def post(self , request):
+        return self.create(request)
+
+class HireDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.HrieModelFullSerializer
+    queryset = models.Hire.objects.all()
