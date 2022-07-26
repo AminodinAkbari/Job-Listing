@@ -46,6 +46,7 @@ class ManagerPanel(DetailView):
             company = Company.objects.filter(manager = manager.id)
         except:
             manager = None
+            company = None
 
         applicants = Applicant.objects.filter(ad__company__manager__email = self.request.user.username)
 
@@ -89,9 +90,14 @@ class EditAdView(UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         Ad = self.get_object()
-        if Ad.company.manager != Manager.objects.get(email = self.request.user.username):
+        if Ad.company.manager.email != self.request.user.username:
             return redirect('Home')
         return super(EditAdView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ویرایش اطلاعات آگهی'
+        return context
 
     def get_success_url(self):
         messages.success(self.request , 'تغییرات ذخیره شد')
@@ -197,6 +203,7 @@ class EditCompanyView(UpdateView):
         obj = self.get_object()
         context = super().get_context_data(**kwargs)
         context['company'] = Company.objects.get(id = obj.id)
+        context['title'] = 'ویرایش اطلاعات شرکت'
         return context
 
 
