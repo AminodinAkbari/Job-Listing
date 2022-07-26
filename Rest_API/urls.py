@@ -18,7 +18,7 @@ urlpatterns = [
 	path('ad_detail/<int:pk>' , Employer_API.ADDetail.as_view() , name = 'ADDetail'),
 	#------------- Applicant -------------------
 	path('all-applicants/' , Employer_API.AllApplicants.as_view() , name = 'AllApplicants'),
-	path('all-applicants/<int:pk>' , Employer_API.ApplicantDetail.as_view() , name = 'ApplicantDetail'),
+	path('all-applicants/<int:pk>' , Employer_API.ApplicantDetail.as_view() , name = 'ApplicantDetailAPI'),
 	# ----------- Hire -----------------
 	path('all-hires/' , Employer_API.AllHires.as_view() , name = 'AllHires'),
 	path('all-hires/<int:pk>' , Employer_API.HireDetail.as_view() , name = 'HireDetail'),
