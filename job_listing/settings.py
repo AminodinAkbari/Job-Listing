@@ -78,7 +78,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'Controllers.custom-middleware.define_user_type',
+    'Controllers.costume-middleware.define_user_type',
 ]
 
 ROOT_URLCONF = 'job_listing.urls'
