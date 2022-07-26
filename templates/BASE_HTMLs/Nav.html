@@ -16,15 +16,15 @@
 			  	<li>
 			  		<strong>{{request.user.get_full_name}}</strong>
 			  	</li>
-					{% if user_id %}
-				  	<li><a class="dropdown-item" href="{% url 'ManagerPanel' pk=user_id %}">پنل مدیریت</a></li>
+					{% if request.session.USER_ID %}
+				  	<li><a class="dropdown-item" href="{% url 'ManagerPanel' pk=request.session.USER_ID %}">پنل مدیریت</a></li>
 					{% endif %}
 
 				  <li><hr class="dropdown-divider"></li>
 				    <li><a class="dropdown-item" href="{% url 'NewCompany'%}">افزودن شرکت جدید</a></li>
 				    <li><a class="dropdown-item" href="{% url 'NewAd'%}">افزودن آگهی جدید</a></li>
 			    <li><hr class="dropdown-divider"></li>
-				    <li><a class="dropdown-item" href="{% url 'EditManagerInfo' pk=user_id %}">ویرایش اطلاعات</a></li>
+				    <li><a class="dropdown-item" href="{% url 'EditManagerInfo' pk=request.session.USER_ID %}">ویرایش اطلاعات</a></li>
 			    <li><hr class="dropdown-divider"></li>
 			    	<li><a class="dropdown-item" href="{% url 'Logout' %}">خروج از حساب کاربری</a></li>
 			  </ul>
@@ -77,7 +77,7 @@
 	          <li class="nav-item {% if request.path == '/'%}active{%endif%}"><a href="{% url 'Home' %}" class="nav-link">خانه</a></li>
 	          <li class="nav-item {% if request.path == '/all-ads'%}active{%endif%}"><a href="{% url 'Search' %}" class="nav-link">آگهی ها</a></li>
 	          <li class="nav-item"><a href="{% url 'ALLCompanies' %}" class="nav-link">شرکت ها</a></li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">مقالات</a></li>
+	          <li class="nav-item"><a href="{% url 'BlogHomePage' %}" class="nav-link">مقالات</a></li>
 	          <!--<li class="nav-item cta mr-md-1"><a href="new-post.html" class="nav-link">Post a Job</a></li>
 	          <li class="nav-item cta cta-colored"><a href="job-post.html" class="nav-link">Want a Job</a></li>-->
 

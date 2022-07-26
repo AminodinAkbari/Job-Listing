@@ -15,29 +15,44 @@ class BaseTest(TestCase):
     'email' : 'user1@gmail.com',
     'password':'123456789' , 're_password' : '123456789',
     }
+    valid_manager2= {
+    'name':'ahmad',
+    'family':'mohammadi',
+    'phone' : '12345678900',
+    'About' : 'test',
+    'email' : 'user2@gmail.com',
+    'password':'123456789' , 're_password' : '123456789',
+    }
 
     def setUp(self):
         user = User.objects.create_user(username = 'user1@gmail.com' , password='PaSs0wrd')
         user2 = User.objects.create_user(username = 'user2@gmail.com' , password='PaSs0wrd')
-        manager = Manager.objects.create(name = self.valid_manager['name'] , family = self.valid_manager['family'],
+
+        manager1 = Manager.objects.create(name = self.valid_manager['name'] , family = self.valid_manager['family'],
         phone = self.valid_manager['phone'] , About = self.valid_manager['About'] , email = self.valid_manager['email'],)
-        self.client.login(username = 'user1@gmail.com' , password = 'PaSs0wrd')
+        self.client.login(username = 'user1@gmail.com' , password = 'PaSs0wrd') #.id = 1
+
+        manager2 = Manager.objects.create(name = self.valid_manager2['name'] , family = self.valid_manager2['family'],
+        phone = self.valid_manager2['phone'] , About = self.valid_manager2['About'] , email = self.valid_manager2['email'],)
+        # self.client.login(username = 'user2@gmail.com' , password = 'PaSs0wrd') #.id = 2
+
 
     def test_manager_panel(self):
+        self.client.logout()
         """Try Access Another Panel (username != Manager.email)"""
         self.client.login(username = 'user2@gmail.com' , password = 'PaSs0wrd')
-        false_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':Manager.objects.all().first().id}))
+        false_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':Manager.objects.get(id = 1).id}))
         self.assertEqual(false_response.status_code , 302)
         self.assertURLEqual(reverse('Home') , '/')
         self.client.logout()
 
         """Correct Manager Try Access Own Panel"""
         self.client.login(username = 'user1@gmail.com' , password = 'PaSs0wrd')
-        True_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':Manager.objects.all().first().id}))
+        True_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':Manager.objects.get(id = 1).id}))
         self.assertEqual(True_response.status_code , 200)
         self.assertTemplateUsed('Employer/ManagerPanel.html')
         self.assertURLEqual(reverse('ManagerPanel' , kwargs = {'pk':Manager.objects.all().first().id}) , '/manager_panel/1')
-        self.client.logout()
+        # self.client.logout()
 
     def test_EditAdView(self):
         response = self.client.get(reverse('EditAdView',kwargs = {'pk':Manager.objects.all().first().id}))

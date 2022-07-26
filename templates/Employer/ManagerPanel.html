@@ -143,7 +143,7 @@
 								    <strong class="card-title">{{object.name}} {{object.family}}</strong><br>
 								    <small class="mb-1 bb-1">{{object.email}} <br> {{object.phone}}</small>
 								    <p class="card-text text-justify">{{object.About}}</p>
-								    <a href="{% url 'EditManagerInfo' pk=manager.id %}" class="btn btn-light btn-sm">ویرایش اطلاعات</a>
+								    <a href="{% url 'EditManagerInfo' pk=request.session.USER_ID %}" class="btn btn-light btn-sm">ویرایش اطلاعات</a>
 								  </div>
 								</div>
 		      	</div>

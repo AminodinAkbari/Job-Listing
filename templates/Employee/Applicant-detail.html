@@ -24,12 +24,17 @@
 					<strong class="pb-5">اطلاعات شما</strong>
 					<p class="bb-1 bg-light p-3">{{request.user.get_full_name}}</p>
 					<p class="bg-light p-3">{{request.user.username}}</p>
-					<a href="{% url 'UpdateResume' pk=employee.id %}" class="btn btn-success text-white text-center btn-block">مشاهده رزومه</a>
-		              <p class="text-center font-size-13 mt-3" dir="rtl">
-		               	آگهی تا <u>{{time_left}}</u> روز دیگر فعال می باشد
-		           	  </p>
+		          {% if time_left > 0 %}
+							<p class="text-center font-size-13 mt-3" dir="rtl">
+								<a href="{% url 'UpdateResume' pk=employee.id %}" class="btn btn-success text-white text-center btn-block">مشاهده رزومه</a>
+								آگهی تا <u>{{time_left}}</u> روز دیگر فعال می باشد
+							</p>
+							<a href="{% url 'CancelingApplicant' pk=object.id %}" class="btn btn-link btn-sm text-danger">لغو درخواست همکاری</a>
+							{% else %}
+							<p class="text-danger text-center font-size-13 mt-3" dir="rtl">آگهی منقضی شده است</p>
+							{% endif %}
             	</div>
-            	<a href="{% url 'CancelingApplicant' pk=object.id %}" class="btn btn-link btn-sm text-danger">لغو درخواست همکاری</a>
+
 			</div>
 			</div>
 		</div>
