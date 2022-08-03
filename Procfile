@@ -1,1 +1,1 @@
-web: gunicorn job-listing.wsgi:application
+web: gunicorn job-listing.wsgi
