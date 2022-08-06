@@ -55,7 +55,7 @@ class Advertisement(models.Model):
 	category = models.ForeignKey(categories , on_delete = models.CASCADE , default = '' , verbose_name = 'دسته بندی' , related_name = 'advertisiment')
 	company = models.ForeignKey(Company , on_delete = models.CASCADE , verbose_name = 'مربوط به شرکت' , related_name='company')
 	text = models.TextField(verbose_name = 'متن آگهی')
-	soldier_ship = models.CharField(max_length = 25, choices=soldiership_types , verbose_name = 'وضعیت خدمت کارجو')
+	soldier_ship = models.CharField(max_length = 100, choices=soldiership_types , verbose_name = 'وضعیت خدمت کارجو')
 	skills = models.TextField(verbose_name = 'مهارتهای مدنظر')
 	job_nature = models.CharField(max_length = 30 , choices = job_nature , verbose_name = 'نوع قرارداد')
 	generate_in = models.DateField(auto_now_add=True , verbose_name = 'تاریخ ایجاد',blank = True, null = True)
