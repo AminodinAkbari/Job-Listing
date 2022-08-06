@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand , CommandError
 from Controllers.models import categories
 import random
 
-categories_names_list = ['خدمات پزشکی' , 'هنر' , 'گرافیک']
+categories_names_list = ['خدمات' , 'حمل و نقل' , 'تولید محتوا' , 'درمان']
 
 class Command(BaseCommand):
     def add_arguments(self , parser):

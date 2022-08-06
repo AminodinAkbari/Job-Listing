@@ -20,7 +20,7 @@ skills = [
 
 class Command(BaseCommand):
     def add_arguments(self , parser):
-        parser.add_argument("category_id")
+        parser.add_argument("category_id" type=int)
         parser.add_argument("Count" , type=int)
 
     def handle(self , *args , **options):
