@@ -46,7 +46,7 @@
 				            <div class="block-18">
 				              <div class="text d-flex">
 				              	<div class="icon mr-2">
-				              		<span class="flaticon-worldwide"></span>
+				              		<span class="bi bi-binoculars"></span>
 				              	</div>
 				              	<div class="desc text-left">
 					                <strong class="number" data-number="{{categories|length}}">{{categories|length}}</strong>
@@ -59,7 +59,7 @@
 				            <div class="block-18 text-center">
 				              <div class="text d-flex">
 				              	<div class="icon mr-2">
-				              		<span class="flaticon-visitor"></span>
+				              		<span class="bi bi-collection"></span>
 				              	</div>
 				              	<div class="desc text-left">
 					                <strong class="number" data-number="{{companies|length}}">{{companies|length}}</strong>
@@ -72,10 +72,10 @@
 				            <div class="block-18 text-center">
 				              <div class="text d-flex">
 				              	<div class="icon mr-2">
-				              		<span class="flaticon-resume"></span>
+				              		<span class="bi bi-magnet-fill"></span>
 				              	</div>
 				              	<div class="desc text-left">
-					                <strong class="number" data-number="{{employees|length}}">{{employees|length}}</strong>
+					                <strong class="number" data-number="{{ads_count}}">{{ads_count}}</strong>
 					                <span>آگهی فعال</span>
 					              </div>
 				              </div>
@@ -281,16 +281,15 @@
 		      <div class="col-lg-3 sidebar text-right">
 		        <div class="row justify-content-center pb-3">
 		          <div class="col-md-12 heading-section ftco-animate">
-		            <h4 class="mb-4">کمپانی های با بیشترین آگهی ها</h4>
+		            <h4 class="mb-4">شرکت های با بیشترین آگهی ها</h4>
 		          </div>
 		        </div>
-		        {{top_company}}
-		        {% for company in top_companies %}
+		        {% for company in top_companies|slice:":12" %}
 		        <div class="sidebar-box ftco-animate">
 		        	<div class="">
-			        	<a href="" class="company-wrap"><img src="{% if company.logo %}{{company.logo.url}}{% else %}{% static 'images/company-1.jpg' %}{% endif %}" class="img-fluid" alt="Colorlib Free Template"></a>
+			        	<a href="{% url 'CompanyView' pk=company.id %}" class="company-wrap"><img src="{% if company.logo %}{{company.logo.url}}{% else %}{% static 'images/company-1.jpg' %}{% endif %}" class="img-fluid" alt="Colorlib Free Template"></a>
 			        	<div class="text p-3">
-			        		<h3><a href="#">{{company.name}}</a></h3>
+			        		<h3><a href="{% url 'CompanyView' pk=company.id %}">{{company.name}}</a></h3>
 			        		<p><span class="number">{{company.company.all | length}}</span> <span>آگهی درج شده تا کنون</span></p>
 			        	</div>
 		        	</div>

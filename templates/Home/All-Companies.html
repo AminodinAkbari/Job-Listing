@@ -23,8 +23,8 @@
                                 {% endfor %}{% endcomment %}
 			        			<p dir="rtl" class="mb-2 text-right">{{company.underlie|truncatewords:30}}</p>
 			        			<p>
-                      <a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-primary">رزومه</a>
-                      <a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-success">Score</a>
+                      <a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-success btn-sm">مشاهده صفحه شرکت</a>
+                      {% comment %}<a href="{% url 'CompanyView' pk=company.id %}" class="btn btn-success">Score</a>{% endcomment %}
                     </p>
 		        			</div>
 		        		</div>

@@ -6,9 +6,13 @@
   <div class="container ftco-animate">
     <div class="row">
       {% if company.profile_pic %}
-      <img src="{{object.profile_pic.url}}" class="col-md-6">
+      <div class="col-md-6">
+        <img src="{{object.profile_pic.url}}" width="100%">
+      </div>
       {%else%}
-      <img src="{% static 'png/User.png' %}" class="col-md-6">
+      <div class="col-md-6">
+        <img src="{% static 'png/User.png' %}" width="100%">
+      </div>
       {% endif %}
       <div class="col-md-6 text-right">
         <h3 class="mt-5">درباره شرکت {{object.name}} :</h3><hr>

@@ -21,7 +21,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-3 sidebar">
-				{% if request.session.TYPE == 'Employee'  %}
+				
 		        <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
 		        	<h3 class="heading-sidebar">نوع قرار داد</h3>
 		        	<form action="" class="browse-form font-size-10">
@@ -34,7 +34,7 @@
 							  <button type="submit" class="btn btn-primary btn-sm">اعمال تغییرات</button>
 							</form>
 		        </div>
-						{% elif request.session.TYPE == 'Employer' %}
+						{% if request.session.TYPE == 'Employer' %}
 						<div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
 		        	<h3 class="heading-sidebar">وضعیت نظام وظیفه</h3>
 		        	<form action="" class="browse-form font-size-10">
