@@ -53,6 +53,7 @@ def search_filter(request):
 	return obj
 
 def search_employee(request):
+	obj = EmployeeModel.objects.all()
 	skill = request.GET.get('skill')
 	location = request.GET.get('location')
 	soldier_service = request.GET.get('soldier_service')
@@ -73,7 +74,7 @@ class Search(ListView):
 		if self.kwargs and self.kwargs == 'category_id':
 			return redirect(reverse('AdByCategory' , kwargs = {"category_id":self.kwargs == 'category_id'}))
 		else:
-			if 'employer-search' in self.request.GET:
+			if self.request.session['TYPE'] == 'Employer':
 				return search_employee(self.request)
 			else:
 				return search_filter(self.request)
