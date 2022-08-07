@@ -45,7 +45,7 @@ class Command(BaseCommand):
                 category = category,
                 company  = (Company.objects.order_by('?')[:1]).first(),
                 text = 'قسمت تست متن آگهی میتواند به شما نشان دهد که ما دقیقا دنبال چه چیزی هستیم',
-                soldier_ship = soldiership_types[random.randint(1,3)][1],
+                soldier_ship = soldiership_types[random.randint(0,2)][1],
                 skills =skills_final ,
                 job_nature = job_nature[random.randint(0,2)][random.randint(0,1)],
                 expired_in = today + timedelta(days=60),
