@@ -32,6 +32,7 @@ def Index(request):
 	context['companies'] = companies
 	context['top_companies'] = top_companies
 	context['employees'] = EmployeeModel.objects.all()
+	context['ads_count'] = len(Advertisement.objects.all())
 	context['ads'] = Advertisement.objects.all()[:12]
 	context['SearchForm'] = SearchForm
 	if request.method == 'POST':
@@ -144,13 +145,13 @@ class CompanyView(DetailView):
 	template_name = 'Employer/company-info.html'
 
 	def get_context_data(self , **kwargs):
+		obj = self.get_object()
 		context = super().get_context_data(**kwargs)
+		context['title'] = obj.name
 		ads_time_left = {}
 		ads = Advertisement.objects.filter(company_id = self.kwargs['pk'])
-		print(ads)
 		for item in ads:
 			time_left = Advertisement_time_left(item)
 			ads_time_left[f'{item.id}']=f'{time_left}'
-		print(ads_time_left)
 		context['ads_time_left'] = ads_time_left
 		return context
