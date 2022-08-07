@@ -28,7 +28,7 @@ class Command(BaseCommand):
             raise CommandError("ID Is'nt In DataBase")
 
         if len(Company.objects.all()) > 1 and category :
-            salary_list = [6000000 , 8500000 , 9000000 , 12000000 , 22000000 , 25000000
+            salary_list = [6000000 , 8500000 , 9000000 , 12000000 , 22000000 , 25000000,
             7500000 , 11000000 , 12000000 , 15000000]
             for i in range(0 , options['Count']):
 
