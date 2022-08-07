@@ -21,10 +21,10 @@ class Command(BaseCommand):
         parser.add_argument('Count' , type=int)
 
     def handle(self , *args , **options):
-        name = random.choice(company_names_list) + str(random.randint(0 , 100))
         all_managers = Manager.objects.all()
         if len(all_managers) > 0:
             for i in range(0 , options['Count']):
+                name = random.choice(company_names_list) + str(random.randint(0 , 100))
                 company = Company.objects.create(
                 manager = (Manager.objects.order_by('?')[:1]).first(),
                 name = name,
