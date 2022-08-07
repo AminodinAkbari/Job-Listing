@@ -4,7 +4,7 @@ today = datetime. today()
 
 from django.core.management.base import BaseCommand , CommandError
 from Employer.models import Company,Advertisement
-from Controllers.models import categories , states_iran , employee_soldier_ship_types , job_nature
+from Controllers.models import categories , states_iran , soldiership_types , job_nature
 
 programing_languages = ['Python' , 'PHP' , 'C' , 'JAVA' , 'RUBY']
 
@@ -15,8 +15,6 @@ skills = [
 ['C','FastAPIs','ASP.NET'],
 ['Ruby','Rubi On Railse'],
 ]
-
-# states_iran = ['تهران' , 'گیلان' , 'اصفهان' , 'مشهد' , 'تبریز']
 
 class Command(BaseCommand):
     def add_arguments(self , parser):
@@ -30,6 +28,8 @@ class Command(BaseCommand):
             raise CommandError("ID Is'nt In DataBase")
 
         if len(Company.objects.all()) > 1 and category :
+            salary_list = [6000000 , 8500000 , 9000000 , 12000000 , 22000000 , 25000000
+            7500000 , 11000000 , 12000000 , 15000000]
             for i in range(0 , options['Count']):
 
                 skills_choiced = random.choice(skills)
@@ -44,11 +44,11 @@ class Command(BaseCommand):
                 category = category,
                 company  = (Company.objects.order_by('?')[:1]).first(),
                 text = 'قسمت تست متن آگهی میتواند به شما نشان دهد که ما دقیقا دنبال چه چیزی هستیم',
-                soldier_ship = employee_soldier_ship_types[random.randint(0,4)][1],
+                soldier_ship = soldiership_types[random.randint(1,3)][1],
                 skills =skills_final ,
                 job_nature = job_nature[random.randint(0,2)][random.randint(0,1)],
                 expired_in = today + timedelta(days=60),
-                salary = random.randint(1000000 , 10000000)
+                salary = random.choice(salary_list)
                 )
         else:
             raise CommandError("Company Models Less Than 2 !")
