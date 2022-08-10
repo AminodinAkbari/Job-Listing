@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 text = 'قسمت تست متن آگهی میتواند به شما نشان دهد که ما دقیقا دنبال چه چیزی هستیم',
                 soldier_ship = soldiership_types[random.randint(0,2)][0],
                 skills =skills_final ,
-                job_nature = job_nature[random.randint(0,2)][0],
+                job_nature = job_nature[random.randint(1,10)][0],
                 expired_in = today + timedelta(days=random.randint(20 , 50)),
                 salary = random.choice(salary_list)
                 )
