@@ -41,11 +41,11 @@ class Command(BaseCommand):
 
                 Advertisement.objects.create(
                 title = 'برنامه نویس ' + str(skills_choiced[0]),
-                location = states_iran[random.randint(1,2)][0],
+                location = states_iran[random.randint(1,9)][0],
                 category = category,
                 company  = (Company.objects.order_by('?')[:1]).first(),
                 text = 'قسمت تست متن آگهی میتواند به شما نشان دهد که ما دقیقا دنبال چه چیزی هستیم',
-                soldier_ship = soldiership_types[random.randint(1,9)][0],
+                soldier_ship = soldiership_types[random.randint(0,2)][0],
                 skills =skills_final ,
                 job_nature = job_nature[random.randint(0,2)][0],
                 expired_in = today + timedelta(days=random.randint(20 , 50)),
