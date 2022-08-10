@@ -35,6 +35,14 @@ states_iran = (
 ('0' , 'استان مورد نظر'),
 ('Tehran' , 'تهران'),
 ('Shiraz' , 'شیراز'),
+('Esfahan' , 'اصفهان'),
+('Mashhad' , 'مشهد'),
+('Tabriz' , 'تبریز'),
+('Hamedan' , 'همدان'),
+('Mazandaran' , 'مازندران'),
+('Gilan' , 'گیلان'),
+('Qom' , 'قم'),
+('Markazi' , 'مرکزی'),
 )
 
 marital = (
