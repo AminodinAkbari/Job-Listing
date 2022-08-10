@@ -14,13 +14,19 @@
 						<button class="btn btn-dark btn-sm">{{object.category.name}}</button>
 					</div>
 					<div class="col-md-6 font-size-13 mb-3">
-						آدرس :<br>
+						موقعیت مکانی :<br>
 						<button class="btn btn-dark btn-sm">{{object.get_location_display}}</button>
 					</div>
 					<div class="col-md-6 font-size-13 mb-3">
 						نوع همکاری :<br>
 						<button class="btn btn-dark btn-sm">{{object.get_job_nature_display}}</button>
 					</div>
+					{% if object.address %}
+					<div class="col-md-6 font-size-13 mb-3">
+						آدرس :<br>
+						<button class="btn btn-dark btn-sm">{{object.address}}</button>
+					</div>
+					{% endif %}
 				</div>
 				<strong class="text-dark">شرح موقعیت شغلی :</strong><hr>
 				<p class="text-justify font-size-13 mb-5">{{object.text}}</p>
@@ -45,8 +51,12 @@
 						<button class="btn btn-dark btn-sm">{{object.get_soldier_ship_display}}</button>
 					</div>
 					<div class="col-md-6 font-size-13 mb-3">
-						حقوق ماهیانه (به تومان) :<br>
+						حقوق ماهیانه (تومان) :<br>
 						<button class="btn btn-dark btn-sm">{{object.salary}}</button>
+					</div>
+					<div class="col-md-6 font-size-13 mb-3">
+						شرکت :<br>
+						<a href="{% url 'CompanyView' pk=object.company.id %}" class="btn btn-dark btn-sm text-white">{{object.company}}</a>
 					</div>
 				</div>
 
