@@ -1,0 +1,10 @@
+**/__pycache__
+**/migrations
+/static
+/staticfiles
+/env
+/uploads
+.env
+db.sqlite3
+**tests.py
+test.html
