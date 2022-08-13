@@ -1,4 +1,5 @@
 import os
+import django
 from django.db import models
 from datetime import datetime
 from django.utils import timezone
@@ -74,13 +75,15 @@ applicant_status=(
 ('send' , 'در انتظار تأیین وضعیت'),
 ('seen' , 'توسط کارفرما مشاهده شد'),
 ('accepted' , 'تأیید برای مصاحبه'),
-('rejected' , 'رد شده')
+('rejected' , 'رد')
 )
 
 class Applicant(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ad = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name="applicants")
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=django.utils.timezone.now , verbose_name = 'تاریخ ارسال درخواست')
+    seen_at = models.DateTimeField(null=True , verbose_name = 'مشاهده شده توسط کارفرما')
+    determine_at = models.DateTimeField(null=True , verbose_name = 'تأیین وضعیت در تاریخ')
     status = models.CharField(max_length = 15 , choices = applicant_status , default = 'send')
 
 hire_status = (
@@ -95,5 +98,4 @@ class Hire(models.Model):
     text = models.TextField(verbose_name = 'متن پیشنهاد همکاری')
     contact = models.CharField(verbose_name = 'راه ارتباطی' , max_length = 200)
     ad   = models.ForeignKey(Advertisement ,null=True , on_delete = models.CASCADE , verbose_name = 'آگهی')
-    created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(choices = hire_status , default = 'waiting' , verbose_name = 'وضعیت' , max_length = 100)

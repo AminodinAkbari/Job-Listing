@@ -7,17 +7,29 @@
 				<div class="col-md-8 text-right text-dark" dir="rtl">
 					<h4 class="bb-1">وضعیت درخواست</h4>
 					<ul class="bg-white pt-1 pb-5">
-						<li class="bg-white">
-							وضعیت در خواست همکاری شما : <br><br>
-						<strong class="p-5">{{object.get_status_display}}</strong> (در {{object.created_at|to_jalali}}) <br>
+						<li class="bg-white mt-5 mb-5">
+						<strong class="p-5">تاریخ ارسال درخواست شما</strong> (در {{object.created_at|to_jalali}}) <br>
 						</li>
+						<li class="bg-white mb-5">
+						<strong class="p-5">توسط کارفرما مشاهده شد</strong> (در {{object.seen_at|to_jalali}}) <br>
+						</li>
+						{% if object.status == 'accepted' or object.status == 'rejected' %}
+
+						<li class="bg-white mb-5">
+						<strong class="p-5">توسط کارفرما {{object.get_status_display}} شد</strong> (در {{object.determine_at|to_jalali}}) <br>
+						</li>
+
+						{% else %}
+						<li class="bg-white">در انتظار تأیین وضعیت از سوی کارفرما</li>
+						{% endif %}
 					</ul>
 				</div>
 
 				<div class="col-md-4 text-right">
 					<div class="p-4 mb-3 bg-white">
 						<strong class="pb-5">آگهی</strong>
-						<p class="bg-light p-3">{{object.ad.title}}<hr>از شرکت » {{object.ad.company.name}}</p>
+						<p dir="rtl" class="bg-light p-3">{{object.ad.title}}<hr>
+						 <a class="text-dark" href="{% url 'CompanyView' pk=object.ad.company.id %}">{{object.ad.company.name}}</a> از شرکت</p>
 						<a href="{% url 'AdDetail' pk=object.ad.id %}" class="btn btn-sm btn-primary">مشاهده آگهی</a>
 					</div>
 				<div class="p-4 mb-3 bg-white">

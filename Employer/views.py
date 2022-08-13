@@ -25,10 +25,6 @@ EditAdInfoForm,
 EditCompanyForm,
 )
 
-from django.utils import timezone
-now = timezone.now()
-# Create your views here.
-
 class ManagerPanel(DetailView):
     model = Manager
     template_name = "Employer/ManagerPanel.html"
@@ -214,6 +210,7 @@ def DeleteCompany(request , pk):
         company.delete()
     return HttpResponseRedirect(reverse_lazy('ManagerPanel' , kwargs={'pk': manager.id}))
 
+import django
 def determine_the_status(request , pk,adver_id):
     employee = get_object_or_404(EmployeeModel,id = pk)
     manager = get_object_or_404(Manager,email = request.user.username)
@@ -221,20 +218,20 @@ def determine_the_status(request , pk,adver_id):
         applicant = Applicant.objects.filter(ad__id = adver_id , user = employee.employee).first()
         if applicant:
             applicant.status = "seen"
-            # The Date is Change But This Is'nt Correct Way
-            # Later Should Fix This
-            applicant.created_at = now
-            #-------------------------
+            if applicant.seen_at is None:
+                applicant.seen_at = django.utils.timezone.now()
             applicant.save()
-    if request.method == 'POST' and applicant:
+    if request.method == 'POST' and 'accepted' in request.POST or 'rejected' in request.POST:
         if 'accepted' in request.POST:
             applicant.status = 'accepted'
-            applicant.save()
-            return redirect('/')
+
         elif 'rejected' in request.POST:
             applicant.status = 'rejected'
-            applicant.save()
-            return redirect('/')
+
+        applicant.determine_at = django.utils.timezone.now()
+        applicant.save()
+        return redirect('/')
+        
     context = {
     'object' : employee ,
     'manager':manager,
