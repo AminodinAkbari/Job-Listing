@@ -237,10 +237,13 @@ def determine_the_status(request , pk,adver_id):
             return redirect('/')
     context = {
     'object' : employee ,
-    'employee_skills' : employee.skills.split('/'),
     'manager':manager,
     'title':'جزئیات رزومه ارسالی'
     }
+    
+    if employee.skills:
+        context['employee_skills'] = employee.skills.split('/')
+
     return render(request , 'Employer/EmployeeDetermine.html' , context)
 
 
