@@ -19,6 +19,7 @@ from django.contrib import messages
 from django import forms
 
 from Controllers.models import passGenerator
+
 # Create your views here.
 
 class UpdateResume(UpdateView):
@@ -105,6 +106,7 @@ class ApplicantDetail(DetailView):
 		context['employee'] = EmployeeModel.objects.filter(employee = self.request.user).first()
 		obj = self.get_object()
 		context['time_left'] = Advertisement_time_left(obj.ad)
+		context['title'] = f'جزئیات درخواست برای آگهی "{obj.ad.title}"'
 		return context
 
 class EmployeeJobApply(ListView):
