@@ -6,7 +6,7 @@ def define_user_type(get_response):
     def middleware(request):
         if request.user.is_authenticated and not request.user.is_superuser:
             try:
-                manager = Manager.objects.get(email = request.user.username)
+                manager = Manager.objects.filter(email = request.user.username).first()
                 request.session['TYPE'] = 'Employer'
                 request.session['USER_ID'] = manager.id
             except:
