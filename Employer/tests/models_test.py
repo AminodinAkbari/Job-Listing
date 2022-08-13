@@ -21,6 +21,17 @@ class Employer_ModelsTest(TestCase):
     'underlie' : 'For Example UnderLie',
     }
 
+    valid_ad = {
+    'title' : 'test title',
+    'company' : models.Company.objects.all().first(),
+    'category' : categories.objects.all().first(),
+    'text' : 'Example For txt Advertisement',
+    'soldier_ship' : 'passed',
+    'skills' : 'test SKILLS',
+    'job_nature' : 'FullTime',
+    'salary' : 12000,
+    }
+
     def setUp(self):
         User.objects.create_user(username = 'TestUser' , password = 'TestPassword')
 
@@ -32,15 +43,18 @@ class Employer_ModelsTest(TestCase):
         #company
         models.Company.objects.create(name = self.valid_company['name'] , address = self.valid_company['address'],
         underlie = self.valid_company['underlie'])
+
+        #category
         categories.objects.create(name = 'Test Cate')
 
         #Advertisement
         models.Advertisement.objects.create(title = self.valid_ad['title'] , company = self.valid_ad['company'],
-        category = self.valid_ad['category'],
+        category = categories.objects.all().first(),
         text = self.valid_ad['text'] , soldier_ship = self.valid_ad['soldier_ship'] , skills = self.valid_ad['skills'],
         job_nature = self.valid_ad['job_nature'] , salary = self.valid_ad['salary'])
 
     def test_Manager_Model(self):
+        print(models.Manager.objects.all())
         manager = models.Manager.objects.get(id = 1)._meta
         self.assertEqual(manager.get_field('name').verbose_name , 'نام')
         self.assertEqual(manager.get_field('name').max_length , 100)
@@ -58,23 +72,12 @@ class Employer_ModelsTest(TestCase):
         self.assertEqual(company.get_field('underlie').verbose_name , 'درباره شرکت (این متن در آگهی های شما نمایش داده می شود)')
         self.assertEqual(company.get_field('underlie').max_length , 2000)
 
-    valid_ad = {
-    'title' : 'test title',
-    'company' : models.Company.objects.all().first(),
-    'category' : categories.objects.all().first(),
-    'text' : 'Example For txt Advertisement',
-    'soldier_ship' : 'passed',
-    'skills' : 'test SKILLS',
-    'job_nature' : 'FullTime',
-    'salary' : 12000,
-    }
-
     def test_Advertisement_Model(self):
         Ad = models.Advertisement.objects.all().first()._meta
 
         self.assertEqual(Ad.get_field('title').max_length , 300)
         self.assertEqual(Ad.get_field('location').max_length , 100)
-        self.assertEqual(Ad.get_field('soldier_ship').max_length , 25)
+        self.assertEqual(Ad.get_field('soldier_ship').max_length , 100)
         self.assertEqual(Ad.get_field('job_nature').max_length , 30)
         self.assertEqual(Ad.get_field('location').choices , states_iran)
         self.assertEqual(Ad.get_field('category').default , '')

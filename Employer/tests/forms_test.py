@@ -51,7 +51,7 @@ class TestEmployerForms(TestCase):
     'title' : 'test 5 char title',
     'location' : 'Tehran',
     'category' : categories.objects.all().first(),
-    'company' : Company.objects.all().first() ,
+    # 'company' : Company.objects.all().first() ,
     'text' : char_30 ,
     'soldier_ship' : 'passed',
     'skills' : '1/2/3',
@@ -77,19 +77,21 @@ class TestEmployerForms(TestCase):
     'name' : 'test' ,
     'address' : 'test street' ,
     'underlie' : 'test text for underlie' ,
-    'manager' : Manager.objects.all().first(),
     }
 
     def setUp(self):
         self.user = User.objects.create_user('amin@gmail.com' ,'amin@gmail.com' ,'aminamin')
+        self.user2 = User.objects.create_user('temp@gmail.com' ,'' ,'aminamin')
         manager1=Manager.objects.create(name = self.valid_manager['name'] , family = self.valid_manager['family'],
         email = self.unvalid_manager['email'] , phone = self.valid_manager['phone']
         )
-        manager2=Manager.objects.create(name = self.valid_manager['name'] , family = self.valid_manager['family'],
+        manager1=Manager.objects.create(name = self.valid_manager['name'] , family = self.valid_manager['family'],
         email = self.valid_manager['email'] , phone = self.unvalid_manager['phone']
         )
-        company1 = Company.objects.create(name = 'test' , address = 'test street' , underlie = 'test' , manager = manager1 , valid = True)
+        company1 = Company.objects.create(name = 'test' , address = 'test street' , underlie = 'test' , manager = Manager.objects.get(email = self.user.username) , valid = True)
+        company2 = Company.objects.create(name = 'test2' , address = 'test street' , underlie = 'test' , manager = Manager.objects.get(email = self.user.username) , valid = True)
         category1 = categories.objects.create(name = 'category1')
+        
 
     def test_edit_info_empty_form(self):
         form = EditManagerInfoForm(data = {})
@@ -153,9 +155,10 @@ class TestEmployerForms(TestCase):
         self.assertEqual(form.errors['skills'] , ['برای شفاف بودن آگهی ، لطفا حداقل 3 مهارت اضافه کنید'])
 
     def test_valid_new_ad(self):
-        form = NewAdvertisementForm(data = self.valid_ad , user = self.user)
-        created = form.save()
+        form = NewAdvertisementForm(user = self.user,data = self.valid_ad|{'company':Company.objects.all().first()}|{'category' : categories.objects.all().first()})
+        print(form.errors)
         self.assertTrue(form.is_valid())
+        created = form.save() 
         self.assertIsInstance(created , Advertisement)
 
     def test_EditAdInfoForm_empty_fields(self):
@@ -173,7 +176,7 @@ class TestEmployerForms(TestCase):
         self.assertEqual(form.errors['title'] , ['لطفا عنوان بهتری برای آگهی ایجادکنید (عنوان بسیار کوتاه است)'])
 
     def test_valid_EditAdInfoForm(self):
-        form = EditAdInfoForm(initial = self.valid_ad , data = self.valid_ad)
+        form = EditAdInfoForm(initial = self.valid_ad , data = self.valid_ad|{'category':categories.objects.all().first()})
         self.assertTrue(form.is_valid())
 
 #----------------------New Company Form-----------------------------
@@ -186,8 +189,8 @@ class TestEmployerForms(TestCase):
 
     def test_NewCompanyForm(self):
         form = NewCompanyForm(data = self.valid_company)
-        created = form.save()
         self.assertTrue(form.is_valid())
+        created = form.save()
         self.assertIsInstance(created , Company)
 
 #------------------ Hire Form -----------------
