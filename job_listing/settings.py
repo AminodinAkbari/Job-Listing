@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     #pip
     'rest_framework',
     'jalali_date',
+    'ckeditor',
     #StartApp
     'Employer',
     'Controllers',
@@ -43,7 +44,8 @@ INSTALLED_APPS = [
     'Employee',
     'Home',
     'Rest_API',
-    'Site_settings'
+    'Site_settings',
+    'Blog',
 ]
 
 REST_FRAMEWORK = {
