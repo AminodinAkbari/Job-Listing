@@ -86,5 +86,9 @@ class Search(ListView):
 
 
 #handeling error pages
-def error_404_view(request, exception):
-	return render(request , 'Home/404.html' , {'title' : 'صفحه مورد نظر یافت نشد'})
+import django
+
+def custom_page_not_found(request):
+    return django.views.defaults.page_not_found(request, None)
+# def error_404_view(request, exception):
+# 	return render(request , 'Home/404.html' , {'title' : 'صفحه مورد نظر یافت نشد'})
