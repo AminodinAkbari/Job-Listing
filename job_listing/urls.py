@@ -18,8 +18,6 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-
-from Controllers.views import custom_page_not_found
 router = routers.DefaultRouter()
 # router.register(r'users', views.UserViewSet)
 # router.register(r'groups', views.GroupViewSet)
@@ -34,8 +32,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/', include('Rest_API.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
-    path("404/",custom_page_not_found),
 
 ]
 if settings.DEBUG:
