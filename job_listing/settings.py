@@ -18,7 +18,7 @@ SECRET_KEY ='django-insecure-$z$^vsn^8sfvub6b!4i5pv4b=5$(jei%_h*w3@r!69p+h)pu(k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config('DEBUG')
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 ALLOWED_HOSTS = ['*']
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'jalali_date',
     'ckeditor',
+    'cloudinary_storage',
+    'cloudinary',
     #StartApp
     'Employer',
     'Controllers',
@@ -145,6 +147,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dr0zyxbwj',
+    'API_KEY': '199387612553567',
+    'API_SECRET': 'JIDv0CTJgauqID-_oVt039Y6Qxk'
+}
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -164,12 +173,11 @@ USE_TZ = True
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STATICFILES_DIRS = [BASE_DIR/'UI-template']
-# MEDIA_ROOT =BASE_DIR / 'staticfiles'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_ROOT =BASE_DIR / 'uploads'
 MEDIA_URL = 'uploads/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
