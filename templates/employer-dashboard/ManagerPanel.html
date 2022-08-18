@@ -1,0 +1,175 @@
+{% extends 'employer-dashboard/dashboard-base.html' %}
+{% block dashboard %}
+{% load jalali_tags %}
+    <!-- Start Company -->
+        <div class="container pt-4 px-4">
+            <div class="row g-4">
+
+                            <div class="col-md-3">
+                                <div class="col-sm-6 col-xl-12">
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                        <i class="fas fa-city fa-3x text-primary"></i>
+                                        <div class="ms-3">
+                                            <p class="mb-2">همه شرکت ها</p>
+                                            <h6 class="mb-0">{{companies|length}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-sm-6 col-xl-12">
+                                    <div class="bg-success rounded d-flex align-items-center justify-content-between p-4">
+                                        <i class="fas fa-check fa-3x text-white"></i>
+                                        <div class="ms-3">
+                                            <p class="mb-2 text-white">شرکت های تأیید شده</p>
+                                            <h6 class="mb-0 text-white">{{valid_companies|length}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-sm-6 col-xl-12">
+                                    <div class="bg-warning rounded d-flex align-items-center justify-content-between p-4">
+                                        <i class="fas fa-spinner fa-3x text-white"></i>
+                                        <div class="ms-3">
+                                            <p class="mb-2 text-white">شرکت های در صف تأیید</p>
+                                            <h6 class="mb-0 text-white">{{company.company.all|length|add:valid_companies.objects.all|length}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+        </div>
+        <div class="container pt-4 px-4">
+                        <div class="row g-4">
+                            <div class="col-sm-12 col-xl-12">
+                                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                    
+                                    <div class="col-sm-12 col-xl-12">
+                                        <div class="bg-light rounded h-100 p-4">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">نام</th>
+                                                        <th scope="col">تأیید شده</th>
+                                                        <th scope="col">ایمیل مدیر</th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in companies %}
+                                                    <tr>
+                                                        <th scope="row">{{item.id}}</th>
+                                                        <td>{{item.name}}</td>
+                                                        <td>
+                                                        {% if item.valid %}
+                                                        <i class="fas fa-check text-success"></i>
+                                                        {% else %}
+                                                        <i class="fas fa-times text-danger"></i>
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>{{item.manager.email}}</td>
+                                                        <td>
+                                                            <a class="btn btn-sm btn-light" href="{%url 'EditCompanyView' pk=item.id%}">
+                                                                ویرایش
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+        </div>
+    <!-- End Company -->
+
+ <!-- Start Ads -->
+<div class="container pt-4 px-4 mt-5">
+    <div class="row g-4">
+
+                    <div class="col-md-3">
+                        <div class="col-sm-6 col-xl-12">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <i class="fas fa-business-time fa-3x text-primary"></i>
+                                <div class="ms-3">
+                                    <p class="mb-2">آگهی ها</p>
+                                    <h6 class="mb-0">{{ads|length}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+</div>
+
+<div class="container pt-4 px-4">
+    <div class="row g-4">
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            
+                            <div class="col-sm-12 col-xl-12">
+                                <div class="bg-light rounded h-100 p-4">
+                                    <table class="table table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">عنوان</th>
+                                                <th scope="col">استان</th>
+                                                <th scope="col">نام شرکت</th>
+                                                <th scope="col">تاریخ انقضا</th>
+                                                <th scope="col">حقوق درج شده</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in ads %}
+                                                    {% if item.expired_in > now %}
+                                                    <tr>
+                                                    {% else %}
+                                                    <tr class="bg-danger text-white">
+                                                    {% endif %}
+                                                        <th scope="row">{{item.id}}</th>
+                                                        <td>{{item.title}}</td>
+                                                        <td>
+                                                            {{item.get_location_display}}
+                                                        </td>
+                                                        <td>{{item.company.name}}</td>
+                                                        <td>
+                                                            {% if item.expired_in > now %}
+                                                            {{item.expired_in|to_jalali}}
+                                                            {% else %}
+                                                            <span class="text-white">{{item.expired_in|to_jalali}}
+                                                            </span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{item.salary}}</td>
+                                                        <td>
+                                                            {% if item.expired_in > now %}
+                                                            <a class="btn btn-sm btn-light" href="{%url 'EditCompanyView' pk=item.id%}">
+                                                                ویرایش
+                                                            </a>
+                                                            {% else %}
+                                                            <span class="text-white">منقضی شده</span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>           
+    </div>
+</div>
+<!-- End Ads -->
+{% endblock %}
