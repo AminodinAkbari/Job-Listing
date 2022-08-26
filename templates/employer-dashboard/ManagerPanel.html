@@ -35,7 +35,7 @@
                                         <i class="fas fa-spinner fa-3x text-white"></i>
                                         <div class="ms-3">
                                             <p class="mb-2 text-white">شرکت های در صف تأیید</p>
-                                            <h6 class="mb-0 text-white">{{company.company.all|length|add:valid_companies.objects.all|length}}</h6>
+                                            <h6 class="mb-0 text-white">{{invalid_companies}}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +101,9 @@
                                 <i class="fas fa-business-time fa-3x text-primary"></i>
                                 <div class="ms-3">
                                     <p class="mb-2">آگهی ها</p>
+                                    {% if ads is not None %}
                                     <h6 class="mb-0">{{ads|length}}</h6>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -168,7 +170,15 @@
                             </div>
                             
                         </div>
-                    </div>           
+                    </div>    
+                    <p dir="ltr">   
+                    {% load template-filters %}
+                    {% load chart %}
+                    {%Chart%}
+                    <hr>
+                    </p> 
+                    
+
     </div>
 </div>
 <!-- End Ads -->
