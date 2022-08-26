@@ -41,16 +41,16 @@ class BaseTest(TestCase):
         self.client.logout()
         """Try Access Another Panel (username != Manager.email)"""
         self.client.login(username = 'user2@gmail.com' , password = 'PaSs0wrd')
-        false_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':Manager.objects.get(id = 1).id}))
+        false_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':1}))
         self.assertEqual(false_response.status_code , 302)
         self.assertURLEqual(reverse('Home') , '/')
         self.client.logout()
 
         """Correct Manager Try Access Own Panel"""
         self.client.login(username = 'user1@gmail.com' , password = 'PaSs0wrd')
-        True_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':Manager.objects.get(id = 1).id}))
+        True_response = self.client.get(reverse('ManagerPanel',kwargs = {'pk':1}))
         self.assertEqual(True_response.status_code , 200)
-        self.assertTemplateUsed('Employer/ManagerPanel.html')
+        self.assertTemplateUsed('employer-dashboard/ManagerPanel.html')
         self.assertURLEqual(reverse('ManagerPanel' , kwargs = {'pk':Manager.objects.all().first().id}) , '/manager_panel/1')
         # self.client.logout()
 

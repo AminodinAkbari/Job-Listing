@@ -103,6 +103,5 @@ class Employer_ModelsTest(TestCase):
         contact = self.valid_hire['contact'] , ad = self.valid_hire['ad'])
         hire = models.Hire.objects.all().first()._meta
         self.assertEqual(hire.get_field('contact').max_length , 200)
-        self.assertEqual(hire.get_field('created_at').default , timezone.now)
         self.assertEqual(hire.get_field('status').max_length , 100)
         self.assertEqual(hire.get_field('status').choices , models.hire_status)

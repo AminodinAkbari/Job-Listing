@@ -15,7 +15,7 @@ from django.views.generic.base import View , TemplateView
 from .models import  Advertisement , Company , Manager , Applicant , Hire
 from Employee.models import EmployeeModel
 
-from Controllers.models import passGenerator
+from Controllers.models import passGenerator , states_iran
 
 
 from .forms import (
@@ -25,9 +25,12 @@ EditAdInfoForm,
 EditCompanyForm,
 )
 
+from django.utils import timezone
+now = timezone.now()
+
 class ManagerPanel(DetailView):
     model = Manager
-    template_name = "Employer/ManagerPanel.html"
+    template_name = "employer-dashboard/ManagerPanel.html"
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -37,19 +40,29 @@ class ManagerPanel(DetailView):
 
     def get_context_data(self,*args , **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            manager = Manager.objects.get(email = self.request.user.username)
-            company = Company.objects.filter(manager = manager.id)
-        except:
-            manager = None
-            company = None
-
+        manager = Manager.objects.filter(email = self.request.user.username).first()
+        company = Company.objects.filter(manager = manager.id)
+        c_valids = company.filter(valid=True)
+        c_invalids = len(company) - len(c_valids)
         applicants = Applicant.objects.filter(ad__company__manager__email = self.request.user.username)
+        
+        employees = EmployeeModel.objects.all()
+        
+        if company:
+            ads= Advertisement.objects.none()
+            for i in company:
+                ads = ads|i.company.all()
+            context['ads'] = ads.order_by('id')
 
+
+        context['states_iran'] = states_iran
         context['object'] =  manager
         context['companies'] = company
+        context['valid_companies'] = c_valids
+        context['invalid_companies'] = c_invalids
         context['applicants'] = applicants
         context['title'] = 'پنل مدیریت'
+        context['now'] = now
         return context
 
 class EditMangerInfo(UpdateView):

@@ -25,7 +25,7 @@ def upload_image_path(instance, filename):
 class Manager(models.Model):
 	name 		= models.CharField(max_length = 100 , verbose_name = 'نام')
 	family  	= models.CharField(max_length = 150 , verbose_name = 'نام خانوادگی')
-	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_image_path)
+	profile_pic = models.ImageField(null = True,blank = True,default = 'static/images/company-2.jpg' ,upload_to = upload_image_path)
 	email 		= models.EmailField(verbose_name = 'ایمیل')
 	phone 		= models.CharField(max_length = 11 , verbose_name = 'شماره تلفن')
 	About 		= models.TextField(verbose_name = 'درباره شما ' , default='متن معرفی کارفرما')
