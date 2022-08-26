@@ -58,13 +58,13 @@ def search_employee(request):
 	location = request.GET.get('location')
 	soldier_service = request.GET.get('soldier_service')
 	if is_valid_queryparam(skill):
-		obj = EmployeeModel.objects.filter(skills__icontains = skill)
+		obj = obj.filter(skills__icontains = skill)
 	if is_valid_queryparam(location):
-		obj = EmployeeModel.objects.filter(state__iexact = location)
+		obj = obj.filter(state__iexact = location)
 	if is_valid_queryparam(soldier_service):
-		obj = EmployeeModel.objects.filter(soldier_ship__icontains = soldier_service)
+		obj = obj.filter(soldier_ship__icontains = soldier_service)
 	if is_valid_queryparam(location) and is_valid_queryparam(skill):
-		obj = EmployeeModel.objects.filter(state__iexact = location , skills__icontains = skill)
+		obj = obj.filter(state__iexact = location , skills__icontains = skill)
 	return obj
 
 class Search(ListView):
