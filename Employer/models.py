@@ -100,10 +100,10 @@ class Hire(models.Model):
     ad   = models.ForeignKey(Advertisement ,null=True , on_delete = models.CASCADE , verbose_name = 'آگهی')
     status = models.CharField(choices = hire_status , default = 'waiting' , verbose_name = 'وضعیت' , max_length = 100)
 
-# class AdminMessage(models.Model):
-# 	user = models.ManyToManyField(Manager , verbose_name = 'مدیر مورد نظر')
-# 	title = models.CharField(max_length = 120 , verbose_name = 'موضوع')
-# 	message  = models.TextField(verbose_name = 'متن پیام')
-# 	created_at = models.DateTimeField(auto_now_add = True)
-# 	enable = models.BooleanField(default=True , verbose_name = 'توسط مدیر دیده شود')
-# 	new = models.BooleanField(default=True)
+class AdminMessage(models.Model):
+	user = models.ManyToManyField(Manager , verbose_name = 'مدیر مورد نظر')
+	title = models.CharField(max_length = 120 , verbose_name = 'موضوع')
+	message  = models.TextField(verbose_name = 'متن پیام')
+	created_at = models.DateTimeField(auto_now_add = True)
+	enable = models.BooleanField(default=True , verbose_name = 'توسط مدیر دیده شود')
+	new = models.BooleanField(default=True)
