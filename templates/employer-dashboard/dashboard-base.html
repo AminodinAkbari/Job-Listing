@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
 {%load static%}
+{% load jalali_tags %}
 <head>
     <meta charset="utf-8">
     <title>پنل مدیریت</title>
@@ -43,51 +44,43 @@
         <!-- Content Start -->
         <div class="content open">
             <!-- Navbar Start -->
-            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0" dir="ltr">
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0 pt-2" dir="ltr">
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <a href="" class="nav-link dropdown-toggle position-relative" data-bs-toggle="dropdown">
                             <i class="fa fa-envelope me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Message</span>
+                            <span class="d-none d-lg-inline-flex">پیام ها</span>
+                            {% if new_messages|length > 0 %}
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{new_messages|length}}
+                              </span>
+                            {% endif %}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
+
+                            {% for message in messages %}
+                            <a href="{% url 'MessageDetail' pk=message.id %}" class="dropdown-item mt-3 mb-3 p-5 position-relative">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src='{% static "dashboard/img/user.jpg" %}' alt="" style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle" src='{% static "images/bg_1.jpg" %}' alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
+                                        <h6 class="fw-normal mb-0">{{message.title}}</h6>
+                                        {% if message.new %}
+                                        <span class="badge bg-primary">جدید</span> |
+                                        {% endif %}
+                                        <small>از طرف : مدیر</small>
+                                        <br>
+                                        <small>{{message.created_at|to_jalali}}</small>
                                     </div>
                                 </div>
                             </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src='{% static "dashboard/img/user.jpg" %}' alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src='{% static "dashboard/img/user.jpg" %}' alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all message</a>
+                            {%endfor%}
+                            <!-- <a href="#" class="dropdown-item text-center">See all message</a> -->
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
+                    <!--<div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-bell me-lg-2"></i>
                             <span class="d-none d-lg-inline-flex">Notificatin</span>
@@ -110,15 +103,19 @@
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item text-center">See all notifications</a>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src='{{object.profile_pic.url}}' alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src='{% if object.profile_pic %}{{object.profile_pic.url}}{% endif %}' alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">{{object.name}} {{object.family}}</span>
                         </a>
                         <div dir="rtl" class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <!-- <a href="#" class="dropdown-item">My Profile</a> -->
-                            <a href="#" class="dropdown-item">تنظیمات حساب کاربری</a>
+                            <a href="{% url 'EditManagerInfo' pk=object.id %}" class="dropdown-item">تنظیمات حساب کاربری</a>
+                            <li><hr class="dropdown-divider"></li>
+                            <a href="{% url 'NewAd' %}" class="dropdown-item">آگهی جدید</a>
+                            <a href="#" class="dropdown-item">افزودن شرکت جدید</a>
+                            <li><hr class="dropdown-divider"></li>
                             <a href="#" class="dropdown-item">خروج</a>
                         </div>
                     </div>
@@ -136,17 +133,13 @@
             {% endblock %}
             
             <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid text-center">
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                        </br>
-                        Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                        </div>
+                        <div class="col-md-3"><a class="btn btn-sm text-primary" href="{% url 'Home' %}">خانه</a></div>
+                        <div class="col-md-3"><a class="btn btn-sm text-primary" href="{% url 'Search' %}">همه آگهی ها</a></div>
+                        <div class="col-md-3"><a class="btn btn-sm text-primary" href="{% url 'ALLCompanies' %}">همه شرکت ها</a></div>
+                        <div class="col-md-3"><a class="btn btn-sm text-primary" href="{% url 'BlogHomePage' %}">مقالات</a></div>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@ class Manager(models.Model):
 	About 		= models.TextField(verbose_name = 'درباره شما ' , default='متن معرفی کارفرما')
 
 	def __str__(self):
-		return self.name
+		return self.email
 
 def upload_logo_path(instance , filename):
     name, ext = get_filename_ext(filename)
@@ -99,3 +99,11 @@ class Hire(models.Model):
     contact = models.CharField(verbose_name = 'راه ارتباطی' , max_length = 200)
     ad   = models.ForeignKey(Advertisement ,null=True , on_delete = models.CASCADE , verbose_name = 'آگهی')
     status = models.CharField(choices = hire_status , default = 'waiting' , verbose_name = 'وضعیت' , max_length = 100)
+
+class AdminMessage(models.Model):
+	user = models.ManyToManyField(Manager , verbose_name = 'مدیر مورد نظر')
+	title = models.CharField(max_length = 120 , verbose_name = 'موضوع')
+	message  = models.TextField(verbose_name = 'متن پیام')
+	created_at = models.DateTimeField(auto_now_add = True)
+	enable = models.BooleanField(default=True , verbose_name = 'توسط مدیر دیده شود')
+	new = models.BooleanField(default=True)

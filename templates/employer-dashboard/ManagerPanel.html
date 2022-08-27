@@ -4,7 +4,6 @@
     <!-- Start Company -->
         <div class="container pt-4 px-4">
             <div class="row g-4">
-
                             <div class="col-md-3">
                                 <div class="col-sm-6 col-xl-12">
                                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
@@ -19,11 +18,11 @@
 
                             <div class="col-md-3">
                                 <div class="col-sm-6 col-xl-12">
-                                    <div class="bg-success rounded d-flex align-items-center justify-content-between p-4">
-                                        <i class="fas fa-check fa-3x text-white"></i>
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                        <i class="fas fa-check fa-3x text-primary"></i>
                                         <div class="ms-3">
-                                            <p class="mb-2 text-white">شرکت های تأیید شده</p>
-                                            <h6 class="mb-0 text-white">{{valid_companies|length}}</h6>
+                                            <p class="mb-2">شرکت های تأیید شده</p>
+                                            <h6 class="mb-0">{{valid_companies|length}}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -31,11 +30,11 @@
 
                             <div class="col-md-3">
                                 <div class="col-sm-6 col-xl-12">
-                                    <div class="bg-warning rounded d-flex align-items-center justify-content-between p-4">
-                                        <i class="fas fa-spinner fa-3x text-white"></i>
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                        <i class="fas fa-spinner fa-3x text-primary"></i>
                                         <div class="ms-3">
-                                            <p class="mb-2 text-white">شرکت های در صف تأیید</p>
-                                            <h6 class="mb-0 text-white">{{invalid_companies}}</h6>
+                                            <p class="mb-2">شرکت های در صف تأیید</p>
+                                            <h6 class="mb-0">{{invalid_companies}}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -154,15 +153,26 @@
                                                         <td>{{item.salary}}</td>
                                                         <td>
                                                             {% if item.expired_in > now %}
-                                                            <a class="btn btn-sm btn-light" href="{%url 'EditCompanyView' pk=item.id%}">
+                                                            <a class="btn btn-sm btn-light text-primary position-relative" href="{% url 'AdvertisementApplicants' pk=item.id %}">
+                                                            مشاهده رزومه های دریافتی این آگهی
+                                                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                                {{item.applicants.all|length}}
+                                                              </span>
+                                                            </a>
+                                                            <a class="btn btn-sm btn-light" href="{%url 'EditAdView' pk=item.id%}">
                                                                 ویرایش
                                                             </a>
                                                             {% else %}
-                                                            <span class="text-white">منقضی شده</span>
+                                                            <a class="btn btn-sm btn-danger position-relative" href="{% url 'AdvertisementApplicants' pk=item.id %}">
+                                                            مشاهده رزومه های دریافتی این آگهی
+                                                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-light text-dark p-2">
+                                                                {{item.applicants.all|length}}
+                                                              </span>
+                                                            </a>
+                                                            <span class="">منقضی شده</span>
                                                             {% endif %}
                                                         </td>
                                                     </tr>
-                                                
                                             {% endfor %}
                                         </tbody>
                                     </table>
@@ -170,15 +180,16 @@
                             </div>
                             
                         </div>
-                    </div>    
+                    </div>  
+
+ 
+
                     <p dir="ltr">   
                     {% load template-filters %}
                     {% load chart %}
                     {%Chart%}
                     <hr>
                     </p> 
-                    
-
     </div>
 </div>
 <!-- End Ads -->

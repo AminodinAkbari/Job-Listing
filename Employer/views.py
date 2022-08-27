@@ -8,11 +8,12 @@ from .forms import EditManagerInfoForm,UpdatePasswordManagersForm,EditEmailEmplo
 
 from django.contrib import messages
 
+from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView , CreateView , FormView
 from django.views.generic.base import View , TemplateView
 
-from .models import  Advertisement , Company , Manager , Applicant , Hire
+from .models import  Advertisement , Company , Manager , Applicant , Hire , AdminMessage
 from Employee.models import EmployeeModel
 
 from Controllers.models import passGenerator , states_iran
@@ -47,6 +48,8 @@ class ManagerPanel(DetailView):
         applicants = Applicant.objects.filter(ad__company__manager__email = self.request.user.username)
         
         employees = EmployeeModel.objects.all()
+        messages = AdminMessage.objects.filter(enable = True).order_by('created_at')
+        new_messages = AdminMessage.objects.filter(enable = True , new=True)
         
         if company:
             ads= Advertisement.objects.none()
@@ -54,16 +57,38 @@ class ManagerPanel(DetailView):
                 ads = ads|i.company.all()
             context['ads'] = ads.order_by('id')
 
-
         context['states_iran'] = states_iran
         context['object'] =  manager
         context['companies'] = company
         context['valid_companies'] = c_valids
         context['invalid_companies'] = c_invalids
-        context['applicants'] = applicants
+        context['apps'] = applicants
+        context['messages'] = messages
+        context['new_messages'] = new_messages
         context['title'] = 'پنل مدیریت'
         context['now'] = now
         return context
+
+class MessageDetail(DetailView):
+    model = AdminMessage
+    template_name = 'Employer/MessageDetail.html'
+
+    def dispatch(self , *args , **kwargs):
+        obj=self.get_object()
+        if obj.new == True:
+            obj.new = False
+            obj.save()
+        return super().dispatch(*args , **kwargs)
+
+class ADApplicants(ListView):
+    model = Applicant
+    template_name = 'Employer/ADApplicants.html'
+
+    def get_context_data(self , *args , **kwargs):
+        context_list = super().get_context_data(*args , **kwargs)
+        ads = get_object_or_404(Advertisement , id = self.kwargs['pk'])
+        context_list['ads'] = ads
+        return context_list
 
 class EditMangerInfo(UpdateView):
     form_class = EditManagerInfoForm
@@ -162,6 +187,13 @@ class NewAd(FormView):
         initial = super().get_form_kwargs()
         initial['user'] = self.request.user.username
         return initial
+
+    def get_context_data(self , *args , **kwargs):
+        context = super().get_context_data(*args , **kwargs)
+        context['title'] = 'آگهی جدید'
+        c = Company.objects.filter(manager__email = self.request.user.username , valid=True)
+        context['companies'] = c
+        return context
 
     def form_valid(self , form):
         form.save()

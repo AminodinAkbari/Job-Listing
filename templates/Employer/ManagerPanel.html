@@ -81,9 +81,9 @@
 									  {% for i in item.user.employee.all %}
 									  <div class="card-footer">
 									  	<div class="row text-center">
-                        {% if i.profile_pic %}
+                        					{% if i.profile_pic %}
 									  			<img class="col-md-1" src="{{i.profile_pic.url}}" width="10%">
-                        {% endif %}
+                        					{% endif %}
 									  	<div class="row">
 									  		<div class="col-md-3"><h5 class="text-success">{{item.user.get_full_name}}</h5></div>
 									  		<div class="col-md-9 alert alert-success">

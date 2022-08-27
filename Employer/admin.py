@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Manager , Company , Advertisement,Applicant , Hire
+from Employer import models
 
 from jalali_date import datetime2jalali, date2jalali
 from jalali_date.admin import ModelAdminJalaliMixin
@@ -24,8 +24,9 @@ class ApplicantAdmin(admin.ModelAdmin):
 class HireAdmin(admin.ModelAdmin):
 	list_display = ['user' , 'ad' , 'status']
 
-admin.site.register(Manager,ManagerAdmin)
-admin.site.register(Company,CompanyAdmin)
-admin.site.register(Advertisement,AdAdmin)
-admin.site.register(Applicant,ApplicantAdmin)
-admin.site.register(Hire,HireAdmin)
+admin.site.register(models.Manager,ManagerAdmin)
+admin.site.register(models.Company,CompanyAdmin)
+admin.site.register(models.Advertisement,AdAdmin)
+admin.site.register(models.Applicant,ApplicantAdmin)
+admin.site.register(models.Hire,HireAdmin)
+admin.site.register(models.AdminMessage)
