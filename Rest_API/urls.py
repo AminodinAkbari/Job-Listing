@@ -12,7 +12,7 @@ urlpatterns = [
 	path('manager/<int:pk>' , Employer_API.EmployerDetail.as_view() , name = 'EmployerDetail'),
 	#--------------Company--------------
 	path('companies/' , Employer_API.AllCompanies.as_view() , name = 'AllCompanies'),
-	path('companies/<int:pk>' , Employer_API.CompaniesDetail.as_view() , name = 'AllCompanies'),
+	path('companies/<int:pk>' , Employer_API.CompaniesDetail.as_view() , name = 'Company'),
 	#--------------Advertisement--------------
 	path('all-ads' , Employer_API.ALLAds.as_view() , name = 'ALLAds'),
 	path('ad_detail/<int:pk>' , Employer_API.ADDetail.as_view() , name = 'ADDetail'),

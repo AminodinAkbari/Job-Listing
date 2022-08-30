@@ -1,6 +1,9 @@
 from django import template
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.contrib import messages
 from Controllers.forms import SearchForm
-from Employer.models import Manager
+from Employer.models import Manager , Company
 from Employee.models import EmployeeModel
 from Controllers.models import categories
 from Controllers.forms import SearchForm
@@ -67,3 +70,17 @@ def Search(request):
 	context['SearchForm'] = SearchForm
 	context['request'] = request
 	return context
+
+@register.inclusion_tag('Employer/components/ValidCompaniescomponnent.html')
+def valid_companies(request):
+	stuff = {}
+	if request.user.is_authenticated:
+		manager = get_object_or_404(Manager , email = request.user.username)
+		companies = Company.objects.filter(manager__email = manager.email)
+		if companies :
+			stuff['companies'] = companies
+	return stuff
+
+# @inclusion_tag('Home/components/JSON_btn.html')
+# def JSON_BTN(url , primery_key):
+# 	return reverse('url', kwargs ={'pk' : primery_key})

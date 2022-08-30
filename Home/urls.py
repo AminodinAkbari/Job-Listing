@@ -9,9 +9,11 @@ ALLEmployees,
 EmployeeDetail,
 ALLCompanies,
 CompanyView,
-
+JSON_BTN,
 )
 urlpatterns = [
+    path('take_json/<name>/<int:pk>', JSON_BTN , name='JSON_Single'),
+    # path('take_json/<name>', JSON_BTN , name='JSON_List'),
     path('admin/', admin.site.urls),
     path('', Index , name = 'Home'),
     path('all-employees', ALLEmployees.as_view() , name = 'AllEmployees'),

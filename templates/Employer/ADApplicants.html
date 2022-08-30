@@ -1,4 +1,9 @@
+{% extends 'BASE_HTMLs/Base.html' %}
+{% block common_content %}
+
 {{ads.apllicants.all}}
 {% for i in ads.applicants.all %}
 {{i.user.first_name}}
 {% endfor %}
+
+{% endblock %}

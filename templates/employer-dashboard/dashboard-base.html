@@ -49,6 +49,9 @@
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
                 <div class="navbar-nav align-items-center ms-auto">
+                    <a href="{% url 'Home' %}" class="nav-link position-relative ml-5">
+                        خانه
+                    </a>
                     <div class="nav-item dropdown">
                         <a href="" class="nav-link dropdown-toggle position-relative" data-bs-toggle="dropdown">
                             <i class="fa fa-envelope me-lg-2"></i>
@@ -62,7 +65,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
 
                             {% for message in messages %}
-                            <a href="{% url 'MessageDetail' pk=message.id %}" class="dropdown-item mt-3 mb-3 p-5 position-relative">
+                            <a href="{% url 'MessageDetail' pk=message.id %}" class="dropdown-item  position-relative" style="width : 260px">
                                 <div class="d-flex align-items-center">
                                     <img class="rounded-circle" src='{% static "images/bg_1.jpg" %}' alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
@@ -79,7 +82,10 @@
                             {%endfor%}
                             <!-- <a href="#" class="dropdown-item text-center">See all message</a> -->
                         </div>
+
+
                     </div>
+
                     <!--<div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-bell me-lg-2"></i>

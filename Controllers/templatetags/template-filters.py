@@ -8,9 +8,12 @@ def find_state(value , state):
 
 @register.filter()
 def find_value(arg , key):
-    print(arg)
     return arg.get(key)
 
 @register.filter()
 def last_item_in_list(list):
     pass
+
+# @register.filter()
+# def JSON_BTN(url , pk):
+#     return reverse('url', kwargs ={'pk' : pk})

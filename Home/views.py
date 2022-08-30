@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.views.generic import ListView , DetailView
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 
 from Controllers.utils import Advertisement_time_left
 from Controllers.models import categories ,job_nature , states_iran
@@ -155,3 +156,6 @@ class CompanyView(DetailView):
 			ads_time_left[f'{item.id}']=f'{time_left}'
 		context['ads_time_left'] = ads_time_left
 		return context
+
+def JSON_BTN(request ,name , pk):
+    return redirect(reverse(name, kwargs ={'pk' : pk}))

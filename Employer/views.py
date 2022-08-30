@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect , get_object_or_404
+import django
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -80,7 +81,7 @@ class MessageDetail(DetailView):
             obj.save()
         return super().dispatch(*args , **kwargs)
 
-class ADApplicants(ListView):
+class ADApplicants(DetailView):
     model = Applicant
     template_name = 'Employer/ADApplicants.html'
 
@@ -215,6 +216,11 @@ class NewCompany(FormView):
         messages.success(self.request , 'شرکت شما با موفقیت ثبت شد . حال باید مدیر وب سایت وجود خارجی این شرکت را تایید کند' , extra_tags = 'NewCompanyCreated')
         return super().form_valid(form)
 
+    def get_context_data(self , *args , **kwargs):
+        context = super().get_context_data(*args , **kwargs)
+        context['title'] = f'ثبت شرکت جدید'
+        return context
+
 
 def DeleteAd(request , pk ,**kwargs):
     manager = Manager.objects.filter(email = request.user.username).first()
@@ -255,7 +261,7 @@ def DeleteCompany(request , pk):
         company.delete()
     return HttpResponseRedirect(reverse_lazy('ManagerPanel' , kwargs={'pk': manager.id}))
 
-import django
+
 def determine_the_status(request , pk,adver_id):
     employee = get_object_or_404(EmployeeModel,id = pk)
     manager = get_object_or_404(Manager,email = request.user.username)
@@ -296,14 +302,18 @@ class NewHire(CreateView):
 
     def get_context_data(self , *args , **kwargs):
         context = super().get_context_data(*args , **kwargs)
-        context['item'] = get_object_or_404(EmployeeModel,id = self.kwargs['employee_id']).first()
+        context['item'] = get_object_or_404(EmployeeModel,id = self.kwargs['employee_id'])
         return context
 
     def form_valid(self , form):
-        employee = EmployeeModel.objects.get(id = self.kwargs['employee_id'])
-        check = Hire.objects.filter(user = employee.employee , ad = form.instance.ad).exists()
-        if check:
+        employee = get_object_or_404(EmployeeModel,id = self.kwargs['employee_id'])
+        check_already_hire = Hire.objects.filter(user = employee.employee , ad = form.instance.ad).exists()
+        check_already_is_applicant = Applicant.objects.filter(user_id = employee.employee.id , ad = form.instance.ad).exists()
+        if check_already_hire:
             messages.success(self.request , 'شما قبلا برای این کارجو درخواست فرستاده اید')
+            return redirect('/')
+        elif check_already_is_applicant :
+            messages.success(self.request , 'کارجو در حال حاضر برای این آگهی درخواست فرستاده است . لطفا پنل مدیریت خود را چک کنید')
             return redirect('/')
         else:
             form.instance.user = employee.employee
