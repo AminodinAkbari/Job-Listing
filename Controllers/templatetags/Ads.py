@@ -3,8 +3,7 @@ from django import template
 from Employer.models import Advertisement
 from django.utils import timezone
 from Employer.models import Manager
-from Employer.models import Applicant
-from Employee.models import Favorite
+from Employer.models import Applicant , Favorite
 
 now = timezone.now()
 

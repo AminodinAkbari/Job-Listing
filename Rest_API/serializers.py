@@ -15,7 +15,7 @@ class UserFullSerilizer(serializers.ModelSerializer):
 
 class FavoriteModelSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = EMP.Favorite
+		model = models.Favorite
 		fields = '__all__'
 
 class AllManagerFullSerializer(serializers.ModelSerializer):

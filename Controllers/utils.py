@@ -7,3 +7,8 @@ def Advertisement_time_left(param):
 	time = datetime.datetime.strptime(ad_date, '%Y-%m-%d %H:%M:%S').date()
 	time_left = (time-today).days
 	return time_left
+
+def caculate_age(param):
+	date = str(param)
+	time = datetime.datetime.strptime(date ,'%Y-%m-%d').date()
+	return (today-time).days//365

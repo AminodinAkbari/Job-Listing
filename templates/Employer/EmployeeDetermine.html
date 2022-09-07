@@ -101,8 +101,13 @@
 
 			<form method="POST" class="mt-5">
 				{% csrf_token %}
+				{% if applicant.status == 'accepted' or applicant.status == 'rejected' %}
+				<button class="btn btn-light">{{applicant.get_status_display}}</button>
+				<button class="btn btn-light" dir="rtl">در ساعت و تاریخ : {{applicant.determine_at|to_jalali}}</button>
+				{% else %}
 				<button class="btn btn-success btn-lg" name="accepted">تأیید کردن برای مصاحبه</button>
 				<button class="btn btn-danger btn-lg" name="rejected">رد کردن</button>
+				{% endif %}
 				<a href="{% url 'ManagerPanel' pk=manager.id %}" class="btn btn-light btn-lg">بازگشت</a>
 			</form>
 

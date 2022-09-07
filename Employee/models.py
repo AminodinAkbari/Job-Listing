@@ -11,8 +11,6 @@ sex_types,
 Languages,
 )
 
-from Employer.models import Advertisement
-
 from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
@@ -25,6 +23,7 @@ def upload_image_path(instance, filename):
     final_name = f"id-employee-{instance.employee.id}{ext}"
     return f"Employee-ProfilePics/{final_name}"
 
+from Controllers.utils import caculate_age
 class EmployeeModel(models.Model):
 	employee = models.ForeignKey(User , on_delete =models.CASCADE , related_name='employee' , blank=True , null = True)
 	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_image_path)
@@ -41,6 +40,5 @@ class EmployeeModel(models.Model):
 	work_experience = models.TextField(verbose_name = 'سوابق شغلی' , blank = True , null = True)
 	education = models.TextField(verbose_name = 'تحصیلات', blank=True , null = True)
 
-class Favorite(models.Model):
-	user = models.ForeignKey(User , on_delete = models.CASCADE)
-	ad 	 = models.ForeignKey(Advertisement , on_delete = models.CASCADE , related_name = 'favortes_ads')
+	def age(self):
+		return caculate_age(self.birth)

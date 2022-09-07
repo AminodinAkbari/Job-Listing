@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from Rest_API.permissions import  OwnerCanSee
 
 from Employee import models
+from Employer import models as EmployerModels
 from . import serializers
 
 from django.contrib.auth.models import User
@@ -49,10 +50,10 @@ class EditEmployee(views.APIView):
         return Response(status = status.HTTP_204_NO_CONTENT)
 
 class FavoriteListOnly(generics.ListAPIView):
-    queryset = models.Favorite.objects.all()
+    queryset = EmployerModels.Favorite.objects.all()
     serializer_class = serializers.FavoriteModelSerializer
 
 class FavoriteDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.FavoriteModelSerializer
-    queryset = models.Favorite.objects.all()
+    queryset = EmployerModels.Favorite.objects.all()
     permission_classes = ((OwnerCanSee,))

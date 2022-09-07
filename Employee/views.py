@@ -11,8 +11,8 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView , ListView
 
-from Employer.models import Manager , Applicant , Advertisement , Hire
-from .models import EmployeeModel , Favorite
+from Employer.models import Manager , Applicant , Advertisement , Hire , Favorite
+from .models import EmployeeModel
 from django.contrib.auth.models import User
 
 from django.contrib import messages
@@ -160,11 +160,12 @@ def AdSaved(request , ad):
 	return redirect(request.GET.get('next'))
 
 def ApplicantView(request , ad):
+	employee_obj = get_object_or_404(EmployeeModel , employee = request.user)
 	advertisement = get_object_or_404(Advertisement,id = ad)
 	try:
-		get_object_or_404(Applicant,user = request.user , ad = ad)
+		Applicant.objects.get(employee__employee = request.user , ad = ad)
 	except:
-		Applicant.objects.create(user = request.user , ad = advertisement)
+		Applicant.objects.create(employee = employee_obj , ad = advertisement)
 	return redirect('/')
 
 def canceling_applicant(request , pk):

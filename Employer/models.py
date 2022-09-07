@@ -10,6 +10,7 @@ from Controllers.models import soldiership_types , job_nature , categories, stat
 from Controllers.utils import Advertisement_time_left
 
 from django.contrib.auth.models import User
+from Employee.models import EmployeeModel
 
 # Create your models here.
 
@@ -75,12 +76,13 @@ applicant_status=(
 ('send' , 'در انتظار تأیین وضعیت'),
 ('seen' , 'توسط کارفرما مشاهده شد'),
 ('accepted' , 'تأیید برای مصاحبه'),
-('rejected' , 'رد')
+('rejected' , 'ردشده')
 )
 
 class Applicant(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    ad = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name="applicants")
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    employee = models.ForeignKey(EmployeeModel , on_delete = models.CASCADE,default=1)
+    ad = models.ForeignKey(Advertisement, on_delete=models.CASCADE,default=1,related_name="applicants")
     created_at = models.DateTimeField(default=django.utils.timezone.now , verbose_name = 'تاریخ ارسال درخواست')
     seen_at = models.DateTimeField(null=True , verbose_name = 'مشاهده شده توسط کارفرما')
     determine_at = models.DateTimeField(null=True , verbose_name = 'تأیین وضعیت در تاریخ')
@@ -107,3 +109,11 @@ class AdminMessage(models.Model):
 	created_at = models.DateTimeField(auto_now_add = True)
 	enable = models.BooleanField(default=True , verbose_name = 'توسط مدیر دیده شود')
 	new = models.BooleanField(default=True)
+
+
+
+# Note :
+"""This Module For Employees , Later Should Added In Duplicate App (Advertisemsnts Stuff App )"""
+class Favorite(models.Model):
+    user = models.ForeignKey(User , on_delete = models.CASCADE , blank=True , null=True)
+    ad 	 = models.ForeignKey(Advertisement , on_delete = models.CASCADE , related_name = 'favortes_ads')

@@ -22,6 +22,10 @@
 .font-size-12{font-size: 12px !important;}
 .font-size-13{font-size: 13px !important;font-weight: 400;line-height: 3;}
 .card img{height: 50%}
+.bt-2-blue{border-top: 2px solid #1f9eed;}
+.bt-2-red{border-top: 2px solid #ed1f41;}
+.bt-2-yellow{border-top: 2px solid #edca05;}
+.bt-2-green{border-top: 2px solid #05ed47;}
 /*---------------MINE----------------*/
 
 :root {

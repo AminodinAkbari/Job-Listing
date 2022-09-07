@@ -51,6 +51,8 @@ class ManagerPanel(DetailView):
         employees = EmployeeModel.objects.all()
         messages = AdminMessage.objects.filter(enable = True).order_by('created_at')
         new_messages = AdminMessage.objects.filter(enable = True , new=True)
+        # hires = Hire.objects.filter(user = self.request.user)
+        # context['hires'] =  hires
         
         if company:
             ads= Advertisement.objects.none()
@@ -82,14 +84,19 @@ class MessageDetail(DetailView):
         return super().dispatch(*args , **kwargs)
 
 class ADApplicants(DetailView):
-    model = Applicant
+    model = Advertisement
     template_name = 'Employer/ADApplicants.html'
 
     def get_context_data(self , *args , **kwargs):
-        context_list = super().get_context_data(*args , **kwargs)
-        ads = get_object_or_404(Advertisement , id = self.kwargs['pk'])
-        context_list['ads'] = ads
-        return context_list
+        context = super().get_context_data(*args , **kwargs)
+        obj = Applicant.objects.filter(ad = self.get_object().id)
+        context['send'] = obj.filter(status = "send")
+        context['seen'] = obj.filter(status = "seen")
+        context['accepted'] = obj.filter(status = "accepted")
+        context['rejected'] = obj.filter(status = "rejected")
+        context['title'] = self.get_object().title
+        return context
+
 
 class EditMangerInfo(UpdateView):
     form_class = EditManagerInfoForm
@@ -265,13 +272,16 @@ def DeleteCompany(request , pk):
 def determine_the_status(request , pk,adver_id):
     employee = get_object_or_404(EmployeeModel,id = pk)
     manager = get_object_or_404(Manager,email = request.user.username)
-    if employee and manager:
-        applicant = Applicant.objects.filter(ad__id = adver_id , user = employee.employee).first()
-        if applicant:
-            applicant.status = "seen"
-            if applicant.seen_at is None:
-                applicant.seen_at = django.utils.timezone.now()
-            applicant.save()
+    context = {}
+    applicant = Applicant.objects.filter(ad__id = adver_id , employee = employee).first()
+    context['applicant'] = applicant
+
+    if applicant and applicant.status == 'send':
+        applicant.status = "seen"
+        if applicant.seen_at is None:
+            applicant.seen_at = django.utils.timezone.now()
+        applicant.save()
+
     if request.method == 'POST' and 'accepted' in request.POST or 'rejected' in request.POST:
         if 'accepted' in request.POST:
             applicant.status = 'accepted'
@@ -283,11 +293,9 @@ def determine_the_status(request , pk,adver_id):
         applicant.save()
         return redirect('/')
         
-    context = {
-    'object' : employee ,
-    'manager':manager,
-    'title':'جزئیات رزومه ارسالی'
-    }
+    context['object']  = employee
+    context['manager'] = manager
+    context['title']   = 'جزئیات رزومه ارسالی'
     
     if employee.skills:
         context['employee_skills'] = employee.skills.split('/')
@@ -308,7 +316,7 @@ class NewHire(CreateView):
     def form_valid(self , form):
         employee = get_object_or_404(EmployeeModel,id = self.kwargs['employee_id'])
         check_already_hire = Hire.objects.filter(user = employee.employee , ad = form.instance.ad).exists()
-        check_already_is_applicant = Applicant.objects.filter(user_id = employee.employee.id , ad = form.instance.ad).exists()
+        check_already_is_applicant = Applicant.objects.filter(employee_id = employee.employee.id , ad = form.instance.ad).exists()
         if check_already_hire:
             messages.success(self.request , 'شما قبلا برای این کارجو درخواست فرستاده اید')
             return redirect('/')

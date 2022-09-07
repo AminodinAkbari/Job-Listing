@@ -1,9 +1,56 @@
 {% extends 'BASE_HTMLs/Base.html' %}
 {% block common_content %}
+{% load static %}
+<section class="ftco-section ftco-candidates ftco-candidates-2 bg-light">
+    	<div class="container text-right" dir="rtl">
 
-{{ads.apllicants.all}}
-{% for i in ads.applicants.all %}
-{{i.user.first_name}}
-{% endfor %}
+    		<h5 class="mt-5">جدید (مشاهده نشده ها) <strong>{{send|length}}</strong> : </h5>
+    		<div class="row bt-2-blue" dir="ltr">
+    		{% if send|length > 0 %}
+    		{% for item in send %}
+    		{% include "Employer/components/applicants-components.html" %}
+    		{% endfor %}
+    		{% else %}
+    		<div class="col-md-12 text-center p-5 alert-primary">رزومه جدیدی وجود ندارد</div>
+    		{% endif %}
+    		</div>
+
+				
+    		<h5 class="mt-5">در انتظار تأیین وضعیت <strong>{{seen|length}}</strong> :</h5>
+    		<div class="row bt-2-yellow" dir="ltr">
+    		{% if seen|length > 0 %}
+    		{% for item in seen %}
+    		{% include "Employer/components/applicants-components.html" %}
+    		{% endfor %}
+    		{% else %}
+    		<div class="col-md-12 text-center p-5 alert-warning">هنوز رزومه های جدید را مشاهده نکرده اید</div>
+    		{% endif %}
+    		</div>
+
+
+    		<h5 class="mt-5">رد شده ها <strong>{{rejected|length}}</strong> :</h5>
+    		<div class="row bt-2-red" dir="ltr">
+    		{% if rejected|length > 0 %}
+    		{% for item in rejected %}
+    		{% include "Employer/components/applicants-components.html" %}
+    		{% endfor %}
+    		{% else %}
+    		<div class="col-md-12 text-center p-5 alert-danger">رزومه رد شده وجود ندارد</div>
+    		{% endif %}
+    		</div>
+
+    		<h5 class="mt-5">تأیید شده ها <strong>{{accepted|length}}</strong> :</h5>
+    		<div class="row bt-2-green" dir="ltr">
+    		{% if accepted|length > 0 %}
+    		{% for item in accepted %}
+    		{% include "Employer/components/applicants-components.html" %}
+    		{% endfor %}
+    		{% else %}
+    		<div class="col-md-12 text-center p-5 alert-success">هنوز رزومه ای تأیید نشده است</div>
+    		{% endif %}
+    		</div>
+
+    	</div>
+</section>
 
 {% endblock %}

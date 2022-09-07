@@ -1,0 +1,15 @@
+<div class="col-md-6 mt-3">
+	<div class="team d-md-flex p-4 bg-white
+	{% if item.status == 'accepted' %}bt-2-green {%elif item.status == 'send'%} bt-2-blue {% elif item.status == 'seen' %} bt-2-yellow {% else %} bt-2-red {% endif %}">
+		<div class="img" style="background-image: url({{item.employee.profile_pic.url}});"></div>
+		    <div class="text pl-md-4 text-right">
+		        <span class="location mb-0">{{item.employee.get_employee_soldier_ship_display}}</span>
+		        	<h2>{{item.employee.employee.get_full_name}}</h2>
+			        <span class="position">{{item.employee.get_state_display}}</span>
+			        <p class="mb-2" dir="rtl">{{item.employee.about_me|truncatewords:10}}</p>
+			        <hr>
+			        <p class="">سن : {{item.employee.age}}</p>
+			        <p><a href="{% url 'DetermineTheStatus' pk=item.employee.id adver_id=object.id %}" class="btn btn-primary">رزومه</a></p>
+		        </div>
+		    </div>
+		</div>
