@@ -33,6 +33,6 @@ class Command(BaseCommand):
                 valid = True
                 )
 
-                self.stdout.write(self.style.SUCCESS(f'company {company.id} with name {company.name} created'))
+                self.stdout.write(self.style.SUCCESS(f'company {company.id} with name {company.name} created . Manager Is {company.manager.email}'))
         else:
             raise CommandError("You Should Have More Manager Model For Creating Companies")

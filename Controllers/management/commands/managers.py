@@ -15,7 +15,7 @@ def phone_number(arg):
     return make_phone_number
 
 class Command(BaseCommand):
-    help = ""
+    help = "With This Command You Can Make Random Managers , Any Count You Want !"
     def add_arguments(self , parser):
         parser.add_argument("make-some-managers" , type=str)
         parser.add_argument("Count" , type=int)

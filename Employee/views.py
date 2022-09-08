@@ -115,7 +115,7 @@ class EmployeeJobApply(ListView):
 	def get_context_data(self):
 		context = super().get_context_data()
 		context ['title'] = 'رزومه های ارسالی'
-		context['Applicants'] = Applicant.objects.filter(user = self.request.user)
+		context['Applicants'] = Applicant.objects.filter(employee__employee = self.request.user)
 		return context
 
 class EmployeeJobMarked(ListView):

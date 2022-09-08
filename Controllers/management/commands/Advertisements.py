@@ -17,6 +17,7 @@ skills = [
 ]
 
 class Command(BaseCommand):
+    help = "With This Command, Just Specify The Category ID and Then Count For Categories"
     def add_arguments(self , parser):
         parser.add_argument("category_id" , type=int)
         parser.add_argument("Count" , type=int)
@@ -39,7 +40,7 @@ class Command(BaseCommand):
                     skills_final += str(i) + '/'
                 skills_final = skills_final.rstrip(skills_final[-1])
 
-                Advertisement.objects.create(
+                creating=Advertisement.objects.create(
                 title = 'برنامه نویس ' + str(skills_choiced[0]),
                 location = states_iran[random.randint(1,9)][0],
                 category = category,
@@ -51,5 +52,8 @@ class Command(BaseCommand):
                 expired_in = today + timedelta(days=random.randint(20 , 50)),
                 salary = random.choice(salary_list)
                 )
+                self.stdout.write(self.style.SUCCESS('-------------------------------------- '))
+                self.stdout.write(self.style.SUCCESS(f'|ad {creating.id} successfuly created ! |'))
+                self.stdout.write(self.style.SUCCESS('-------------------------------------- '))
         else:
             raise CommandError("Company Models Less Than 2 !")
