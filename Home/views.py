@@ -88,7 +88,7 @@ class AdDetail(DetailView):
 		obj = self.get_object()
 
 		if self.request.user.is_authenticated:
-			applied_jobs = Applicant.objects.filter(user = self.request.user)
+			applied_jobs = Applicant.objects.filter(employee__employee = self.request.user)
 			str_list_for_applid = []
 			for ad in applied_jobs:
 				str_list_for_applid.append(ad.ad)
