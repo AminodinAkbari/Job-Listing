@@ -37,19 +37,19 @@ def search_filter(request):
 	if is_valid_queryparam(title):
 		obj = obj.filter(title__icontains = title)
 	if is_valid_queryparam(location):
-		obj = obj.filter(location__iexact = location)
+		obj = obj.filter(location_id = location)
 	if is_valid_queryparam(category):
 		obj = obj.filter(category__name__iexact = category)
 	if is_valid_queryparam(job_nature):
 		obj = obj.filter(job_nature__iexact = job_nature)
 	if is_valid_queryparam(category) and is_valid_queryparam(title) and is_valid_queryparam(location):
-		obj = obj.filter(category__name__iexact = category , title__icontains = title , location__icontains = location )
+		obj = obj.filter(category__name__iexact = category , title__icontains = title , location_id = location )
 	if is_valid_queryparam(category) and is_valid_queryparam(title):
 		obj = obj.filter(category__name__iexact = category , title__icontains = title)
 	if is_valid_queryparam(category) and is_valid_queryparam(location):
-		obj = obj.filter(category__name__iexact = category , location__iexact = location)
+		obj = obj.filter(category__name__iexact = category , location_id = location)
 	if is_valid_queryparam(title) and is_valid_queryparam(location):
-		obj = obj.filter(title__icontains = title , location__iexact = location)
+		obj = obj.filter(title__icontains = title , location_id = location)
 	return obj
 
 def search_employee(request):
@@ -60,11 +60,11 @@ def search_employee(request):
 	if is_valid_queryparam(skill):
 		obj = obj.filter(skills__icontains = skill)
 	if is_valid_queryparam(location):
-		obj = obj.filter(state__iexact = location)
+		obj = obj.filter(state_id = location)
 	if is_valid_queryparam(soldier_service):
-		obj = obj.filter(soldier_ship__icontains = soldier_service)
+		obj = obj.filter(employee_soldier_ship__icontains = soldier_service)
 	if is_valid_queryparam(location) and is_valid_queryparam(skill):
-		obj = obj.filter(state__iexact = location , skills__icontains = skill)
+		obj = obj.filter(state_id = location , skills__icontains = skill)
 	return obj
 
 class Search(ListView):
