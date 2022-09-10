@@ -39,7 +39,7 @@
 			  		<strong>{{request.user.get_full_name}}</strong>
 			  	</li>
 					<li><a class="dropdown-item" href="{% url 'HiresList' %}">پیام های دریافتی</a></li>
-			  	<li><a class="dropdown-item" href="{% url 'UpdateResume' pk=request.user.id %}">رزومه ساز</a></li>
+			  	<li><a class="dropdown-item" href="{% url 'UpdateResume' pk=request.session.USER_ID %}">رزومه ساز</a></li>
 			  	<li><a class="dropdown-item" href="{% url 'EmployeeJobApply' %}">رزومه های ارسالی</a></li>
 			  	<li><a class="dropdown-item" href="{% url 'AdsSaved' %}">آگهی های نشان شده</a></li>
 			  	<li><a class="dropdown-item" href="{% url 'Logout' %}">خروج</a></li>

@@ -7,6 +7,7 @@ NewAdvertisementForm ,
 NewCompanyForm ,
 EditAdInfoForm ,
 )
+from Controllers.models import states_iran
 from Employer.models import Manager , Company , categories , Advertisement
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -49,7 +50,7 @@ class TestEmployerForms(TestCase):
 
     valid_ad = {
     'title' : 'test 5 char title',
-    'location' : 'Tehran',
+    'location' : 1,
     'category' : categories.objects.all().first(),
     # 'company' : Company.objects.all().first() ,
     'text' : char_30 ,
@@ -62,7 +63,7 @@ class TestEmployerForms(TestCase):
     }
     invalid_ad = {
     'title' : '1234',
-    'location' : 'Tehran',
+    'location' : 1,
     'category' : categories.objects.all().first(),
     'company' : Company.objects.all().first() ,
     'text' : 'too short' ,
@@ -91,7 +92,7 @@ class TestEmployerForms(TestCase):
         company1 = Company.objects.create(name = 'test' , address = 'test street' , underlie = 'test' , manager = Manager.objects.get(email = self.user.username) , valid = True)
         company2 = Company.objects.create(name = 'test2' , address = 'test street' , underlie = 'test' , manager = Manager.objects.get(email = self.user.username) , valid = True)
         category1 = categories.objects.create(name = 'category1')
-        
+        states_iran.objects.create(name="TestProvince")
 
     def test_edit_info_empty_form(self):
         form = EditManagerInfoForm(data = {})

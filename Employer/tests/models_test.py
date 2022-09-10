@@ -76,12 +76,11 @@ class Employer_ModelsTest(TestCase):
 
     def test_Advertisement_Model(self):
         Ad = models.Advertisement.objects.all().first()._meta
-
+        self.assertTrue(Ad.get_field('company'))
         self.assertEqual(Ad.get_field('title').max_length , 300)
-        self.assertEqual(Ad.get_field('location').max_length , 100)
+        self.assertTrue(Ad.get_field('location'))
         self.assertEqual(Ad.get_field('soldier_ship').max_length , 100)
         self.assertEqual(Ad.get_field('job_nature').max_length , 30)
-        self.assertEqual(Ad.get_field('location').choices , states_iran)
         self.assertEqual(Ad.get_field('category').default , '')
         self.assertTrue(Ad.get_field('generate_in').auto_now_add)
         self.assertFalse(Ad.get_field('expired').default)

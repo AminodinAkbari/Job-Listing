@@ -60,9 +60,11 @@
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4" dir="ltr">
                             <div class="card mb-3">
                               <div class="row no-gutters">
+                                {% if object.profile_pic %}
                                 <div class="col-md-4">
-                                  <img src="{{object.profile_pic.url}}" class="card-img" alt="Manager Profile Picture">
+                                  <img src="{{object.profile_pic}}" class="card-img" alt="Manager Profile Picture">
                                 </div>
+                                {% endif %}
                                 <div class="col-md-8" dir="rtl">
                                   <div class="card-body">
                                     <h5 class="card-title">{{object.name}} {{object.family}}</h5>

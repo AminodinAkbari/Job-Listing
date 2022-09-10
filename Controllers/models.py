@@ -31,19 +31,19 @@ job_nature = (
 ('Remote' , 'دورکاری')
 )
 
-states_iran = (
-('0' , 'استان مورد نظر'),
-('Tehran' , 'تهران'),
-('Shiraz' , 'شیراز'),
-('Esfahan' , 'اصفهان'),
-('Mashhad' , 'مشهد'),
-('Tabriz' , 'تبریز'),
-('Hamedan' , 'همدان'),
-('Mazandaran' , 'مازندران'),
-('Gilan' , 'گیلان'),
-('Qom' , 'قم'),
-('Markazi' , 'مرکزی'),
-)
+# states_iran = (
+# ('0' , 'استان مورد نظر'),
+# ('Tehran' , 'تهران'),
+# ('Shiraz' , 'شیراز'),
+# ('Esfahan' , 'اصفهان'),
+# ('Mashhad' , 'مشهد'),
+# ('Tabriz' , 'تبریز'),
+# ('Hamedan' , 'همدان'),
+# ('Mazandaran' , 'مازندران'),
+# ('Gilan' , 'گیلان'),
+# ('Qom' , 'قم'),
+# ('Markazi' , 'مرکزی'),
+# )
 
 marital = (
 ('Married','متأهل'),
@@ -66,6 +66,13 @@ class categories(models.Model):
     name = models.CharField(max_length = 100)
     icon = models.CharField(max_length = 80 , blank=True , null=True)
 
+    def __str__(self):
+        return self.name
+
+class states_iran(models.Model):
+    name = models.CharField(max_length = 80 , verbose_name='نام استان')
+    class Meta:
+        ordering = ['name']
     def __str__(self):
         return self.name
 

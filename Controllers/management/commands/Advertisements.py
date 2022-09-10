@@ -6,6 +6,8 @@ from django.core.management.base import BaseCommand , CommandError
 from Employer.models import Company,Advertisement
 from Controllers.models import categories , states_iran , soldiership_types , job_nature
 
+province = states_iran.objects.all()
+
 programing_languages = ['Python' , 'PHP' , 'C' , 'JAVA' , 'RUBY']
 
 skills = [
@@ -42,7 +44,7 @@ class Command(BaseCommand):
 
                 creating=Advertisement.objects.create(
                 title = 'برنامه نویس ' + str(skills_choiced[0]),
-                location = states_iran[random.randint(1,9)][0],
+                location = province.order_by('?').first(),
                 category = category,
                 company  = (Company.objects.order_by('?')[:1]).first(),
                 text = 'قسمت تست متن آگهی میتواند به شما نشان دهد که ما دقیقا دنبال چه چیزی هستیم',

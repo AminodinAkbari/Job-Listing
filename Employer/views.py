@@ -60,7 +60,7 @@ class ManagerPanel(DetailView):
                 ads = ads|i.company.all()
             context['ads'] = ads.order_by('id')
 
-        context['states_iran'] = states_iran
+        # context['states_iran'] = states_iran
         context['object'] =  manager
         context['companies'] = company
         context['valid_companies'] = c_valids

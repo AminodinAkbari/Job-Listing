@@ -7,13 +7,7 @@ from Employee.models import EmployeeModel
 def Chart(context):
 	obj = EmployeeModel.objects.all().order_by('state')
 	"""States Cart"""
-	EN_list = []
-	FA_list = []
-	for i in states_iran[1:]:
-		EN_list.append(i[0])
-		FA_list.append(i[1])
-	context['EN_list'] = list(EN_list)
-	context['FA_list'] = list(FA_list)
+	context['FA_list'] = states_iran.objects.all()
 	context['employees'] = obj
 
 	"""Sex Chart"""

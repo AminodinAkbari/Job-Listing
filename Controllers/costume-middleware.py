@@ -19,7 +19,6 @@ def define_user_type(get_response):
         else:
             manager = 'Unknown'
             request.session['TYPE'] = 'Unknown'
-
         response = get_response(request)
         return response
     return middleware

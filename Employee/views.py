@@ -150,7 +150,7 @@ def AdUnsaved(request , pk , employee):
 
 
 def AdSaved(request , ad):
-	if user_type is not None:
+	if request.session['TYPE'] == 'Employer':
 		return redirect('/')
 	advertisement = get_object_or_404(Advertisement,id = ad)
 	try:

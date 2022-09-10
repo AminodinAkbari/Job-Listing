@@ -28,7 +28,7 @@ class EmployeeModel(models.Model):
 	employee = models.ForeignKey(User , on_delete =models.CASCADE , related_name='employee' , blank=True , null = True)
 	profile_pic = models.ImageField(null = True,blank = True,upload_to = upload_image_path)
 	phone = models.CharField(max_length = 11 , verbose_name = 'تلفن', blank = True , null = True)
-	state = models.CharField(max_length = 50 , choices = states_iran , verbose_name = 'استان محل سکونت' , blank = True , null = True)
+	state = models.ForeignKey(states_iran,on_delete=models.CASCADE , verbose_name = 'استان محل سکونت' , blank = True , null = True)
 	address = models.CharField(max_length = 200 , verbose_name = 'آدرس', blank = True , null = True)
 	sex = models.CharField(max_length = 10 , choices=sex_types , verbose_name = 'جنسیت', blank = True , null = True)
 	marital_status = models.CharField(max_length = 10 , choices=marital , verbose_name = 'وضعیت تأهل', blank = True , null = True)

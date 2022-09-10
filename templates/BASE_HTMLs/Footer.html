@@ -3,8 +3,8 @@
         <div class="row">
         	<div class="col-md">
              <div class="ftco-footer-widget mb-4 text-center">
-              <h2 class="ftco-heading-2">{{Footer.logo}}</h2>
-              <p class="font-size-12 text-right"><strong>{{Footer.short_text}}</strong></p>
+              <h2 class="ftco-heading-2">{{Footer.logo_en}}</h2>
+              <p class="font-size-12 text-right" dir="rtl"><strong>{{Footer.short_text}}</strong></p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
                 {% for item in Social %}
                 <li class="ftco-animate"><a href="#"><span class="icon-{{item.name}}"></span></a></li>
@@ -28,7 +28,7 @@
             {% else %}
             <div class="col-md text-center">
               <div class="ftco-footer-widget mb-4">
-                <h2 class="ftco-heading-2 bb-1 pb-3">کارجو</h2>
+                <h2 class="ftco-heading-2 bb-1 pb-3">کارفرما</h2>
                 <ul class="list-unstyled font-size-13">
                   <li>
                     <strong>{{request.user.get_full_name}}</strong>
@@ -60,10 +60,10 @@
 
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">سوالی دارید</h2>
+            	<h5 class="ftco-heading-2" dir="rtl">سوالی دارید؟ با ما در میان بگذارید ↓ </h5>
             	<div class="block-23 mb-3">
 	              <ul>
-	                <li><a href=""><span class="icon icon-envelope"></span> | <span class="text">{{Footer.email}}</span></a></li>
+	                <li><a><span class="icon icon-envelope"></span><span class="text p-1"> {{Footer.email}} </span></a></li>
 	              </ul>
 	            </div>
             </div>
@@ -72,9 +72,11 @@
         <div class="row">
           <div class="col-md-12 text-center">
 
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  &copy; تمامی حقوق برای {{Footer.logo}} محفوظ است . قدرت گرفته شده از پایتون |  برنامه نویس<a href="https://aminodin.pythonanywhere.com/" target="_blank"> امین الدین اکبری</a> | <script>document.write(new Date().getFullYear())</script>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+              {% if Footer.logo_fa %}
+              <p>
+                &copy; تمامی حقوق برای {{Footer.logo_fa}} محفوظ است . قدرت گرفته شده از پایتون |  برنامه نویس<a href="https://aminodin.pythonanywhere.com/" target="_blank"> امین الدین اکبری</a> | <script>document.write(new Date().getFullYear())</script>
+              </p>
+              {% endif %}
           </div>
         </div>
       </div>
