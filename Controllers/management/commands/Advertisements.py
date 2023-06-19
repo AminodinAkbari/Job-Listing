@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 skills_final = ''
                 for i in skills_choiced:
                     skills_final += str(i) + '/'
-                skills_final = skills_final.rstrip(skills_final[-1])
+                skills_final = skills_final.r(skills_final[-1])
 
                 creating=Advertisement.objects.create(
                 title = 'برنامه نویس ' + str(skills_choiced[0]),
